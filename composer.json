@@ -1,0 +1,75 @@
+{
+   "name": "rovota/core",
+   "version": "1.0.0",
+   "type": "library",
+   "description": "A modern PHP framework designed for a painless development experience.",
+   "keywords": ["framework", "php", "rovota", "modern", "web"],
+   "homepage": "https://github.com/Rovota/Core",
+   "license": "MIT",
+   "authors": [
+      {
+         "name": "Software Department",
+         "email": "developers@rovota.com"
+      },
+      {
+         "name": "Rovota Community",
+         "homepage": "https://rovota.com/community"
+      }
+   ],
+   "support": {
+      "email": "support@rovota.com",
+      "docs": "https://docs.rovota.com/products/core"
+   },
+   "require": {
+      "php-64bit": ">=8.0.0",
+      "ext-curl": "*",
+      "ext-exif": "*",
+      "ext-fileinfo": "*",
+      "ext-hash": "*",
+      "ext-json": "*",
+      "ext-mbstring": "*",
+      "ext-openssl": "*",
+      "ext-pdo": "*",
+      "ext-sodium": "*",
+      "ext-zip": "*",
+      "dflydev/dot-access-data": "^3.0",
+      "envms/fluentpdo": "^2.2",
+      "guzzlehttp/guzzle": "^7.4",
+      "league/commonmark": "^2.3",
+      "league/flysystem": "^3.2",
+      "league/flysystem-read-only": "3.3",
+      "monolog/monolog": "^3.2",
+      "phlak/semver": "^4.0",
+      "phpmailer/phpmailer": "^6.6",
+      "phpseclib/phpseclib": "^3.0",
+      "spomky-labs/otphp": "^11.0"
+   },
+   "require-dev": {
+      "league/flysystem-aws-s3-v3": "^3.2",
+      "league/flysystem-sftp-v3": "^3.2"
+   },
+   "suggest": {
+      "league/flysystem-aws-s3-v3": "Allows usage of AWS S3 and similar services as file storage.",
+      "league/flysystem-sftp-v3": "Allows usage of SFTP file storage.",
+      "ext-redis": "*",
+      "ext-apcu": "*",
+      "ext-imagick": "*"
+   },
+   "autoload": {
+      "psr-4": {
+         "Rovota\\Core\\": "src/"
+      }
+   },
+   "conflict": {
+      "phpmailer/phpmailer": "<6.0",
+      "league/flysystem": "<2.0"
+   },
+   "config": {
+      "sort-packages": true,
+      "optimize-autoloader": true
+   },
+   "replace": {
+      "symfony/polyfill-php80": "*",
+      "symfony/polyfill-mbstring": "*"
+   }
+}

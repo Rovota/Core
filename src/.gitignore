@@ -1,0 +1,8 @@
+# Log files
+*.log
+
+# Config files
+*.env
+
+# IDE
+.idea/*

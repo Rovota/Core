@@ -1,0 +1,13 @@
+# Log files
+*.log
+*.txt
+
+# IDE
+.idea
+.idea/dataSources
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+
+# Dependencies
+vendor
+*.lock

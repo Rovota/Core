@@ -1,0 +1,11 @@
+# Languages
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+
+# Ignore in exports
+/.github export-ignore
+/.idea export-ignore
+/.gitignore export-ignore
+/.composer.lock export-ignore

@@ -1,0 +1,282 @@
+/* Copyright 2022 - Created and designed by Rovota */
+/* ---------------------- */
+:root {
+    --color-base: 240, 240, 240;
+    --color-card: 255, 255, 255;
+    --color-font: 20, 20, 20;
+    --color-font-alt: 255, 255, 255;
+
+    --color-neutral: 27, 127, 184;
+    --color-danger: 229, 70, 70;
+}
+
+@media (prefers-color-scheme: dark) {
+    /*:root {*/
+    /*	--color-base: 10, 10, 10;*/
+    /*	--color-card: 10, 10, 10;*/
+    /*}*/
+}
+
+/* ---------------------- */
+
+html, body, button, a, input, textarea, select, pre::before {
+    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif !important;
+}
+
+* {
+    box-sizing: border-box;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    margin: 20px 0;
+    border: none;
+    height: 1px;
+    background: rgba(var(--color-font), .1);
+}
+
+body {
+    padding: 40px 0;
+    margin: 0;
+    background: rgba(var(--color-base), 1);
+    color: rgba(var(--color-font), 1);
+    display: flex;
+    justify-content: center;
+}
+
+container {
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+
+card {
+    display: flex;
+    flex-direction: row;
+    background: rgba(var(--color-card), 1);
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+/* ---------------------- */
+
+nav {
+    width: 100%;
+}
+
+nav > ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-inline-start: 0;
+    margin: 0;
+    font-weight: 500;
+}
+
+nav > ul > li {
+    display: inline-block;
+}
+
+nav > ul > li {
+    color: rgba(var(--color-font), .65);
+}
+
+nav > ul > li a {
+    color: rgba(var(--color-font), .65);
+}
+
+/* ---------------------- */
+
+.throwable {
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 30px;
+}
+
+.throwable > .name {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+}
+
+.throwable > .name > span {
+    display: block;
+    line-height: 40px;
+    background: rgba(var(--color-font), .05);
+    color: rgba(var(--color-font), .65);
+    padding: 0 14px;
+    font-weight: 500;
+    border-radius: 5px;
+}
+
+.throwable > .name > span.unhandled {
+    background: rgba(var(--color-danger), 1);
+    color: rgba(var(--color-font-alt), 1);
+}
+
+.throwable > hr {
+    margin: 15px 0;
+}
+
+.throwable > p {
+    margin-bottom: 0;
+    font-size: 15px;
+}
+
+.throwable > p > span {
+    color: rgba(var(--color-font), 0.65);
+    font-weight: 500;
+    margin-right: 15px;
+}
+
+.solution {
+    display: block;
+    padding: 30px;
+    flex: 0 0 350px;
+}
+
+.solution > p:first-of-type {
+    margin-top: 0;
+}
+
+.solution > p:last-of-type {
+    margin-bottom: 0;
+}
+
+.solution > p > a {
+    font-weight: bold;
+    color: rgba(var(--color-neutral), 1);
+}
+
+/* ---------------------- */
+
+.stack {
+    background: transparent;
+    flex-direction: row;
+    column-gap: 10px;
+}
+
+.stack > traces {
+    overflow: hidden;
+    background: rgba(var(--color-card), 1);
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 350px;
+    border-radius: 10px;
+}
+
+.stack > traces > heading, .stack > preview > heading {
+    background: rgba(50, 50, 50, 1);
+    color: rgba(var(--color-font-alt), 1);
+    display: block;
+    line-height: 60px;
+    padding: 0 30px;
+    font-weight: 500;
+}
+
+.stack > traces > trace {
+    display: block; padding: 14px 30px;
+    border-bottom: 1px solid rgba(var(--color-font), .1);
+}
+
+.stack > traces > trace > span {
+    display: block; line-height: 1.5;
+}
+
+.stack > traces > trace > span small {
+    font-size: 15px;
+    color: rgba(var(--color-font), 0.65);
+}
+
+.stack > traces > trace > span badge {
+    display: inline-block;
+    color: rgba(var(--color-font-alt), 1);
+    border-radius: 3px; font-size: 10px;
+    text-transform: uppercase;
+    padding: 2px 4px; margin-right: 4px;
+    transform: translateY(-1px);
+}
+
+.stack > traces > trace > span badge.static {
+    background: rgba(170, 79, 225, 1);
+}
+
+.stack > traces > trace > span badge.non-static {
+    background: rgba(246, 144, 45, 1);
+}
+
+.stack > preview {
+    overflow: hidden;
+    background: rgba(var(--color-card), 1);
+    display: flex; flex-grow: 1;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+file {
+    width: 100%;
+    overflow: auto;
+    display: block;
+}
+
+file > table {
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border: none;
+    border-spacing: 0;
+}
+
+file > table tr td {
+    height: 26px;
+}
+
+file > table tr td:first-child {
+    background: rgba(var(--color-font), .025);
+    padding: 0 10px;
+    color: rgba(var(--color-font), 0.5);
+    -webkit-user-select: none;
+    font-family: monospace;
+}
+
+file > table tr td:last-child {
+    padding-right: 80px;
+}
+
+file > table pre {
+    margin: 0; font-size: 15px;
+}
+
+file > table tr.highlight td {
+    background: rgba(var(--color-danger), .2);
+}
+
+file > table tr.comment td:last-child {
+    color: rgba(var(--color-font), .45);
+}
+
+file > table tr.highlight td:first-child {
+    color: rgba(var(--color-danger), 1);
+}
