@@ -7,5 +7,9 @@
 # Ignore in exports
 /.github export-ignore
 /.idea export-ignore
+/docs export-ignore
+/tests export-ignore
+/.gitattributes export-ignore
+/.gitbook.yaml export-ignore
 /.gitignore export-ignore
 /.composer.lock export-ignore
