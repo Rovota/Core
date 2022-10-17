@@ -72,6 +72,13 @@ trait DirectoryFunctions
 
 	// -----------------
 
+	public function checksum(string $location, array $config = []): string
+	{
+		return $this->disk->checksum($this->location().'/'.$location, $config);
+	}
+
+	// -----------------
+
 	/**
 	 * @throws UnableToCheckExistence
 	 * @throws UnableToReadFile

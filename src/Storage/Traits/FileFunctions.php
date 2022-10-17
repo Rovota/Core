@@ -90,6 +90,13 @@ trait FileFunctions
 
 	// -----------------
 
+	public function checksum(array $config = []): string
+	{
+		return $this->disk->checksum($this->location(), $config);
+	}
+
+	// -----------------
+
 	/**
 	 * @throws UnableToMoveFile
 	 * @throws FilesystemException

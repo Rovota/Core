@@ -197,6 +197,13 @@ abstract class Disk implements DiskInterface
 
 	// -----------------
 
+	public function checksum(string $location, array $config = []): string
+	{
+		return $this->flysystem->checksum($location, $config);
+	}
+
+	// -----------------
+
 	public function file(string $location, array $without = [], bool $stream = false): File|null
 	{
 		$fields = ['size', 'mime_type', 'last_modified'];

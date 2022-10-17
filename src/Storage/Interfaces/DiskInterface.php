@@ -112,6 +112,10 @@ interface DiskInterface
 
 	// -----------------
 
+	public function checksum(string $location, array $config = []): string;
+
+	// -----------------
+
 	/**
 	 * @throws UnableToReadFile
 	 * @throws UnableToRetrieveMetadata

@@ -137,6 +137,13 @@ final class Storage
 
 	// -----------------
 
+	public static function checksum(string $location, array $config = []): string
+	{
+		return StorageManager::get()->checksum($location, $config);
+	}
+
+	// -----------------
+
 	/**
 	 * @throws UnableToReadFile
 	 * @throws UnableToRetrieveMetadata
