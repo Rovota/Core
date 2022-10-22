@@ -168,7 +168,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	 */
 	public function count(string|null $key = null): int
 	{
-		return count($key !== null ? $this->pluck($key)->all() : $this->items);
+		return count($key !== null ? $this->only($key) : $this->items);
 	}
 
 	/**
