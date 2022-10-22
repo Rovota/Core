@@ -6,7 +6,7 @@
 
 * [Installation](getting-started/installation.md)
 * [Directory Structure](getting-started/directory-structure.md)
-* [Configuration](getting-started/configuration/README.md)
+* [Configuration](getting-started/configuration.md)
   * [Caches](getting-started/configuration/caches.md)
   * [Databases](getting-started/configuration/databases.md)
   * [Disks](getting-started/configuration/disks.md)
@@ -27,7 +27,8 @@
 ## Basics
 
 * [Add-ons](basics/add-ons.md)
-* [Routing](basics/routing.md)
+* [Routing](basics/routing/README.md)
+  * [URL Builder](basics/routing/url-builder.md)
 * [Middleware](basics/middleware.md)
 * [Controllers](basics/controllers.md)
 * [Requests](basics/requests.md)
@@ -44,8 +45,9 @@
 * [Collections](advanced/collections.md)
 * [Conversions](advanced/conversions.md)
 * [Cookies](advanced/cookies.md)
-* [Databases](advanced/databases.md)
-* [Date & Time](advanced/date-and-time/README.md)
+* [Databases](advanced/databases/README.md)
+  * [Query Builder](advanced/databases/query-builder.md)
+* [Date & Time](advanced/date-and-time.md)
   * [Formatting](advanced/date-and-time/formatting.md)
   * [Modification](advanced/date-and-time/modification.md)
   * [Validation](advanced/date-and-time/validation.md)
@@ -79,6 +81,5 @@
 * [Permissions](security/permissions.md)
 * [Roles](security/roles.md)
 * [Validation](security/validation.md)
-* [Helpers](security/helpers.md)
-* [HIBP](security/hibp.md)
 * [API Tokens](security/api-tokens.md)
+* [HIBP](security/hibp.md)

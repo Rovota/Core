@@ -27,3 +27,9 @@ This familiarity also allows developers to switch to Core, as well as the other 
 Core is designed in a way that allows continuous development of the codebase while minimally impacting compatibility with previously written code.
 
 We do however tend to upgrade our codebase to work with new PHP versions faster than is common in the current PHP landscape. This is done to avoid being the dependency that prevents you from making use of new language features and improvements when they become available.
+
+### Full-Stack or API
+
+We understand that not everyone structures their application the same way. Some of you may prefer going full-stack (using Core for both rendering and backend) or creating an API (backend only) to then use with something else.
+
+Core fully supports either of these approaches, by providing built-in rendering of views, string modification, parsing, API errors, tokens, JSON responses and more.
