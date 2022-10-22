@@ -1126,6 +1126,14 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
+	 * Returns all items where the value is the equivalent to `null`.
+	 */
+	public function whereNull(): Collection
+	{
+		return new Collection(Arr::whereNull($this->items));
+	}
+
+	/**
 	 * Returns all items where the value is not equivalent to `null`.
 	 */
 	public function whereNotNull(): Collection
