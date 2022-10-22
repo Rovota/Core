@@ -78,7 +78,7 @@ final class Arr
 		if ($value instanceof Closure) {
 			$callback = $value;
 			foreach ($haystack as $key => $value) {
-				if ($callback($key, $value)) {
+				if ($callback($value, $key)) {
 					return $value;
 				}
 			}
