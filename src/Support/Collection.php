@@ -46,19 +46,25 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 
 	// -----------------
 
+	/**
+	 * Adds a new value at the end of the collection, using a numeric key.
+	 */
 	public function add(mixed $item): Collection
 	{
 		$this->put(null, $item);
 		return $this;
 	}
 
+	/**
+	 * Returns the array used internally by the collection.
+	 */
 	public function all(): array
 	{
 		return $this->items;
 	}
 
 	/**
-	 * Adds the value or values to the end of the collection. Does not return a new collection.
+	 * Adds the value or values to the end of the collection. Optionally, you can provide a custom key as second parameter.
 	 */
 	public function append(mixed $value, string|int|null $key = null): Collection
 	{
@@ -113,7 +119,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Appends the given array or collection onto the end of the current collection.
+	 * Appends the values of a given array or collection onto the end of the current collection.
 	 */
 	public function concat(mixed $source): Collection
 	{
