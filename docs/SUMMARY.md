@@ -62,7 +62,6 @@
 * [Images](advanced/images.md)
 * [Localization](advanced/localization.md)
 * [Logging](advanced/logging.md)
-* [Macros](advanced/macros.md)
 * [Mail](advanced/mail.md)
 * [Media](advanced/media.md)
 * [Pluralization](advanced/pluralization.md)

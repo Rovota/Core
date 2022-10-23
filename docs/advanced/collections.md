@@ -4,6 +4,10 @@ description: 'Namespace: Rovota\Core\Support'
 
 # Collections
 
+{% hint style="danger" %}
+This article is still being written. Various parts are empty or incomplete.
+{% endhint %}
+
 ### Introduction
 
 Unlike some other languages, PHP does not provide the ability to chain methods to an array, forcing you to provide the result of each function as the parameter of another.
@@ -35,7 +39,7 @@ use Rovota\Core\Support\Collection;
 
 Collection::macro('stringLength', function() {
     return $this->map(function ($value) {
-        return str_length($value);
+        return strlen($value);
     });
 });
 

@@ -1,5 +1,9 @@
 # Introduction
 
+{% hint style="danger" %}
+This documentation is still being written. Various parts are empty or incomplete.
+{% endhint %}
+
 Rovota Core is a modern PHP framework created to make it trivial to build fast, secure and feature-rich applications. With built-in support for most things you'd need, writing code becomes a painless experience that lets you focus on the things that matter.
 
 ### Backstory
