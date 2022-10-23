@@ -617,11 +617,11 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Returns how many times a given key exists in the collection.
+	 * Returns how many times a given value exists in the collection.
 	 */
-	public function occurrences(string $key): int
+	public function occurrences(string $value): int
 	{
-		return $this->countBy()[$key] ?? 0;
+		return $this->countBy()[$value] ?? 0;
 	}
 
 	/**
