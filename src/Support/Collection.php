@@ -192,6 +192,9 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 		return new Collection($counts);
 	}
 
+	/**
+	 * @internal
+	 */
 	public function current(): mixed
 	{
 		return $this->items[$this->keys[$this->position]];
@@ -505,11 +508,17 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 		return $collection->implode($glue).$final_glue.$final_item;
 	}
 
+	/**
+	 * @internal
+	 */
 	public function jsonSerialize(): array
 	{
 		return $this->toArray();
 	}
 
+	/**
+	 * @internal
+	 */
 	public function key(): mixed
 	{
 		return $this->keys[$this->position];
@@ -611,6 +620,9 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 		return $this;
 	}
 
+	/**
+	 * @internal
+	 */
 	public function next(): void
 	{
 		++$this->position;
@@ -635,6 +647,9 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 		return new Collection(Arr::only($this->items, $keys));
 	}
 
+	/**
+	 * @internal
+	 */
 	public function valid(): bool
 	{
 		return isset($this->keys[$this->position]);
@@ -811,6 +826,9 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 		return new Collection(array_reverse($this->items, true));
 	}
 
+	/**
+	 * @internal
+	 */
 	public function rewind(): void
 	{
 		$this->position = 0;
@@ -1082,16 +1100,25 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 		return $this->when($this->isNotEmpty(), $closure, $alternative);
 	}
 
+	/**
+	 * @internal
+	 */
 	public function offsetExists(mixed $offset): bool
 	{
 		return isset($this->items[$offset]);
 	}
 
+	/**
+	 * @internal
+	 */
 	public function offsetGet(mixed $offset): mixed
 	{
 		return $this->items[$offset] ?? null;
 	}
 
+	/**
+	 * @internal
+	 */
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
 		if (is_null($offset)) {
@@ -1103,6 +1130,9 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 		}
 	}
 
+	/**
+	 * @internal
+	 */
 	public function offsetUnset(mixed $offset): void
 	{
 		unset($this->items[$offset]);
