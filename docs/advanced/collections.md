@@ -52,37 +52,37 @@ collect(['car', 'bicycle', 'train'])->stringLength();
 
 Nearly all of the following methods may be chained to easily work with the underlying array of a collection object. Please note that most methods return a new instance, rather than modifying the existing one, allowing you to keep the original when needed.
 
-| [add](collections.md#undefined)             | has             | pull             | toArray      |
-| ------------------------------------------- | --------------- | ---------------- | ------------ |
-| [all](collections.md#all)                   | hasAll          | push             | toJson       |
-| [append](collections.md#append)             | hasAny          | put              | toQuery      |
-| [avg](collections.md#avg)                   | hasNone         | random           | transform    |
-| [chunk](collections.md#chunk)               | implode         | range            | unless       |
-| [collapse](collections.md#collapse)         | intersect       | reduce           | values       |
-| [collect](collections.md#collect)           | intersectByKeys | reject           | when         |
-| [combine](collections.md#combine)           | isEmpty         | replace          | whenEmpty    |
-| [concat](collections.md#concat)             | isList          | replaceRecursive | whenNotEmpty |
-| [contains](collections.md#contains)         | isNotEmpty      | resetKeys        | whereNotNull |
-| [containsAll](collections.md#containsall)   | join            | reverse          | whereNull    |
-| [containsAny](collections.md#containsany)   | keyBy           | rewind           |              |
-| [containsNone](collections.md#containsnone) | keys            | search           |              |
-| [count](collections.md#count)               | last            | shift            |              |
-| [countBy](collections.md#countby)           | macro           | shuffle          |              |
-| [diff](collections.md#diff)                 | map             | skip             |              |
-| [diffAssoc](collections.md#diffassoc)       | max             | skipUntil        |              |
-| [diffKeys](collections.md#diffkeys)         | median          | skipWhile        |              |
-| [duplicates](collections.md#duplicates)     | merge           | slice            |              |
-| [each](collections.md#each)                 | min             | sort             |              |
-| [every](collections.md#every)               | missing         | sortBy           |              |
-| [except](collections.md#except)             | mode            | sortByDesc       |              |
-| [fields](collections.md#fields)             | modify          | sortDesc         |              |
-| [filter](collections.md#filter)             | occurrences     | sortKeys         |              |
-| [first](collections.md#first)               | only            | sortKeysDesc     |              |
-| [flip](collections.md#flip)                 | partition       | sum              |              |
-| [flush](collections.md#flush)               | pipe            | take             |              |
-| [forget](collections.md#forget)             | pluck           | takeFrom         |              |
-| [get](collections.md#get)                   | pop             | takeUntil        |              |
-| [groupBy](collections.md#groupby)           | prepend         | takeWhile        |              |
+| [add](collections.md#undefined)             | [has](collections.md#has)                         | [pull](collections.md#pull)                         | [toJson](collections.md#tojson)             |
+| ------------------------------------------- | ------------------------------------------------- | --------------------------------------------------- | ------------------------------------------- |
+| [all](collections.md#all)                   | [hasAll](collections.md#hasall)                   | [push](collections.md#push)                         | [toQuery](collections.md#toquery)           |
+| [append](collections.md#append)             | [hasAny](collections.md#hasany)                   | [put](collections.md#put)                           | [transform](collections.md#transform)       |
+| [avg](collections.md#avg)                   | [hasNone](collections.md#hasnone)                 | [random](collections.md#random)                     | [unless](collections.md#unless)             |
+| [chunk](collections.md#chunk)               | [implode](collections.md#implode)                 | [range](collections.md#range)                       | [values](collections.md#values)             |
+| [collapse](collections.md#collapse)         | [intersect](collections.md#intersect)             | [reduce](collections.md#reduce)                     | [when](collections.md#when)                 |
+| [collect](collections.md#collect)           | [intersectByKeys](collections.md#intersectbykeys) | [reject](collections.md#reject)                     | [whenEmpty](collections.md#whenempty)       |
+| [combine](collections.md#combine)           | [isEmpty](collections.md#isempty)                 | [replace](collections.md#replace)                   | [whenNotEmpty](collections.md#whennotempty) |
+| [concat](collections.md#concat)             | [isList](collections.md#islist)                   | [replaceRecursive](collections.md#replacerecursive) | [whereNotNull](collections.md#wherenotnull) |
+| [contains](collections.md#contains)         | [isNotEmpty](collections.md#isnotempty)           | [resetKeys](collections.md#resetkeys)               | [whereNull](collections.md#wherenull)       |
+| [containsAll](collections.md#containsall)   | [join](collections.md#join)                       | [reverse](collections.md#reverse)                   |                                             |
+| [containsAny](collections.md#containsany)   | [keyBy](collections.md#keyby)                     | [search](collections.md#search)                     |                                             |
+| [containsNone](collections.md#containsnone) | [keys](collections.md#keys)                       | [shift](collections.md#shift)                       |                                             |
+| [count](collections.md#count)               | [last](collections.md#last)                       | [shuffle](collections.md#shuffle)                   |                                             |
+| [countBy](collections.md#countby)           | [macro](collections.md#macro)                     | [skip](collections.md#skip)                         |                                             |
+| [diff](collections.md#diff)                 | [map](collections.md#map)                         | [skipUntil](collections.md#skipuntil)               |                                             |
+| [diffAssoc](collections.md#diffassoc)       | [max](collections.md#max)                         | [skipWhile](collections.md#skipwhile)               |                                             |
+| [diffKeys](collections.md#diffkeys)         | [median](collections.md#median)                   | [slice](collections.md#slice)                       |                                             |
+| [duplicates](collections.md#duplicates)     | [merge](collections.md#merge)                     | [sort](collections.md#sort)                         |                                             |
+| [each](collections.md#each)                 | [min](collections.md#min)                         | [sortBy](collections.md#sortby)                     |                                             |
+| [every](collections.md#every)               | [missing](collections.md#missing)                 | [sortByDesc](collections.md#sortbydesc)             |                                             |
+| [except](collections.md#except)             | [mode](collections.md#mode)                       | [sortDesc](collections.md#sortdesc)                 |                                             |
+| [fields](collections.md#fields)             | [modify](collections.md#modify)                   | [sortKeys](collections.md#sortbykeys)               |                                             |
+| [filter](collections.md#filter)             | [occurrences](collections.md#occurrences)         | [sortKeysDesc](collections.md#sortbykeysdesc)       |                                             |
+| [first](collections.md#first)               | [only](collections.md#only)                       | [sum](collections.md#sum)                           |                                             |
+| [flip](collections.md#flip)                 | [partition](collections.md#partition)             | [take](collections.md#take)                         |                                             |
+| [flush](collections.md#flush)               | [pipe](collections.md#pipe)                       | [takeFrom](collections.md#takefrom)                 |                                             |
+| [forget](collections.md#forget)             | [pluck](collections.md#pluck)                     | [takeUntil](collections.md#takeuntil)               |                                             |
+| [get](collections.md#get)                   | [pop](collections.md#pop)                         | [takeWhile](collections.md#takewhile)               |                                             |
+| [groupBy](collections.md#groupby)           | [prepend](collections.md#prepend)                 | [toArray](collections.md#toarray)                   |                                             |
 
 ### Examples
 
@@ -536,51 +536,211 @@ collect([
 
 #### `has()`
 
+Checks whether a key is present:
+
+```php
+collect(['name' => 'Mike', 'age' => 45])->has('email');
+
+// false
+```
+
 #### `hasAll()`
+
+Checks whether all given keys are present:
+
+```php
+collect(['name' => 'Mike', 'age' => 45])->hasAll(['email', 'age']);
+
+// false
+```
 
 #### `hasAny()`
 
+Checks whether at least one of the given keys is present:
+
+```php
+collect(['name' => 'Mike', 'age' => 45])->hasAny(['email', 'age']);
+
+// true
+```
+
 #### `hasNone()`
+
+Checks whether none of the given keys are present:
+
+```php
+collect(['name' => 'Mike', 'age' => 45])->hasNone(['email', 'phone']);
+
+// true
+```
 
 #### `implode()`
 
+Joins items in a collection together using "glue". When the collection contains arrays or objects, you need to provide the key you want to join:
+
+```php
+collect(['red', 'green', 'orange'])->implode('-');
+
+// red-green-orange
+```
+
+```php
+collect([
+    ['name' => 'Mike', 'age' => 35],
+    ['name' => 'Joshua', 'age' => 35],
+    ['name' => 'Edward', 'age' => 35],
+])->implode('age', '-');
+
+// 35-28-41
+```
+
 #### `intersect()`
+
+Removes all values from the collection that are not present in the given collection:
+
+```php
+// Some code
+```
 
 #### `intersectByKeys()`
 
+Removes all keys from the collection that are not present in the given collection:
+
+```php
+// Some code
+```
+
 #### `isEmpty()`
+
+Returns `true` when no items are present in the collection:
+
+```php
+// Some code
+```
 
 #### `isList()`
 
+Returns `true` when the collection keys are numeric, in ascending order, starting by 0:
+
+```php
+// Some code
+```
+
 #### `isNotEmpty()`
+
+Returns `true` when at least one item is present in the collection:
+
+```php
+// Some code
+```
 
 #### `join()`
 
+Joins the values of the collection together. The second argument can be used to specify how the final element should be appended:
+
+```php
+// Some code
+```
+
 #### `keyBy()`
+
+Keys the collection using the given key, or the result of the closure:
+
+```php
+// Some code
+```
 
 #### `keys()`
 
+Returns the keys present in the collection:
+
+```php
+// Some code
+```
+
 #### `last()`
+
+Returns the last item in a collection, optionally the last the passes a given truth test:
+
+```php
+// Some code
+```
 
 #### `macro()`
 
+See the [Extending](collections.md#extending) section for more information.
+
 #### `map()`
+
+Iterates through the collection allowing modification of each item, returning a new collection with the result:
+
+```php
+// Some code
+```
 
 #### `max()`
 
+Returns the highest value in a collection or for a given key, limited by the value of the second parameter:
+
+```php
+// Some code
+```
+
 #### `median()`
+
+Returns the median of the collection or for a given key:
+
+```php
+// Some code
+```
 
 #### `merge()`
 
+Merges the current collection with the items in the new collection:
+
+```php
+// Some code
+```
+
 #### `min()`
+
+Returns the lowest value in a collection or for a given key, limited by the value of the second parameter:
+
+```php
+// Some code
+```
 
 #### `missing()`
 
+Checks whether the key or keys are missing:
+
+```php
+// Some code
+```
+
 #### `mode()`
+
+Returns the mode of the collection or given key:
+
+```php
+// Some code
+```
 
 #### `modify()`
 
+Allows modifying the collection using a closure:
+
+```php
+// Some code
+```
+
 #### `occurrences()`
+
+Returns how many times a given value exists in the collection:
+
+```php
+// Some code
+```
 
 #### `only()`
 
@@ -594,92 +754,390 @@ collect(['country' => 'NL', 'city' => 'Amsterdam'])->only(['country']);
 
 #### `partition()`
 
+Splits the collection into two collections, where one has items passing the truth test, and the other has items failing the truth test:
+
+```php
+// Some code
+```
+
 #### `pipe()`
+
+Passes the collection to the closure and returns the result:
+
+```php
+// Some code
+```
 
 #### `pluck()`
 
+Retrieves all values for a given key:
+
+```php
+// Some code
+```
+
 #### `pop()`
+
+Removes and returns the last item or `x` items from the collection. Defaults to `1`:
+
+```php
+// Some code
+```
+
+{% hint style="warning" %}
+This method modifies the original collection rather than creating a new instance.
+{% endhint %}
 
 #### `prepend()`
 
+Adds the value or values to the beginning of the collection:
+
+```php
+// Some code
+```
+
+{% hint style="warning" %}
+This method modifies the original collection rather than creating a new instance.
+{% endhint %}
+
 #### `pull()`
+
+Retrieves the item for the given key and removes it from the collection:
+
+```php
+// Some code
+```
+
+{% hint style="warning" %}
+This method modifies the original collection rather than creating a new instance.
+{% endhint %}
 
 #### `push()`
 
+Adds a new value to the end of the collection:
+
+```php
+// Some code
+```
+
+{% hint style="warning" %}
+This method modifies the original collection rather than creating a new instance.
+{% endhint %}
+
 #### `put()`
+
+Adds a new value for the given key:
+
+```php
+// Some code
+```
+
+{% hint style="warning" %}
+This method modifies the original collection rather than creating a new instance.
+{% endhint %}
 
 #### `random()`
 
+Returns `x` random items from the collection. Defaults to `1`:
+
+```php
+// Some code
+```
+
 #### `range()`
+
+Returns the result of the maximum value minus the minimum value:
+
+```php
+// Some code
+```
 
 #### `reduce()`
 
+Reduces the collection to a single value, passing the result of each iteration into the next:
+
+```php
+// Some code
+```
+
 #### `reject()`
+
+Returns all items from the collection except those that pass the truth test:
+
+```php
+// Some code
+```
 
 #### `replace()`
 
+Replaces the items in the current collection with the items in the given collection:
+
+```php
+// Some code
+```
+
 #### `replaceRecursive()`
+
+Similar to `replace()`, but applies the same process to inner values:
+
+```php
+// Some code
+```
 
 #### `resetKeys()`
 
+Remove existing keys and replace them with consecutive keys starting from 0:
+
+```php
+// Some code
+```
+
 #### `reverse()`
 
-#### `rewind()`
+Reverses the order of the items in the collection while preserving the keys:
+
+```php
+// Some code
+```
 
 #### `search()`
 
+Returns the corresponding key of the searched value when found. Uses strict comparisons by default:
+
+```php
+// Some code
+```
+
+Optionally, you can pass a closure to search for the first item that matches a truth test:
+
+```php
+// Some code
+```
+
 #### `shift()`
+
+Removes and returns the first item or `x` items from the collection. Defaults to `1`:
+
+```php
+// Some code
+```
 
 #### `shuffle()`
 
+Changes the order of the items in the collection to be random:
+
+```php
+// Some code
+```
+
 #### `skip()`
+
+Skips over `x` items from the collection, and returns the remaining items:
+
+```php
+// Some code
+```
 
 #### `skipUntil()`
 
+Skips over the items from the collection until the closure returns `true`, and returns the remaining items:
+
+```php
+// Some code
+```
+
 #### `skipWhile()`
+
+Skips over the items from the collection as long as the closure returns `true`, and returns the remaining items:
+
+```php
+// Some code
+```
 
 #### `slice()`
 
+Returns a slice of the collection starting at the given index, with a maximum number of items if defined:
+
+```php
+// Some code
+```
+
 #### `sort()`
+
+Sorts the array by value, while preserving the array keys. For custom behavior, pass your own algorithm to the `closure` parameter:
+
+```php
+// Some code
+```
 
 #### `sortBy()`
 
+Sort the items using the result of the provided closure:
+
+```php
+// Some code
+```
+
 #### `sortByDesc()`
+
+Sort the items in descending order using the result of the provided closure:
+
+```php
+// Some code
+```
 
 #### `sortDesc()`
 
-#### `sortByKeys()`
+Sorts the array by value in descending order, while preserving the array keys:
 
-#### `sortByKeysDesc()`
+```php
+// Some code
+```
+
+#### `sortKeys()`
+
+Sorts the array by key:
+
+```php
+// Some code
+```
+
+#### `sortKeysDesc()`
+
+Sorts the array by key in descending order:
+
+```php
+// Some code
+```
 
 #### `sum()`
 
+Returns the sum of all items in the collection, the specified key or using a closure:
+
+```php
+// Some code
+```
+
 #### `take()`
+
+Returns `x` number of items from the original collection:
+
+```php
+// Some code
+```
 
 #### `takeFrom()`
 
+Returns all items after the specified value or when an item passes the truth test:
+
+```php
+// Some code
+```
+
 #### `takeUntil()`
+
+Returns all items up until the value has been found or an item passes a truth test:
+
+```php
+// Some code
+```
 
 #### `takeWhile()`
 
+Returns all items until an item fails the given truth test:
+
+```php
+// Some code
+```
+
 #### `toArray()`
+
+Returns array representation created from the data in the collection:
+
+```php
+// Some code
+```
 
 #### `toJson()`
 
+Returns JSON representation created from the data in the collection:
+
+```php
+// Some code
+```
+
 #### `toQuery()`
+
+Returns a formatted query string using the items in the collection:
+
+```php
+// Some code
+```
 
 #### `transform()`
 
+Iterates over all items in the collection and replaces all values with the values returned by the closure:
+
+```php
+// Some code
+```
+
+{% hint style="warning" %}
+This method modifies the original collection rather than creating a new instance.
+{% endhint %}
+
 #### `unless()`
+
+Executes the provided callback when the condition is `false`. Optionally, when `true`, the alternative callback will be executed:
+
+```php
+// Some code
+```
 
 #### `values()`
 
+Returns the values of the collection without the original keys:
+
+```php
+// Some code
+```
+
 #### `when()`
+
+Executes the provided callback when the condition is `true`. Optionally, when `false`, the alternative callback will be executed:
+
+```php
+// Some code
+```
 
 #### `whenEmpty()`
 
+Executes the closure when no items are present. Optionally, when not empty, the alternative closure will be executed:
+
+```php
+// Some code
+```
+
 #### `whenNotEmpty()`
+
+Executes the closure when at least one item is present. Optionally, when empty, the alternative closure will be executed:
+
+```php
+// Some code
+```
 
 #### `whereNotNull()`
 
+Returns all items where the value is not equivalent to `null`:
+
+```php
+// Some code
+```
+
 #### `whereNull()`
+
+Returns all items where the value is the equivalent to `null`:
+
+```php
+// Some code
+```
