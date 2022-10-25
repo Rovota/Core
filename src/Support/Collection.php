@@ -172,17 +172,17 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Counts all occurrences of each value in the collection. Optionally, uses a closure to group occurrences.
+	 * Counts all occurrences of each value in the collection. Optionally, uses a callback to group occurrences.
 	 */
-	public function countBy(callable|null $closure = null): Collection
+	public function countBy(callable|null $callback = null): Collection
 	{
-		if ($closure === null) {
+		if ($callback === null) {
 			return new Collection(array_count_values($this->items));
 		}
 
 		$counts = [];
 		foreach ($this->items as $key => $value) {
-			$group = $closure($value, $key);
+			$group = $callback($value, $key);
 			if (isset($counts[$group]) === false) {
 				$counts[$group] = 0;
 			}
@@ -225,11 +225,11 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Returns all duplicate values in the collection. Optionally, a key or closure can be provided.
+	 * Returns all duplicate values in the collection. Optionally, a key or callback can be provided.
 	 */
-	public function duplicates(callable|string|null $closure = null): Collection
+	public function duplicates(callable|string|null $callback = null): Collection
 	{
-		$items = $this->map(value_retriever($closure));
+		$items = $this->map(value_retriever($callback));
 
 		$counters = [];
 		$duplicates = [];
@@ -246,12 +246,12 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Iterates over all items in the collection and passes the item to the given closure. Stops iterating when `false` is returned, or the end of the collection is reached.
+	 * Iterates over all items in the collection and passes the item to the given callback. Stops iterating when `false` is returned, or the end of the collection is reached.
 	 */
-	public function each(callable $closure): Collection
+	public function each(callable $callback): Collection
 	{
 		foreach ($this->items as $key => $value) {
-			if ($closure($value, $key) === false) {
+			if ($callback($value, $key) === false) {
 				break;
 			}
 		}
@@ -262,10 +262,10 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	/**
 	 * Returns `true` when all items pass a given truth test using the given closure.
 	 */
-	public function every(callable $closure): bool
+	public function every(callable $callback): bool
 	{
 		foreach ($this->items as $key => $value) {
-			if ($closure($value, $key) === false) {
+			if ($callback($value, $key) === false) {
 				return false;
 			}
 		}
@@ -305,19 +305,19 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Returns the items from the collection that pass a given truth test. When no closure is provided, items with a value of `null` will be removed.
+	 * Returns the items from the collection that pass a given truth test. When no callback is provided, items with a value of `null` will be removed.
 	 */
-	public function filter(callable|null $closure = null): Collection
+	public function filter(callable|null $callback = null): Collection
 	{
-		return new Collection(Arr::filter($this->items, $closure));
+		return new Collection(Arr::filter($this->items, $callback));
 	}
 
 	/**
 	 * Returns the first item in the collection, optionally the first that passes a given truth test.
 	 */
-	public function first(callable|null $closure = null, mixed $default = null): mixed
+	public function first(callable|null $callback = null, mixed $default = null): mixed
 	{
-		return Arr::first($this->items, $closure, $default);
+		return Arr::first($this->items, $callback, $default);
 	}
 
 	/**
@@ -363,7 +363,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Return a new collection grouped by the given key, or a value returned from a closure.
+	 * Return a new collection grouped by the given key, or a value returned from a callback.
 	 */
 	public function groupBy(callable|string $group_by, bool $preserve_keys = false): Collection
 	{
@@ -525,7 +525,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Keys the collection using the given key, or the result of the closure.
+	 * Keys the collection using the given key, or the result of the callback.
 	 */
 	public function keyBy(callable|string $key_by): Collection
 	{
@@ -550,17 +550,17 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	/**
 	 * Returns the last item in a collection, optionally the last the passes a given truth test.
 	 */
-	public function last(callable|null $closure = null, mixed $default = null): mixed
+	public function last(callable|null $callback = null, mixed $default = null): mixed
 	{
-		return Arr::last($this->items, $closure, $default);
+		return Arr::last($this->items, $callback, $default);
 	}
 
 	/**
 	 * Iterates through the collection allowing modification of each item, returning a new collection with the result.
 	 */
-	public function map(callable $closure): Collection
+	public function map(callable $callback): Collection
 	{
-		return new Collection(Arr::map($this->items, $closure));
+		return new Collection(Arr::map($this->items, $callback));
 	}
 
 	/**
@@ -658,13 +658,13 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	/**
 	 * Splits the collection into two collections, where one has items passing the truth test, and the other has items failing the truth test.
 	 */
-	public function partition(callable $closure): Collection
+	public function partition(callable $callback): Collection
 	{
 		$passed = [];
 		$failed = [];
 
 		foreach ($this->items as $key => $item) {
-			if ($closure($item, $key)) {
+			if ($callback($item, $key)) {
 				$passed[$key] = $item;
 			} else {
 				$failed[$key] = $item;
@@ -675,11 +675,11 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Passes the collection to the closure and returns the result.
+	 * Passes the collection to the callback and returns the result.
 	 */
-	public function pipe(callable $closure): mixed
+	public function pipe(callable $callback): mixed
 	{
-		return $closure($this);
+		return $callback($this);
 	}
 
 	/**
@@ -738,7 +738,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Adds a new value to the end of the collection
+	 * Adds a new value to the end of the collection.
 	 */
 	public function push(mixed $value): Collection
 	{
@@ -775,19 +775,19 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	/**
 	 * Reduces the collection to a single value, passing the result of each iteration into the next.
 	 */
-	public function reduce(callable $closure, mixed $initial = null): mixed
+	public function reduce(callable $callback, mixed $initial = null): mixed
 	{
-		return Arr::reduce($this->items, $closure, $initial);
+		return Arr::reduce($this->items, $callback, $initial);
 	}
 
 	/**
 	 * Returns all items from the collection except those that pass the truth test.
 	 */
-	public function reject(callable $closure): Collection
+	public function reject(callable $callback): Collection
 	{
 		$new = [];
 		foreach ($this->items as $key => $value) {
-			if ($closure($value, $key) === false) {
+			if ($callback($value, $key) === false) {
 				$new[$key] = $value;
 			}
 		}
@@ -921,7 +921,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	/**
 	 * Skips over the items from the collection as long as the closure returns `true`, and returns the remaining items.
 	 */
-	public function skipWhile(callable $closure): Collection
+	public function skipWhile(Closure $closure): Collection
 	{
 		if ($this->count() === 0) {
 			return new Collection();
@@ -947,11 +947,11 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Sorts the array by value, while preserving the array keys. For custom behavior, pass your own algorithm to the `closure` parameter.
+	 * Sorts the array by value, while preserving the array keys. For custom behavior, pass your own algorithm to the `callback` parameter.
 	 */
-	public function sort(callable|int|null $closure = null, bool $descending = false): Collection
+	public function sort(callable|int|null $callback = null, bool $descending = false): Collection
 	{
-		return new Collection(Arr::sort($this->items, $closure, $descending));
+		return new Collection(Arr::sort($this->items, $callback, $descending));
 	}
 
 	/**
@@ -997,7 +997,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	/**
 	 * Returns the sum of all items in the collection, the specified key or using a closure.
 	 */
-	public function sum(callable|string|null $closure = null): int|float
+	public function sum(Closure|string|null $closure = null): int|float
 	{
 		return Arr::sum($this->items, $closure);
 	}
@@ -1054,7 +1054,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	/**
 	 * Returns all items until an item fails the given truth test.
 	 */
-	public function takeWhile(callable $closure): Collection
+	public function takeWhile(Closure $closure): Collection
 	{
 		$result = [];
 		foreach ($this->items as $key => $value) {
@@ -1068,11 +1068,11 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Iterates over all items in the collection and replaces all values with the values returned by the closure.
+	 * Iterates over all items in the collection and replaces all values with the values returned by the callback.
 	 */
-	public function transform(callable $closure): Collection
+	public function transform(callable $callback): Collection
 	{
-		$this->items = Arr::map($this->items, $closure);
+		$this->items = Arr::map($this->items, $callback);
 		return $this;
 	}
 
@@ -1085,19 +1085,19 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Executes the closure when no items are present. Optionally, when not empty, the alternative closure will be executed.
+	 * Executes the callback when no items are present. Optionally, when not empty, the alternative callback will be executed.
 	 */
-	public function whenEmpty(callable $closure, callable|null $alternative = null): Collection
+	public function whenEmpty(callable $callback, callable|null $alternative = null): Collection
 	{
-		return $this->when($this->isEmpty(), $closure, $alternative);
+		return $this->when($this->isEmpty(), $callback, $alternative);
 	}
 
 	/**
-	 * Executes the closure when at least one item is present. Optionally, when empty, the alternative closure will be executed.
+	 * Executes the callback when at least one item is present. Optionally, when empty, the alternative callback will be executed.
 	 */
-	public function whenNotEmpty(callable $closure, callable|null $alternative = null): Collection
+	public function whenNotEmpty(callable $callback, callable|null $alternative = null): Collection
 	{
-		return $this->when($this->isNotEmpty(), $closure, $alternative);
+		return $this->when($this->isNotEmpty(), $callback, $alternative);
 	}
 
 	/**
@@ -1156,6 +1156,9 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 		return Json::encodeClean($this->jsonSerialize());
 	}
 
+	/**
+	 * Returns array representation created from the data in the collection.
+	 */
 	public function toArray(): array
 	{
 		return $this->items;
