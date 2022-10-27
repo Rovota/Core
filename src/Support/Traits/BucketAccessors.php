@@ -64,12 +64,12 @@ trait BucketAccessors
 		return filter_var($this->get($key, $default), FILTER_VALIDATE_BOOLEAN);
 	}
 
-	public function int(string $key, int $default = 0): int
+	public function int(string $key, int $default = 0): int|false
 	{
 		return filter_var($this->get($key, $default), FILTER_VALIDATE_INT);
 	}
 
-	public function float(string $key, float $default = 0.00): float
+	public function float(string $key, float $default = 0.00): float|false
 	{
 		return filter_var($this->get($key, $default), FILTER_VALIDATE_FLOAT);
 	}
