@@ -110,6 +110,10 @@ collect(['apple', 'banana', 'blueberries'])->all();
 // ['apple', 'banana', 'blueberries']
 ```
 
+{% hint style="info" %}
+This method is an alias of [`toArray()`](collections.md#toarray).
+{% endhint %}
+
 #### `append()`
 
 Adds the value or values to the end of the collection. Optionally, you can provide a custom key as second parameter:
@@ -211,7 +215,7 @@ collect([1, 2, 3, 4, 5, 6])->contains(8);
 Alternatively, you can use a closure to check whether an item exists matching a truth test:
 
 ```php
-collect(['Mike', 'Richard', 'Linda'])->contains(function($name) {
+collect(['Mike', 'Richard', 'Linda'])->contains(function ($name) {
     return str_starts_with($name, 'M');
 });
 
@@ -277,7 +281,7 @@ collect([1, 2, 2, 2, 3])->countBy();
 // [1 => 1, 2 => 3, 3 => 1]
 ```
 
-Alternatively, you could pass a closure to count all values using custom logic:
+Alternatively, you could pass a callback to count all values using custom logic:
 
 {% code overflow="wrap" %}
 ```php
@@ -350,7 +354,7 @@ collect([
 // [3 => 'Google']
 ```
 
-Or, you could provide a closure in which you customize the values used:
+Or, you could provide a callback in which you customize the values used:
 
 ```php
 use Rovota\Core\Support\Text;
@@ -373,7 +377,7 @@ This method compares all values using strict comparisons.
 
 #### `each()`
 
-Iterates over all items in the collection and passes the item to the given closure. Stops iterating when `false` is returned, or the end of the collection is reached:
+Iterates over all items in the collection and passes the item to the given callback. Stops iterating when `false` is returned, or the end of the collection is reached:
 
 ```php
 $collection->each(function ($value, $key) {
@@ -386,7 +390,7 @@ $collection->each(function ($value, $key) {
 
 #### `every()`
 
-Returns `true` when all items pass a given truth test using the given closure:
+Returns `true` when all items pass a given truth test using the given callback:
 
 ```php
 collect([45, 87, 23, 79, 48])->every(function ($number) {
@@ -430,7 +434,7 @@ collect([
 
 #### `filter()`
 
-Returns the items from the collection that pass a given truth test. When no closure is provided, items with a value of `null` will be removed:
+Returns the items from the collection that pass a given truth test. When no callback is provided, items with a value of `null` will be removed:
 
 ```php
 collect([1, 'Porsche', null, 67, 'Pineapple'])->filter();
@@ -508,13 +512,14 @@ Returns the value for a given key. If the key does not exist, the default value 
 
 ```php
 collect(['name' => 'Mike', 'age' => 47])->get('age');
-
 // 47
+collect(['name' => 'Mike', 'age' => 47])->get('score', 10);
+// 10
 ```
 
 #### `groupBy()`
 
-Return a new collection grouped by the given key, or a value returned from a closure:
+Return a new collection grouped by the given key, or a value returned from a callback:
 
 ```php
 collect([
@@ -599,7 +604,7 @@ collect([
 Removes all values from the collection that are not present in the given collection:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `intersectByKeys()`
@@ -607,7 +612,7 @@ Removes all values from the collection that are not present in the given collect
 Removes all keys from the collection that are not present in the given collection:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `isEmpty()`
@@ -615,7 +620,9 @@ Removes all keys from the collection that are not present in the given collectio
 Returns `true` when no items are present in the collection:
 
 ```php
-// Some code
+collect(['red', 'green'])->isEmpty();
+
+// false
 ```
 
 #### `isList()`
@@ -623,7 +630,9 @@ Returns `true` when no items are present in the collection:
 Returns `true` when the collection keys are numeric, in ascending order, starting by 0:
 
 ```php
-// Some code
+collect([1, 4, 5, 6, 7, 9])->isList();
+
+// false
 ```
 
 #### `isNotEmpty()`
@@ -631,7 +640,9 @@ Returns `true` when the collection keys are numeric, in ascending order, startin
 Returns `true` when at least one item is present in the collection:
 
 ```php
-// Some code
+collect(['red', 'green'])->isNotEmpty();
+
+// true
 ```
 
 #### `join()`
@@ -639,15 +650,30 @@ Returns `true` when at least one item is present in the collection:
 Joins the values of the collection together. The second argument can be used to specify how the final element should be appended:
 
 ```php
-// Some code
+collect(['Google', 'Samsung', 'Apple'])->join(', ');
+// Google, Samsung, Apple
+collect(['Google', 'Samsung', 'Apple'])->join(', ', ' and ');
+// Google, Samsung and Apple
+collect(['Google', 'Samsung'])->join(', ', ' and ');
+// Google and Samsung
 ```
 
 #### `keyBy()`
 
-Keys the collection using the given key, or the result of the closure:
+Keys the collection using the given key, or the result of the callback:
 
 ```php
-// Some code
+collect([
+    ['name' => 'Kevin', 'age' => 35],
+    ['name' => 'Emily', 'age' => 26],
+    ['name' => 'Sharon', 'age' => 41],
+])->keyBy('name');
+
+// [
+//     'Kevin' => ['name' => 'Kevin', 'age' => 35],
+//     'Emily' => ['name' => 'Emily', 'age' => 26],
+//     'Sharon' => ['name' => 'Sharon', 'age' => 41],
+// ]
 ```
 
 #### `keys()`
@@ -655,7 +681,9 @@ Keys the collection using the given key, or the result of the closure:
 Returns the keys present in the collection:
 
 ```php
-// Some code
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->keys();
+
+// ['color', 'width', 'height']
 ```
 
 #### `last()`
@@ -663,7 +691,17 @@ Returns the keys present in the collection:
 Returns the last item in a collection, optionally the last the passes a given truth test:
 
 ```php
-// Some code
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->last();
+
+// 250
+```
+
+```php
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->last(function ($value) {
+    return is_int($value) && $value < 200;
+});
+
+// 100
 ```
 
 #### `macro()`
@@ -675,7 +713,11 @@ See the [Extending](collections.md#extending) section for more information.
 Iterates through the collection allowing modification of each item, returning a new collection with the result:
 
 ```php
-// Some code
+collect(['911', 'Taycan', 'Panamera'])->map(function ($model) {
+    return 'Porsche '.$model;
+});
+
+// ['Porsche 911', 'Porsche Taycan', 'Porsche Panamera']
 ```
 
 #### `max()`
@@ -683,7 +725,20 @@ Iterates through the collection allowing modification of each item, returning a 
 Returns the highest value in a collection or for a given key, limited by the value of the second parameter:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6, 7, 8])->max();
+// 8
+collect([1, 2, 3, 4, 5, 6, 7, 8])->max(limit: 5);
+// 5
+```
+
+```php
+collect([
+    ['name' => 'Kevin', 'age' => 35],
+    ['name' => 'Emily', 'age' => 26],
+    ['name' => 'Sharon', 'age' => 41],
+])->max('age');
+
+// 41
 ```
 
 #### `median()`
@@ -691,7 +746,18 @@ Returns the highest value in a collection or for a given key, limited by the val
 Returns the median of the collection or for a given key:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6, 7, 8])->median();
+// 4.5
+```
+
+```php
+collect([
+    ['name' => 'Kevin', 'age' => 35],
+    ['name' => 'Emily', 'age' => 26],
+    ['name' => 'Sharon', 'age' => 41],
+])->median('age');
+
+// 35
 ```
 
 #### `merge()`
@@ -699,7 +765,7 @@ Returns the median of the collection or for a given key:
 Merges the current collection with the items in the new collection:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `min()`
@@ -707,7 +773,20 @@ Merges the current collection with the items in the new collection:
 Returns the lowest value in a collection or for a given key, limited by the value of the second parameter:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6, 7, 8])->min();
+// 1
+collect([1, 2, 3, 4, 5, 6, 7, 8])->min(limit: 5);
+// 5
+```
+
+```php
+collect([
+    ['name' => 'Kevin', 'age' => 35],
+    ['name' => 'Emily', 'age' => 26],
+    ['name' => 'Sharon', 'age' => 41],
+])->min('age');
+
+// 26
 ```
 
 #### `missing()`
@@ -715,7 +794,9 @@ Returns the lowest value in a collection or for a given key, limited by the valu
 Checks whether the key or keys are missing:
 
 ```php
-// Some code
+collect(['color' => 'red', 'label' => 'Sale'])->missing('color');
+
+// false
 ```
 
 #### `mode()`
@@ -723,7 +804,20 @@ Checks whether the key or keys are missing:
 Returns the mode of the collection or given key:
 
 ```php
-// Some code
+collect([1, 2, 3, 3, 4, 5, 6])->mode();
+// [3]
+collect([1, 3, 3, 4, 5, 5])->mode();
+// [3, 5]
+```
+
+```php
+collect([
+    ['name' => 'Kevin', 'age' => 35],
+    ['name' => 'Emily', 'age' => 35],
+    ['name' => 'Sharon', 'age' => 41],
+])->mode('age');
+
+// [35]
 ```
 
 #### `modify()`
@@ -731,15 +825,25 @@ Returns the mode of the collection or given key:
 Allows modifying the collection using a closure:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->transform(function ($number) {
+    return $number * 2;
+});
+
+// [2, 4, 6, 8, 10, 12]
 ```
+
+{% hint style="info" %}
+This method returns a new Collection instance. If you want to modify the original collection, use [`transform()`](collections.md#transform) instead.
+{% endhint %}
 
 #### `occurrences()`
 
 Returns how many times a given value exists in the collection:
 
 ```php
-// Some code
+collect([1, 2, 3, 3, 4, 6, 7, 8])->occurrences(3);
+
+// 2
 ```
 
 #### `only()`
@@ -757,15 +861,27 @@ collect(['country' => 'NL', 'city' => 'Amsterdam'])->only(['country']);
 Splits the collection into two collections, where one has items passing the truth test, and the other has items failing the truth test:
 
 ```php
-// Some code
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->partition(function ($value) {
+    return is_int($value);
+});
+
+// [
+//     0 => [ 
+//         'width' => 100,
+//         'height' => 250,
+//     ],
+//     1 => [
+//         'color' => 'red',
+//     ],
+// ]
 ```
 
 #### `pipe()`
 
-Passes the collection to the closure and returns the result:
+Passes the collection to the callback and returns the result:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `pluck()`
@@ -773,7 +889,23 @@ Passes the collection to the closure and returns the result:
 Retrieves all values for a given key:
 
 ```php
-// Some code
+$collection = collect([
+    ['name' => 'Kevin', 'age' => 35],
+    ['name' => 'Emily', 'age' => 26],
+])->pluck('age');
+
+// [35, 26]
+```
+
+Optionally, you can specify how the items should be keyed using the second parameter:
+
+```php
+$collection = collect([
+    ['name' => 'Kevin', 'age' => 35],
+    ['name' => 'Emily', 'age' => 26],
+])->pluck('age', 'name');
+
+// ['Kevin' => 35, 'Emily' => 26]
 ```
 
 #### `pop()`
@@ -781,7 +913,10 @@ Retrieves all values for a given key:
 Removes and returns the last item or `x` items from the collection. Defaults to `1`:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5])->pop();
+// 5
+collect([1, 2, 3, 4, 5])->pop(3);
+// [5, 4, 3]
 ```
 
 {% hint style="warning" %}
@@ -793,7 +928,9 @@ This method modifies the original collection rather than creating a new instance
 Adds the value or values to the beginning of the collection:
 
 ```php
-// Some code
+collect(['username' => 'mike'])->prepend(34, 'age');
+
+// ['age' => 34, 'username' => 'mike']
 ```
 
 {% hint style="warning" %}
@@ -805,7 +942,10 @@ This method modifies the original collection rather than creating a new instance
 Retrieves the item for the given key and removes it from the collection:
 
 ```php
-// Some code
+collect(['username' => 'mike', 'age' => 34])->pull('age');
+// 34
+collect(['username' => 'mike', 'age' => 34])->pull('score', 10);
+// 10
 ```
 
 {% hint style="warning" %}
@@ -817,7 +957,9 @@ This method modifies the original collection rather than creating a new instance
 Adds a new value to the end of the collection:
 
 ```php
-// Some code
+collect(['username' => 'mike', 'age' => 34])->push('score');
+
+// ['username' => 'mike', 'age' => 34, 'score']
 ```
 
 {% hint style="warning" %}
@@ -829,7 +971,9 @@ This method modifies the original collection rather than creating a new instance
 Adds a new value for the given key:
 
 ```php
-// Some code
+collect(['username' => 'mike', 'age' => 34])->put('score', 10);
+
+// ['username' => 'mike', 'age' => 34, 'score' => 10]
 ```
 
 {% hint style="warning" %}
@@ -841,7 +985,10 @@ This method modifies the original collection rather than creating a new instance
 Returns `x` random items from the collection. Defaults to `1`:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5])->random();
+// 4
+collect([1, 2, 3, 4, 5])->random(3);
+// [1, 4, 5]
 ```
 
 #### `range()`
@@ -849,7 +996,18 @@ Returns `x` random items from the collection. Defaults to `1`:
 Returns the result of the maximum value minus the minimum value:
 
 ```php
-// Some code
+collect([1, 2, 3, 3, 4, 5, 6])->range();
+// 5
+```
+
+```php
+collect([
+    ['name' => 'Kevin', 'age' => 35],
+    ['name' => 'Emily', 'age' => 26],
+    ['name' => 'Sharon', 'age' => 41],
+])->range('age');
+
+// [15]
 ```
 
 #### `reduce()`
@@ -857,7 +1015,7 @@ Returns the result of the maximum value minus the minimum value:
 Reduces the collection to a single value, passing the result of each iteration into the next:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `reject()`
@@ -865,7 +1023,11 @@ Reduces the collection to a single value, passing the result of each iteration i
 Returns all items from the collection except those that pass the truth test:
 
 ```php
-// Some code
+collect([1, 2, 3, 3, 4, 5, 6])->reject(function ($number) {
+    return is_odd($number);
+})
+
+// [2, 4, 6]
 ```
 
 #### `replace()`
@@ -873,7 +1035,7 @@ Returns all items from the collection except those that pass the truth test:
 Replaces the items in the current collection with the items in the given collection:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `replaceRecursive()`
@@ -881,7 +1043,7 @@ Replaces the items in the current collection with the items in the given collect
 Similar to `replace()`, but applies the same process to inner values:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `resetKeys()`
@@ -889,7 +1051,9 @@ Similar to `replace()`, but applies the same process to inner values:
 Remove existing keys and replace them with consecutive keys starting from 0:
 
 ```php
-// Some code
+collect(['username' => 'mike', 'age' => 34])->resetKeys();
+
+// [0 => 'mike', 1 => 34]
 ```
 
 #### `reverse()`
@@ -897,7 +1061,9 @@ Remove existing keys and replace them with consecutive keys starting from 0:
 Reverses the order of the items in the collection while preserving the keys:
 
 ```php
-// Some code
+collect(['username' => 'mike', 'age' => 34])->reverse();
+
+// ['age' => 34, 'username' => 'mike']
 ```
 
 #### `search()`
@@ -905,13 +1071,19 @@ Reverses the order of the items in the collection while preserving the keys:
 Returns the corresponding key of the searched value when found. Uses strict comparisons by default:
 
 ```php
-// Some code
+collect(['Alpine', 'Mercedes', 'BMW', 'Volkswagen'])->search('BMW');
+
+// 2
 ```
 
 Optionally, you can pass a closure to search for the first item that matches a truth test:
 
 ```php
-// Some code
+collect(['Alpine', 'Mercedes', 'BMW', 'Volkswagen'])->search(function ($brand) {
+    return Text::startsWith($brand, 'M');
+});
+
+// 1
 ```
 
 #### `shift()`
@@ -919,7 +1091,10 @@ Optionally, you can pass a closure to search for the first item that matches a t
 Removes and returns the first item or `x` items from the collection. Defaults to `1`:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5])->shift();
+// 1
+collect([1, 2, 3, 4, 5])->shift(3);
+// [1, 2, 3]
 ```
 
 #### `shuffle()`
@@ -927,7 +1102,9 @@ Removes and returns the first item or `x` items from the collection. Defaults to
 Changes the order of the items in the collection to be random:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->shuffle();
+
+// [2, 5, 3, 1, 6, 4]
 ```
 
 #### `skip()`
@@ -935,7 +1112,9 @@ Changes the order of the items in the collection to be random:
 Skips over `x` items from the collection, and returns the remaining items:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->skip(2);
+
+// [3, 4, 5, 6]
 ```
 
 #### `skipUntil()`
@@ -943,7 +1122,11 @@ Skips over `x` items from the collection, and returns the remaining items:
 Skips over the items from the collection until the closure returns `true`, and returns the remaining items:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->skipUntil(function ($number) {
+    return $number > 3;
+});
+
+// [4, 5, 6]
 ```
 
 #### `skipWhile()`
@@ -951,7 +1134,11 @@ Skips over the items from the collection until the closure returns `true`, and r
 Skips over the items from the collection as long as the closure returns `true`, and returns the remaining items:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->skipWhile(function ($number) {
+    return $number < 3;
+});
+
+// [3, 4, 5, 6]
 ```
 
 #### `slice()`
@@ -959,15 +1146,19 @@ Skips over the items from the collection as long as the closure returns `true`, 
 Returns a slice of the collection starting at the given index, with a maximum number of items if defined:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->slice(3, 2);
+
+// [4, 5]
 ```
 
 #### `sort()`
 
-Sorts the array by value, while preserving the array keys. For custom behavior, pass your own algorithm to the `closure` parameter:
+Sorts the array by value, while preserving the array keys. For custom behavior, pass your own algorithm to the `callback` parameter:
 
 ```php
-// Some code
+collect([2, 5, 3, 1, 6, 4])->sort();
+
+// [1, 2, 3, 4, 5, 6]
 ```
 
 #### `sortBy()`
@@ -975,7 +1166,7 @@ Sorts the array by value, while preserving the array keys. For custom behavior, 
 Sort the items using the result of the provided closure:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `sortByDesc()`
@@ -983,7 +1174,7 @@ Sort the items using the result of the provided closure:
 Sort the items in descending order using the result of the provided closure:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `sortDesc()`
@@ -991,7 +1182,9 @@ Sort the items in descending order using the result of the provided closure:
 Sorts the array by value in descending order, while preserving the array keys:
 
 ```php
-// Some code
+collect([2, 5, 3, 1, 6, 4])->sortDesc();
+
+// [6, 5, 4, 3, 2, 1]
 ```
 
 #### `sortKeys()`
@@ -999,7 +1192,9 @@ Sorts the array by value in descending order, while preserving the array keys:
 Sorts the array by key:
 
 ```php
-// Some code
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->sortKeys();
+
+// ['color' => 'red', 'height' => 250, 'width' => 100]
 ```
 
 #### `sortKeysDesc()`
@@ -1007,7 +1202,9 @@ Sorts the array by key:
 Sorts the array by key in descending order:
 
 ```php
-// Some code
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->sortKeysDesc();
+
+// ['width' => 100, 'height' => 250, 'color' => 'red']
 ```
 
 #### `sum()`
@@ -1015,7 +1212,18 @@ Sorts the array by key in descending order:
 Returns the sum of all items in the collection, the specified key or using a closure:
 
 ```php
-// Some code
+collect([1, 2, 3, 3, 4, 5, 6])->sum();
+// 21
+```
+
+```php
+collect([
+    ['name' => 'Chair', 'stock' => 27],
+    ['name' => 'Desk', 'stock' => 41],
+    ['name' => 'Lamp', 'stock' => 182],
+])->sum('stock');
+
+// [250]
 ```
 
 #### `take()`
@@ -1023,7 +1231,9 @@ Returns the sum of all items in the collection, the specified key or using a clo
 Returns `x` number of items from the original collection:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->take(2);
+
+// [1, 2]
 ```
 
 #### `takeFrom()`
@@ -1031,7 +1241,17 @@ Returns `x` number of items from the original collection:
 Returns all items after the specified value or when an item passes the truth test:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->takeFrom(2);
+
+// [3, 4, 5, 6]
+```
+
+```php
+collect([1, 2, 3, 4, 5, 6])->takeFrom(function ($number) {
+    return $number > 3; // from 4
+});
+
+// [5, 6]
 ```
 
 #### `takeUntil()`
@@ -1039,7 +1259,17 @@ Returns all items after the specified value or when an item passes the truth tes
 Returns all items up until the value has been found or an item passes a truth test:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->takeUntil(5);
+
+// [1, 2, 3, 4]
+```
+
+```php
+collect([1, 2, 3, 4, 5, 6])->takeUntil(function ($number) {
+    return $number > 3; // until 4
+});
+
+// [1, 2, 3]
 ```
 
 #### `takeWhile()`
@@ -1047,7 +1277,11 @@ Returns all items up until the value has been found or an item passes a truth te
 Returns all items until an item fails the given truth test:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->takeWhile(function ($number) {
+    return $number < 3;
+});
+
+// [1, 2]
 ```
 
 #### `toArray()`
@@ -1055,7 +1289,9 @@ Returns all items until an item fails the given truth test:
 Returns array representation created from the data in the collection:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->toArray();
+
+// [1, 2, 3, 4, 5, 6]
 ```
 
 #### `toJson()`
@@ -1063,7 +1299,9 @@ Returns array representation created from the data in the collection:
 Returns JSON representation created from the data in the collection:
 
 ```php
-// Some code
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->toJson();
+
+// {"color":"red","width":100,"height":250}
 ```
 
 #### `toQuery()`
@@ -1071,15 +1309,21 @@ Returns JSON representation created from the data in the collection:
 Returns a formatted query string using the items in the collection:
 
 ```php
-// Some code
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->toQuery();
+
+// ?color=red&width=100&height=250
 ```
 
 #### `transform()`
 
-Iterates over all items in the collection and replaces all values with the values returned by the closure:
+Iterates over all items in the collection and replaces all values with the values returned by the callback:
 
 ```php
-// Some code
+collect([1, 2, 3, 4, 5, 6])->transform(function ($number) {
+    return $number * 2;
+});
+
+// [2, 4, 6, 8, 10, 12]
 ```
 
 {% hint style="warning" %}
@@ -1091,7 +1335,7 @@ This method modifies the original collection rather than creating a new instance
 Executes the provided callback when the condition is `false`. Optionally, when `true`, the alternative callback will be executed:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `values()`
@@ -1099,7 +1343,9 @@ Executes the provided callback when the condition is `false`. Optionally, when `
 Returns the values of the collection without the original keys:
 
 ```php
-// Some code
+collect(['color' => 'red', 'width' => 100, 'height' => 250])->values();
+
+// ['red', 100, 250]
 ```
 
 #### `when()`
@@ -1107,23 +1353,23 @@ Returns the values of the collection without the original keys:
 Executes the provided callback when the condition is `true`. Optionally, when `false`, the alternative callback will be executed:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `whenEmpty()`
 
-Executes the closure when no items are present. Optionally, when not empty, the alternative closure will be executed:
+Executes the callback when no items are present. Optionally, when not empty, the alternative callback will be executed:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `whenNotEmpty()`
 
-Executes the closure when at least one item is present. Optionally, when empty, the alternative closure will be executed:
+Executes the callback when at least one item is present. Optionally, when empty, the alternative callback will be executed:
 
 ```php
-// Some code
+// Example coming soon
 ```
 
 #### `whereNotNull()`
@@ -1131,7 +1377,9 @@ Executes the closure when at least one item is present. Optionally, when empty, 
 Returns all items where the value is not equivalent to `null`:
 
 ```php
-// Some code
+collect(['name' => 'Mike' => 'age' => 35, 'alias' => null])->whereNotNull();
+
+// ['name' => 'Mike' => 'age' => 35]
 ```
 
 #### `whereNull()`
@@ -1139,5 +1387,7 @@ Returns all items where the value is not equivalent to `null`:
 Returns all items where the value is the equivalent to `null`:
 
 ```php
-// Some code
+collect(['name' => 'Mike' => 'age' => 35, 'alias' => null])->whereNull();
+
+// ['alias' => null]
 ```
