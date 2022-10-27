@@ -112,9 +112,9 @@ class Bucket implements ArrayAccess, JsonSerializable
 		return true;
 	}
 
-	public function filledAny(string|array $keys): bool
+	public function filledAny(array $keys): bool
 	{
-		foreach (is_array($keys) ? $keys : [$keys] as $key) {
+		foreach ($keys as $key) {
 			if ($this->get($key) !== null) {
 				return true;
 			}
