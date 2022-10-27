@@ -77,7 +77,7 @@ class Bucket implements ArrayAccess, JsonSerializable
 	public function count(string|null $key): int
 	{
 		$value = $key === null ? $this->export() : $this->get($key);
-		return is_array($value) ? 1 : count($value);
+		return is_array($value) ? count($value) : 1;
 	}
 
 	// -----------------
@@ -166,6 +166,18 @@ class Bucket implements ArrayAccess, JsonSerializable
 	{
 		$this->data->import($data, self::PRESERVE);
 		return $this;
+	}
+
+	// -----------------
+
+	public function toJson(): string
+	{
+		return Json::encodeClean($this->jsonSerialize());
+	}
+
+	public function toArray(): array
+	{
+		return $this->data->export();
 	}
 
 	// -----------------

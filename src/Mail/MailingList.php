@@ -34,7 +34,7 @@ class MailingList extends Model
 
 	protected function getSubscribersAttribute(): Collection
 	{
-		return Cache::remember('mailing_list_subscribers_'.$this->id, function() {
+		return Cache::remember('mailing_list_subscribers_'.$this->id, function () {
 			return MailingListSubscriber::where('mailing_list_id', $this->id)->get();
 		});
 	}
