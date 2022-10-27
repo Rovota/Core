@@ -16,7 +16,7 @@ This is rather inconvenient, since it makes code much less readable. Core solves
 
 ### Compatibility
 
-The Collection class implements `ArrayAccess`, `Iterator`, `Countable`, and `JsonSerializable`. This allows collections to be used as if they were arrays in many places, with the exception of parameters that require a value of type `array`. In these cases, you can use the `toArray()` method.
+The Collection class implements `ArrayAccess`, `Iterator`, `Countable`, and `JsonSerializable`. This allows collections to be used as if they were arrays in many places, with the exception of parameters that require a value of type `array`. In these cases, you can use the [`toArray()`](collections.md#toarray) method.
 
 ### Creation
 
@@ -26,7 +26,11 @@ Alternatively, you can create collections yourself using the `collect()` helper 
 
 ```php
 $collection = collect([1, 2, 3, 4]);
+
 // is equivalent to
+
+use Rovota\Core\Support\Collection;
+
 $collection = Collection::make([1, 2, 3, 4]);
 ```
 
@@ -37,7 +41,7 @@ Collections support Macro functionality. This allows you to add any method you n
 ```php
 use Rovota\Core\Support\Collection;
 
-Collection::macro('stringLength', function() {
+Collection::macro('stringLength', function () {
     return $this->map(function ($value) {
         return strlen($value);
     });
