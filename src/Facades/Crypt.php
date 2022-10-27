@@ -38,7 +38,7 @@ final class Crypt
 
 	public static function supports(string $key, string $cipher): bool
 	{
-		return Encrypter::supported($key, $cipher);
+		return Encrypter::supports($key, $cipher);
 	}
 
 	public static function generateKey(string $cipher): string

@@ -35,7 +35,7 @@ final class Encrypter
 	 */
 	public function __construct(string $key, string|null $cipher = 'aes-256-gcm')
 	{
-		if (!Encrypter::supported($key, $cipher)) {
+		if (!Encrypter::supports($key, $cipher)) {
 			$ciphers = collect(self::$supported_ciphers)->keys()->join(', ', ' and ');
 			throw new IncorrectKeyException("Unsupported cipher or incorrect key length. Supported ciphers are: $ciphers.");
 		}
@@ -46,7 +46,7 @@ final class Encrypter
 
 	// -----------------
 
-	public static function supported(string $key, string $cipher): bool
+	public static function supports(string $key, string $cipher): bool
 	{
 		$cipher = strtolower($cipher);
 		if (!isset(self::$supported_ciphers[$cipher])) {
@@ -79,6 +79,11 @@ final class Encrypter
 	public function getKeyEncoded(): string
 	{
 		return base64_encode($this->key);
+	}
+
+	public function getCipher(): string
+	{
+		return $this->cipher;
 	}
 
 	// -----------------
