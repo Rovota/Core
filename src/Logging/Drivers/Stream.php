@@ -6,11 +6,12 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Logging;
+namespace Rovota\Core\Logging\Drivers;
 
 use Monolog\Handler\StreamHandler;
+use Rovota\Core\Logging\Logger;
 
-final class StreamLogger extends Logger
+final class Stream extends Logger
 {
 
 	public function __construct(string $name, array $options = [])

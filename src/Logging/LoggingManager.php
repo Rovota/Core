@@ -9,6 +9,10 @@
 namespace Rovota\Core\Logging;
 
 use Rovota\Core\Kernel\ExceptionHandler;
+use Rovota\Core\Logging\Drivers\Discord;
+use Rovota\Core\Logging\Drivers\Monolog;
+use Rovota\Core\Logging\Drivers\Stack;
+use Rovota\Core\Logging\Drivers\Stream;
 use Rovota\Core\Logging\Exceptions\MissingChannelConfigException;
 use Rovota\Core\Logging\Exceptions\UnsupportedDriverException;
 use Rovota\Core\Logging\Interfaces\LogInterface;
@@ -81,10 +85,10 @@ final class LoggingManager
 	public static function build(string $name, array $options): LogInterface
 	{
 		return match ($options['driver']) {
-			'stack' => new StackLogger($name, $options),
-			'stream' => new StreamLogger($name, $options),
-			'discord' => new DiscordLogger($name, $options),
-			'monolog' => new MonologLogger($name, $options),
+			'stack' => new Stack($name, $options),
+			'stream' => new Stream($name, $options),
+			'discord' => new Discord($name, $options),
+			'monolog' => new Monolog($name, $options),
 			default => throw new UnsupportedDriverException("The selected driver '{$options['driver']}' is not supported.")
 		};
 	}

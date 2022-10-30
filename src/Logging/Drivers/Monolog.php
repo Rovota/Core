@@ -6,9 +6,11 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Logging;
+namespace Rovota\Core\Logging\Drivers;
 
-final class MonologLogger extends Logger
+use Rovota\Core\Logging\Logger;
+
+final class Monolog extends Logger
 {
 
 	public function __construct(string $name, array $options = [])

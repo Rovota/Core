@@ -6,15 +6,16 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Logging;
+namespace Rovota\Core\Logging\Drivers;
 
 use Monolog\Logger;
 use Rovota\Core\Logging\Interfaces\LogInterface;
+use Rovota\Core\Logging\LoggingManager;
 use Rovota\Core\Logging\Traits\SharedFunctions;
 use Rovota\Core\Support\Text;
 use Stringable;
 
-final class StackLogger implements LogInterface
+final class Stack implements LogInterface
 {
 	use SharedFunctions;
 

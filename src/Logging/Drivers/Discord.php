@@ -6,11 +6,12 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Logging;
+namespace Rovota\Core\Logging\Drivers;
 
 use Rovota\Core\Logging\Handlers\DiscordHandler;
+use Rovota\Core\Logging\Logger;
 
-final class DiscordLogger extends Logger
+final class Discord extends Logger
 {
 
 	public function __construct(string $name, array $options = [])

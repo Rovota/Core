@@ -12,9 +12,9 @@ namespace Rovota\Core\Logging\Traits;
 
 use Closure;
 use Rovota\Core\Kernel\ExceptionHandler;
+use Rovota\Core\Logging\Drivers\Stack;
 use Rovota\Core\Logging\Interfaces\LogInterface;
 use Rovota\Core\Logging\LoggingManager;
-use Rovota\Core\Logging\StackLogger;
 use Throwable;
 
 trait SharedFunctions
@@ -95,7 +95,7 @@ trait SharedFunctions
 
 	public function attach(LogInterface|string|array $channel): LogInterface
 	{
-		if ($this instanceof StackLogger) {
+		if ($this instanceof Stack) {
 			// It already is a stack. Just add the given channel(s).
 			$channels = is_array($channel) ? $channel : [$channel];
 			foreach ($channels as $channel) {
@@ -106,7 +106,7 @@ trait SharedFunctions
 
 		try {
 			// Create an on-demand stack using the current and new channel(s).
-			return StackLogger::createUsing([$this])->attach($channel);
+			return Stack::createUsing([$this])->attach($channel);
 		} catch (Throwable $throwable) {
 			ExceptionHandler::addThrowable($throwable);
 			return $this;

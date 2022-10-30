@@ -8,10 +8,10 @@
 
 namespace Rovota\Core\Facades;
 
+use Rovota\Core\Logging\Drivers\Stack;
 use Rovota\Core\Logging\Interfaces\LogInterface;
 use Rovota\Core\Logging\Logger;
 use Rovota\Core\Logging\LoggingManager;
-use Rovota\Core\Logging\StackLogger;
 
 final class Log
 {
@@ -32,7 +32,7 @@ final class Log
 	 */
 	public static function stack(array $channels): LogInterface
 	{
-		return StackLogger::createUsing($channels);
+		return Stack::createUsing($channels);
 	}
 
 	/**
