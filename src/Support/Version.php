@@ -9,6 +9,7 @@
 namespace Rovota\Core\Support;
 
 use JsonSerializable;
+use PHLAK\SemVer\Exceptions\InvalidVersionException;
 use PHLAK\SemVer\Version as SemVer;
 
 final class Version implements JsonSerializable
@@ -130,34 +131,40 @@ final class Version implements JsonSerializable
 
 	// -----------------
 
-	public function isGreater($version): bool
+	public function isGreater(Version|string $version): bool
 	{
-		return $this->semver->gt($version);
+		$version = $this->getInstance($version);
+		return !($version === null) && $this->semver->gt($version->semver());
 	}
 
-	public function isLower($version): bool
+	public function isLower(Version|string $version): bool
 	{
-		return $this->semver->lt($version);
+		$version = $this->getInstance($version);
+		return !($version === null) && $this->semver->lt($version->semver());
 	}
 
-	public function isEqual($version): bool
+	public function isEqual(Version|string $version): bool
 	{
-		return $this->semver->eq($version);
+		$version = $this->getInstance($version);
+		return !($version === null) && $this->semver->eq($version->semver());
 	}
 
-	public function isNotEqual($version): bool
+	public function isNotEqual(Version|string $version): bool
 	{
-		return $this->semver->neq($version);
+		$version = $this->getInstance($version);
+		return !($version === null) && $this->semver->neq($version->semver());
 	}
 
-	public function isEqualOrGreater($version): bool
+	public function isEqualOrGreater(Version|string $version): bool
 	{
-		return $this->semver->gte($version);
+		$version = $this->getInstance($version);
+		return !($version === null) && $this->semver->gte($version->semver());
 	}
 
-	public function isEqualOrLower($version): bool
+	public function isEqualOrLower(Version|string $version): bool
 	{
-		return $this->semver->lte($version);
+		$version = $this->getInstance($version);
+		return !($version === null) && $this->semver->lte($version->semver());
 	}
 
 	// -----------------
@@ -165,6 +172,16 @@ final class Version implements JsonSerializable
 	public function semVer(): SemVer
 	{
 		return $this->semver;
+	}
+
+	protected function getInstance(Version|string $version): Version|null
+	{
+		try {
+			$version = is_string($version) ? new Version($version) : $version;
+		} catch(InvalidVersionException) {
+			return null;
+		}
+		return $version;
 	}
 
 }
