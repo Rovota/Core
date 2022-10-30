@@ -71,6 +71,26 @@ final class Version implements JsonSerializable
 
 	// -----------------
 
+	public function incrementMajor(): Version
+	{
+		$this->semver->incrementMajor();
+		return $this;
+	}
+
+	public function incrementMinor(): Version
+	{
+		$this->semver->incrementMinor();
+		return $this;
+	}
+
+	public function incrementPatch(): Version
+	{
+		$this->semver->incrementPatch();
+		return $this;
+	}
+
+	// -----------------
+
 	public function basic(): string
 	{
 		$version = implode('.', [$this->semver->major, $this->semver->minor, $this->semver->patch]);
