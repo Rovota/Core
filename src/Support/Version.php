@@ -160,4 +160,11 @@ final class Version implements JsonSerializable
 		return $this->semver->lte($version);
 	}
 
+	// -----------------
+
+	public function semVer(): SemVer
+	{
+		return $this->semver;
+	}
+
 }
