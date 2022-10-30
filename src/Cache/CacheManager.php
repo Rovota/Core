@@ -9,6 +9,9 @@
 namespace Rovota\Core\Cache;
 
 use RedisException;
+use Rovota\Core\Cache\Drivers\APCuStore;
+use Rovota\Core\Cache\Drivers\ArrayStore;
+use Rovota\Core\Cache\Drivers\RedisStore;
 use Rovota\Core\Cache\Exceptions\MissingCacheConfigException;
 use Rovota\Core\Cache\Exceptions\UnsupportedDriverException;
 use Rovota\Core\Kernel\ExceptionHandler;

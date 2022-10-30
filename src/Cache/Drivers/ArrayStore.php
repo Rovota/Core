@@ -6,8 +6,9 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Cache;
+namespace Rovota\Core\Cache\Drivers;
 
+use Rovota\Core\Cache\CacheStore;
 use Rovota\Core\Support\Arr;
 
 class ArrayStore extends CacheStore
