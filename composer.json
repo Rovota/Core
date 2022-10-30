@@ -35,7 +35,7 @@
       "guzzlehttp/guzzle": "^7.5",
       "league/commonmark": "^2.3",
       "league/flysystem": "^3.10",
-      "league/flysystem-read-only": "^3.3",
+      "league/flysystem-read-only": "^3.10",
       "monolog/monolog": "^3.2",
       "phlak/semver": "^4.0",
       "phpmailer/phpmailer": "^6.6",
