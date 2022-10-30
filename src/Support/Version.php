@@ -11,12 +11,17 @@ namespace Rovota\Core\Support;
 use JsonSerializable;
 use PHLAK\SemVer\Version as SemVer;
 
-final class Version extends SemVer implements JsonSerializable
+final class Version implements JsonSerializable
 {
 
+	protected SemVer $semver;
+
+	/**
+	 * @throws \PHLAK\SemVer\Exceptions\InvalidVersionException
+	 */
 	public function __construct(string $version = '0.1.0')
 	{
-		parent::__construct($version);
+		$this->semver = new SemVer($version);
 	}
 
 	// -----------------
@@ -33,9 +38,41 @@ final class Version extends SemVer implements JsonSerializable
 
 	// -----------------
 
+	public function setMajor(int $value): Version
+	{
+		$this->semver->setMajor($value);
+		return $this;
+	}
+
+	public function setMinor(int $value): Version
+	{
+		$this->semver->setMinor($value);
+		return $this;
+	}
+
+	public function setPatch(int $value): Version
+	{
+		$this->semver->setPatch($value);
+		return $this;
+	}
+
+	public function setPreRelease(string|null $value): Version
+	{
+		$this->semver->setPreRelease($value);
+		return $this;
+	}
+
+	public function setBuild(string|null $value): Version
+	{
+		$this->semver->setBuild($value);
+		return $this;
+	}
+
+	// -----------------
+
 	public function basic(): string
 	{
-		$version = implode('.', [$this->major, $this->minor, $this->patch]);
+		$version = implode('.', [$this->semver->major, $this->semver->minor, $this->semver->patch]);
 		if (empty($this->preRelease) === false) {
 			$version .= '-'.$this->preRelease;
 		}
@@ -68,59 +105,59 @@ final class Version extends SemVer implements JsonSerializable
 
 	public function major(): int
 	{
-		return $this->major;
+		return $this->semver->major;
 	}
 
 	public function minor(): int
 	{
-		return $this->minor;
+		return $this->semver->minor;
 	}
 
 	public function patch(): int
 	{
-		return $this->patch;
+		return $this->semver->patch;
 	}
 
 	public function preRelease(): string|null
 	{
-		return $this->preRelease;
+		return $this->semver->preRelease;
 	}
 
 	public function build(): string|null
 	{
-		return $this->build;
+		return $this->semver->build;
 	}
 
 	// -----------------
 
 	public function isGreater($version): bool
 	{
-		return $this->gt($version);
+		return $this->semver->gt($version);
 	}
 
 	public function isLower($version): bool
 	{
-		return $this->lt($version);
+		return $this->semver->lt($version);
 	}
 
 	public function isEqual($version): bool
 	{
-		return $this->eq($version);
+		return $this->semver->eq($version);
 	}
 
 	public function isNotEqual($version): bool
 	{
-		return $this->neq($version);
+		return $this->semver->neq($version);
 	}
 
 	public function isEqualOrGreater($version): bool
 	{
-		return $this->gte($version);
+		return $this->semver->gte($version);
 	}
 
 	public function isEqualOrLower($version): bool
 	{
-		return $this->lte($version);
+		return $this->semver->lte($version);
 	}
 
 }
