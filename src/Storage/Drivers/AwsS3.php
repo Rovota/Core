@@ -6,12 +6,13 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Storage;
+namespace Rovota\Core\Storage\Drivers;
 
-use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use Aws\S3\S3Client;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use Rovota\Core\Storage\Disk;
 
-final class CloudDisk extends Disk
+final class AwsS3 extends Disk
 {
 
 	public function __construct(string $name, array $options = [])

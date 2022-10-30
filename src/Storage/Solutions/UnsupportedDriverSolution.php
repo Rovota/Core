@@ -20,7 +20,7 @@ class UnsupportedDriverSolution implements Solution
 
 	public function getDescription(): string
 	{
-		return 'Currently, only the local, s3, sftp and flysystem drivers are supported.';
+		return 'Currently, only the local, s3, sftp and custom drivers are supported.';
 	}
 
 	public function getDocumentationLinks(): array

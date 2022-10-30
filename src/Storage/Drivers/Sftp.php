@@ -6,13 +6,14 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Storage;
+namespace Rovota\Core\Storage\Drivers;
 
 use League\Flysystem\PhpseclibV3\SftpAdapter;
 use League\Flysystem\PhpseclibV3\SftpConnectionProvider;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
+use Rovota\Core\Storage\Disk;
 
-final class RemoteDisk extends Disk
+final class Sftp extends Disk
 {
 
 	public function __construct(string $name, array $options = [])

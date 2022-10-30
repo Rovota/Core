@@ -6,11 +6,12 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Storage;
+namespace Rovota\Core\Storage\Drivers;
 
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use Rovota\Core\Storage\Disk;
 
-final class LocalDisk extends Disk
+final class Local extends Disk
 {
 
 	public function __construct(string $name, array $options)

@@ -9,6 +9,10 @@
 namespace Rovota\Core\Storage;
 
 use Rovota\Core\Kernel\ExceptionHandler;
+use Rovota\Core\Storage\Drivers\Custom;
+use Rovota\Core\Storage\Drivers\Local;
+use Rovota\Core\Storage\Drivers\Sftp;
+use Rovota\Core\Storage\Drivers\AwsS3;
 use Rovota\Core\Storage\Exceptions\MissingStorageConfigException;
 use Rovota\Core\Storage\Exceptions\UnsupportedDriverException;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
@@ -84,10 +88,10 @@ final class StorageManager
 	public static function build(string $name, array $options): DiskInterface
 	{
 		return match ($options['driver']) {
-			'local' => new LocalDisk($name, $options),
-			's3' => new CloudDisk($name, $options),
-			'sftp' => new RemoteDisk($name, $options),
-			'flysystem' => new FlysystemDisk($name, $options),
+			'local' => new Local($name, $options),
+			's3' => new AwsS3($name, $options),
+			'sftp' => new Sftp($name, $options),
+			'custom' => new Custom($name, $options),
 			default => throw new UnsupportedDriverException("The selected driver '{$options['driver']}' is not supported.")
 		};
 	}
