@@ -36,7 +36,7 @@ interface DiskInterface
 
 	// -----------------
 
-	public function option(string $name): string|bool|int|array|null;
+	public function option(string $name): mixed;
 
 	public function driver(): string;
 

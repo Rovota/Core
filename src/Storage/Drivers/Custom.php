@@ -21,7 +21,7 @@ final class Custom extends Disk
 
 	// -----------------
 
-	public function parameter(string $name): string|int|array|null
+	public function parameter(string $name): mixed
 	{
 		return $this->options['parameters'][$name] ?? null;
 	}

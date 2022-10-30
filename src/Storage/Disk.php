@@ -64,7 +64,7 @@ abstract class Disk implements DiskInterface
 
 	// -----------------
 
-	public function option(string $name): string|bool|int|array|null
+	public function option(string $name): mixed
 	{
 		return $this->options[$name] ?? null;
 	}
