@@ -47,7 +47,7 @@
       "league/flysystem-sftp-v3": "^3.6"
    },
    "suggest": {
-      "league/flysystem-aws-s3-v3": "Allows usage of AWS S3 and similar services as file storage.",
+      "league/flysystem-aws-s3-v3": "Allows usage of S3 compatible services as file storage.",
       "league/flysystem-sftp-v3": "Allows usage of SFTP file storage.",
       "ext-redis": "*",
       "ext-apcu": "*",
@@ -68,6 +68,7 @@
    },
    "replace": {
       "symfony/polyfill-php80": "*",
-      "symfony/polyfill-mbstring": "*"
+      "symfony/polyfill-mbstring": "*",
+      "ralouphie/getallheaders": "*"
    }
 }
