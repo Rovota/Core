@@ -6,7 +6,7 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Storage\Solutions;
+namespace Rovota\Core\Cache\Solutions;
 
 use Rovota\Core\Kernel\Interfaces\Solution;
 
@@ -26,7 +26,7 @@ class UnsupportedDriverSolution implements Solution
 	public function getDocumentationLinks(): array
 	{
 		return [
-			'Read documentation' => 'https://rovota.gitbook.io/core/getting-started/configuration/disks'
+			'Read documentation' => 'https://rovota.gitbook.io/core/getting-started/configuration/caches'
 		];
 	}
 	

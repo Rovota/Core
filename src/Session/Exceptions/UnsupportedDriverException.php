@@ -11,7 +11,7 @@ namespace Rovota\Core\Session\Exceptions;
 use Exception;
 use Rovota\Core\Kernel\Interfaces\ProvidesSolution;
 use Rovota\Core\Kernel\Interfaces\Solution;
-use Rovota\Core\Storage\Solutions\UnsupportedDriverSolution;
+use Rovota\Core\Session\Solutions\UnsupportedDriverSolution;
 
 class UnsupportedDriverException extends Exception implements ProvidesSolution
 {

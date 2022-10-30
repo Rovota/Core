@@ -20,12 +20,14 @@ class UnsupportedDriverSolution implements Solution
 
 	public function getDescription(): string
 	{
-		return 'Currently, only the stack, stream, discord and monolog drivers are supported.';
+		return 'Make sure you have the latest version installed, and that the driver name is spelled correctly.';
 	}
 
 	public function getDocumentationLinks(): array
 	{
-		return ['Read more about this' => ''];
+		return [
+			'Read documentation' => 'https://rovota.gitbook.io/core/getting-started/configuration/logging'
+		];
 	}
-
+	
 }

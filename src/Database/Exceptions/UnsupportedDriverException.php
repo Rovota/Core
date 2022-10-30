@@ -6,12 +6,12 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Cache\Exceptions;
+namespace Rovota\Core\Database\Exceptions;
 
 use Exception;
 use Rovota\Core\Kernel\Interfaces\ProvidesSolution;
 use Rovota\Core\Kernel\Interfaces\Solution;
-use Rovota\Core\Cache\Solutions\UnsupportedDriverSolution;
+use Rovota\Core\Database\Solutions\UnsupportedDriverSolution;
 
 class UnsupportedDriverException extends Exception implements ProvidesSolution
 {
