@@ -21,7 +21,7 @@
       "docs": "https://rovota.gitbook.io/core"
    },
    "require": {
-      "php-64bit": ">=8.0.0",
+      "php-64bit": ">=8.1.0",
       "ext-curl": "*",
       "ext-exif": "*",
       "ext-fileinfo": "*",
@@ -49,9 +49,9 @@
    "suggest": {
       "league/flysystem-aws-s3-v3": "Allows usage of S3 compatible services as file storage.",
       "league/flysystem-sftp-v3": "Allows usage of SFTP file storage.",
-      "ext-redis": "*",
-      "ext-apcu": "*",
-      "ext-imagick": "*"
+      "ext-redis": "Allows you to use Redis-based caching.",
+      "ext-apcu": "Allows you to use APCu-based caching.",
+      "ext-imagick": "Required for being able to process/modify images."
    },
    "autoload": {
       "psr-4": {
