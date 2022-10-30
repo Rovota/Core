@@ -18,7 +18,7 @@
    ],
    "support": {
       "email": "support@rovota.com",
-      "docs": "https://docs.rovota.com/products/core"
+      "docs": "https://rovota.gitbook.io/core"
    },
    "require": {
       "php-64bit": ">=8.0.0",
