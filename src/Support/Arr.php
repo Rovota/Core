@@ -154,16 +154,10 @@ final class Arr
 		return $array;
 	}
 
-	public static function filter(array $array, callable|null $callback = null): array
+	public static function filter(array $array, callable $callback): array
 	{
 		$new = [];
 		foreach ($array as $key => $value) {
-			if ($callback === null) {
-				if ($value !== null) {
-					$new[$key] = $value;
-				}
-				continue;
-			}
 			if ($callback($value, $key) === true) {
 				$new[$key] = $value;
 			}

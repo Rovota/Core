@@ -305,9 +305,9 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Returns the items from the collection that pass a given truth test. When no callback is provided, items with a value of `null` will be removed.
+	 * Returns the items from the collection that pass a given truth test.
 	 */
-	public function filter(callable|null $callback = null): Collection
+	public function filter(callable $callback): Collection
 	{
 		return new Collection(Arr::filter($this->items, $callback));
 	}
