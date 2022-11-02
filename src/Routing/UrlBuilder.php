@@ -120,6 +120,22 @@ final class UrlBuilder
 		return $path;
 	}
 
+	/**
+	 * Returns a formatted query string using the items in the array.
+	 */
+	public static function arrayToQuery(array $fields = [], bool $encode = true): string
+	{
+		$items = '';
+		foreach ($fields as $key => $value) {
+			$value = (string)$value;
+			if (Text::length($value) > 0) {
+				$value = $encode ? rawurlencode($value) : $value;
+				$items .= sprintf('%s%s=%s', (Text::length($items) > 0) ? '&' : '', $key, $value);
+			}
+		}
+		return (Text::length($items) > 0) ? '?'.$items : '';
+	}
+
 	// -----------------
 
 	protected function buildUrl(string $path, bool $full = true): string

@@ -526,21 +526,6 @@ final class Arr
 
 	// -----------------
 
-	public static function toQueryString(array $fields = [], bool $encode = true): string
-	{
-		$items = '';
-		foreach ($fields as $key => $value) {
-			$value = (string)$value;
-			if (Text::length($value) > 0) {
-				$value = $encode ? rawurlencode($value) : $value;
-				$items .= sprintf('%s%s=%s', (Text::length($items) > 0) ? '&' : '', $key, $value);
-			}
-		}
-		return (Text::length($items) > 0) ? '?'.$items : '';
-	}
-
-	// -----------------
-
 	protected static function valueCallable(): callable
 	{
 		return function ($value) {
