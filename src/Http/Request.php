@@ -15,6 +15,7 @@ use Rovota\Core\Http\Traits\RequestInput;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Routing\Route as RouteObject;
+use Rovota\Core\Routing\UrlBuilder;
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Bucket;
 use Rovota\Core\Support\Moment;
@@ -164,17 +165,17 @@ final class Request
 
 	public function fullUrl(): string
 	{
-		return $this->url().Arr::toQueryString($this->query->all());
+		return $this->url().UrlBuilder::arrayToQuery($this->query->all());
 	}
 
 	public function fullUrlWithQuery(array|string $include): string
 	{
-		return $this->url().Arr::toQueryString($this->query->only($include));
+		return $this->url().UrlBuilder::arrayToQuery($this->query->only($include));
 	}
 
 	public function fullUrlWithoutQuery(array|string $exclude): string
 	{
-		return $this->url().Arr::toQueryString($this->query->except($exclude));
+		return $this->url().UrlBuilder::arrayToQuery($this->query->except($exclude));
 	}
 
 	public function getPassword(): string|null
@@ -307,7 +308,7 @@ final class Request
 
 	public function queryString(): string
 	{
-		return Arr::toQueryString($this->query->all());
+		return UrlBuilder::arrayToQuery($this->query->all());
 	}
 
 	public function referrer(): string|null

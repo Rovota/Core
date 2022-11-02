@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Routing;
 
-use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Conditionable;
 
@@ -140,7 +139,7 @@ final class UrlBuilder
 
 	protected function buildUrl(string $path, bool $full = true): string
 	{
-		$query = Arr::toQueryString($this->query);
+		$query = UrlBuilder::arrayToQuery($this->query);
 		$port = ($this->port !== 80 && $this->port !== 443) ? ':'.$this->port : '';
 		$address = sprintf('%s://%s%s', $this->scheme, $this->domain, $port);
 		$path = trim($path, '/');
