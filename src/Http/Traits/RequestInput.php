@@ -15,7 +15,6 @@ use Rovota\Core\Facades\Session;
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Support\Bucket;
 use Rovota\Core\Support\Collection;
-use Rovota\Core\Support\Json;
 use Rovota\Core\Support\Moment;
 
 trait RequestInput
@@ -236,8 +235,11 @@ trait RequestInput
 
 	public function jsonAsArray(): array
 	{
-		$json = Json::decode($this->body ?? '', true);
-		return is_array($json) ? $json : [];
+		$json = json_decode($this->body ?? '', true);
+		if ($json !== null) {
+			return is_array($json) ? $json : [$json];
+		}
+		return [];
 	}
 
 	public function jsonAsCollection(): Collection

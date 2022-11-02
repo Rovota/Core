@@ -8,8 +8,6 @@
 
 namespace Rovota\Core\Database\Casts;
 
-use Rovota\Core\Support\Json;
-
 final class JsonCast extends Cast
 {
 
@@ -22,12 +20,16 @@ final class JsonCast extends Cast
 
 	public function get(mixed $value, array $options): array
 	{
-		return Json::decode($value, isset($options[0]) && $options[0] === 'array');
+		$json = json_decode($value, isset($options[0]) && $options[0] === 'array');
+		if ($json !== null) {
+			return is_array($json) ? $json : [$json];
+		}
+		return [];
 	}
 
 	public function set(mixed $value, array $options): string
 	{
-		return Json::encodeClean($value);
+		return json_encode_clean($value);
 	}
 
 }

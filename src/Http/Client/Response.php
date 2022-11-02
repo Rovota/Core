@@ -11,7 +11,6 @@ namespace Rovota\Core\Http\Client;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Rovota\Core\Support\Collection;
-use Rovota\Core\Support\Json;
 
 final class Response
 {
@@ -55,8 +54,11 @@ final class Response
 
 	public function jsonAsArray(): array
 	{
-		$json = Json::decode($this->json(), true);
-		return is_array($json) ? $json : [];
+		$json = json_decode($this->json() ?? '', true);
+		if ($json !== null) {
+			return is_array($json) ? $json : [$json];
+		}
+		return [];
 	}
 
 	public function jsonAsCollection(): Collection

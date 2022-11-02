@@ -10,7 +10,6 @@ namespace Rovota\Core\Http\Resources;
 
 use JsonSerializable;
 use Rovota\Core\Database\Model;
-use Rovota\Core\Support\Json;
 
 /**
  * @internal
@@ -43,7 +42,7 @@ abstract class Resource implements JsonSerializable
 
 	public function toJson(): string
 	{
-		return Json::encodeClean($this->jsonSerialize());
+		return json_encode_clean($this->jsonSerialize());
 	}
 
 	public function toArray(): array

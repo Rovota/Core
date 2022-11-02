@@ -16,7 +16,6 @@ use Rovota\Core\Facades\DB;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Collection;
-use Rovota\Core\Support\Json;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -172,7 +171,7 @@ abstract class Model implements JsonSerializable
 
 	public function toJson(): string
 	{
-		return Json::encodeClean($this->jsonSerialize());
+		return json_encode_clean($this->jsonSerialize());
 	}
 
 	// -----------------

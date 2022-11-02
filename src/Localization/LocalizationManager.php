@@ -14,7 +14,6 @@ use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Bucket;
 use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\Enums\Status;
-use Rovota\Core\Support\Json;
 use Throwable;
 
 /**
@@ -296,7 +295,7 @@ final class LocalizationManager
 			$location = sprintf('%s/translations/%s.json', $location, self::$active_locale);
 			if (file_exists($location)) {
 				$file_contents = file_get_contents($location);
-				$results = array_merge($results, Json::decode($file_contents, true) ?? []);
+				$results = array_merge($results, json_decode($file_contents, true) ?? []);
 			}
 		}
 		self::$loaded[$name] = $results;

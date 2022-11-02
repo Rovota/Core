@@ -172,7 +172,7 @@ class Bucket implements ArrayAccess, JsonSerializable
 
 	public function toJson(): string
 	{
-		return Json::encodeClean($this->jsonSerialize());
+		return json_encode_clean($this->jsonSerialize());
 	}
 
 	public function toArray(): array

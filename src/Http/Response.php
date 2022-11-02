@@ -20,7 +20,6 @@ use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Media;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\ImageObject;
-use Rovota\Core\Support\Json;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Macroable;
@@ -87,7 +86,7 @@ class Response
 	protected function getContentAsJson(): string
 	{
 		$this->setContentType('application/json; charset=UTF-8');
-		return Json::encodeClean($this->content);
+		return json_encode_clean($this->content);
 	}
 
 	protected function getContentAsString(): string

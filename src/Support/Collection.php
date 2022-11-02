@@ -1153,7 +1153,7 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	 */
 	public function toJson(): string
 	{
-		return Json::encodeClean($this->jsonSerialize());
+		return json_encode_clean($this->jsonSerialize());
 	}
 
 	/**
