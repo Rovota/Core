@@ -1141,14 +1141,6 @@ final class Collection implements ArrayAccess, Iterator, Countable, Arrayable, J
 	}
 
 	/**
-	 * Returns a formatted query string using the items in the collection.
-	 */
-	public function toQuery(bool $encode = true): string
-	{
-		return Arr::toQueryString($this->items, $encode);
-	}
-
-	/**
 	 * Returns JSON representation created from the data in the collection.
 	 */
 	public function toJson(): string
