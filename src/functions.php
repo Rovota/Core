@@ -675,3 +675,10 @@ if (!function_exists('hash_length')) {
 		};
 	}
 }
+
+if (!function_exists('json_encode_clean')) {
+	function json_encode_clean(mixed $value, int $depth = 512): false|string
+	{
+		return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK, $depth);
+	}
+}
