@@ -11,6 +11,7 @@ namespace Rovota\Core\Support;
 use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Localization\LocalizationManager;
 use Throwable;
+$randomizer = new Random\Randomizer();
 
 final class Text
 {
@@ -420,7 +421,7 @@ final class Text
 			if (strlen($word) < 4) {
 				$string .= $word.' ';
 			} else {
-				$string .= sprintf('%s%s%s ', $word[0], str_shuffle(substr($word, 1, -1)), $word[strlen($word) - 1]);
+				$string .= sprintf('%s%s%s ', $word[0], $randomizer->shuffleBytes(substr($word, 1, -1)), $word[strlen($word) - 1]);
 			}
 		}
 
@@ -429,7 +430,7 @@ final class Text
 
 	public static function shuffle(string $string): string
 	{
-		return str_shuffle($string);
+		return $randomizer->shuffleBytes($string);
 	}
 
 	public static function simplify(string $string): string

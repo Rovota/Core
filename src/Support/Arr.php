@@ -10,6 +10,7 @@ namespace Rovota\Core\Support;
 
 use ArrayAccess;
 use Closure;
+$randomizer = new Random\Randomizer();
 
 final class Arr
 {
@@ -374,10 +375,10 @@ final class Arr
 		$requested = $items === 0 ? 1 : (($items > $count) ? $count : $items);
 
 		if ($requested === 1) {
-			return $array[array_rand($array)];
+			return $array[$randomizer->pickArrayKeys($array)];
 		}
 
-		$keys = array_rand($array, $requested);
+		$keys = $randomizer->pickArrayKeys($array, $requested);
 		$result = [];
 
 		foreach ($keys as $key) {
