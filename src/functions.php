@@ -47,7 +47,7 @@ use Rovota\Core\Views\ViewManager;
 // -----------------
 // Strings
 
-if (!function_exists('url')) {
+if (!function_exists('string')) {
    function string(string $string): FluentString
    {
       return Text::make($string);
