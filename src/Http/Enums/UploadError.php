@@ -6,7 +6,7 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Support\Enums;
+namespace Rovota\Core\Http\Enums;
 
 use Rovota\Core\Support\Traits\EnumHelpers;
 
