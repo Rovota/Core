@@ -39,6 +39,9 @@ use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
+use Rovota\Core\Support\Structures\Map;
+use Rovota\Core\Support\Structures\Sequence;
+use Rovota\Core\Support\Structures\Set;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Validation\ValidationManager;
 use Rovota\Core\Views\View;
@@ -300,6 +303,30 @@ if (!function_exists('token')) {
 	{
 		$provider = AuthManager::activeProvider();
 		return $provider instanceof TokenAuthentication ? $provider->getToken() : null;
+	}
+}
+
+// -----------------
+// Structures
+
+if (!function_exists('as_map')) {
+	function as_map(mixed $items = []): Map
+	{
+		return new Map($items);
+	}
+}
+
+if (!function_exists('as_sequence')) {
+	function as_sequence(mixed $items = []): Sequence
+	{
+		return new Sequence($items);
+	}
+}
+
+if (!function_exists('as_set')) {
+	function as_set(mixed $items = []): Set
+	{
+		return new Set($items);
 	}
 }
 
