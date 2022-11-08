@@ -50,11 +50,6 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, Countable, 
 		return empty($this->keys);
 	}
 
-	public function isNotEmpty(): bool
-	{
-		return empty($this->keys) === false;
-	}
-
 	// -----------------
 
 	public function contains(mixed $values): bool
