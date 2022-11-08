@@ -14,6 +14,22 @@ class Sequence extends Collection
 
 	// -----------------
 
+	public function reverse(): static
+	{
+		$this->values = array_reverse($this->values);
+		return $this;
+	}
+
+	public function get(int $key): mixed
+	{
+		return $this->offsetGet($key);
+	}
+
+	public function set(int $key, mixed $value): void
+	{
+		$this->offsetSet($key, $value);
+	}
+
 	// -----------------
 
 	// -----------------

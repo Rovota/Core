@@ -20,6 +20,13 @@ class Set extends Collection
 
 	// -----------------
 
+	public function get(mixed $key): mixed
+	{
+		return $this->offsetGet($key);
+	}
+
+	// -----------------
+
 	public function add(mixed $values): void
 	{
 		foreach (convert_to_array($values) as $value) {

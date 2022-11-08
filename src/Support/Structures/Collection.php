@@ -29,10 +29,11 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, Countable, 
 
 	// -----------------
 
-	public function clear(): void
+	public function clear(): static
 	{
 		$this->values = [];
 		$this->keys = [];
+		return $this;
 	}
 
 	public function copy(): static
@@ -48,6 +49,13 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, Countable, 
 	public function isEmpty(): bool
 	{
 		return empty($this->keys);
+	}
+
+	public function reverse(): static
+	{
+		$this->values = array_reverse($this->values, true);
+		$this->keys = array_reverse($this->keys, true);
+		return $this;
 	}
 
 	// -----------------
