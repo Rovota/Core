@@ -12,19 +12,20 @@ use BackedEnum;
 use DateTime;
 use DateTimeZone;
 use Rovota\Core\Facades\Session;
+use Rovota\Core\Http\RequestData;
 use Rovota\Core\Http\UploadedFile;
-use Rovota\Core\Support\Bucket;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\Map;
 use Rovota\Core\Support\Moment;
 
 trait RequestInput
 {
 
 	public readonly string|null $body;
-	public readonly Bucket $post;
-	public readonly Bucket $query;
+	public readonly RequestData $post;
+	public readonly RequestData $query;
 
-	protected Bucket|null $input_data = null;
+	protected RequestData|null $input_data = null;
 
 	// -----------------
 
@@ -33,34 +34,19 @@ trait RequestInput
 		return $this->getInputData()->all();
 	}
 
-	public function collect(): Collection
-	{
-		return $this->getInputData()->collect();
-	}
-
-	public function input(string $key, mixed $default = null): mixed
+	public function get(string $key, mixed $default = null): mixed
 	{
 		return $this->getInputData()->get($key, $default);
 	}
 
-	public function only(string|array $keys, bool $allow_null = true): array
+	public function only(string|array $keys): RequestData
 	{
-		return $this->getInputData()->only($keys, $allow_null);
+		return $this->getInputData()->only($keys);
 	}
 
-	public function except(string|array $keys): array
+	public function except(string|array $keys): RequestData
 	{
 		return $this->getInputData()->except($keys);
-	}
-
-	public function merge(array $keys): void
-	{
-		$this->getInputData()->merge($keys);
-	}
-
-	public function mergeIfMissing(array $keys): void
-	{
-		$this->getInputData()->mergeIfMissing($keys);
 	}
 
 	public function has(string $key): bool
@@ -68,32 +54,9 @@ trait RequestInput
 		return $this->getInputData()->has($key);
 	}
 
-	public function hasAll(array $keys): bool
-	{
-		return $this->getInputData()->hasAll($keys);
-	}
-
-	public function hasAny(array $keys): bool
-	{
-		return $this->getInputData()->hasAny($keys);
-	}
-
-	public function whenHas(string $key, callable $callback): mixed
-	{
-		if ($this->getInputData()->has($key)) {
-			return $callback();
-		}
-		return null;
-	}
-
 	public function filled(string|array $keys): bool
 	{
 		return $this->getInputData()->filled($keys);
-	}
-
-	public function filledAny(string|array $keys): bool
-	{
-		return $this->getInputData()->filledAny($keys);
 	}
 
 	public function whenFilled(string $key, callable $callback): mixed
@@ -104,19 +67,17 @@ trait RequestInput
 		return null;
 	}
 
-	public function missing(string $key): bool
+	public function whenHas(string $key, callable $callback): mixed
 	{
-		return $this->getInputData()->missing($key);
-	}
-
-	public function missingAny(string|array $keys): bool
-	{
-		return $this->getInputData()->missingAny($keys);
+		if ($this->getInputData()->has($key)) {
+			return $callback();
+		}
+		return null;
 	}
 
 	public function whenMissing(string $key, callable $callback): mixed
 	{
-		if ($this->getInputData()->missing($key)) {
+		if ($this->getInputData()->has($key) === false) {
 			return $callback();
 		}
 		return null;
@@ -124,9 +85,9 @@ trait RequestInput
 
 	// -----------------
 
-	public function string(string $key, string $default = ''): string
+	public function array(string $key, array $default = []): array
 	{
-		return $this->getInputData()->string($key, $default);
+		return $this->getInputData()->array($key, $default);
 	}
 
 	public function bool(string $key, bool $default = false): bool
@@ -134,9 +95,14 @@ trait RequestInput
 		return $this->getInputData()->bool($key, $default);
 	}
 
-	public function int(string $key, int $default = 0): int
+	public function date(string $key, DateTimeZone|null $timezone = null): DateTime|null
 	{
-		return $this->getInputData()->int($key, $default);
+		return $this->getInputData()->date($key, $timezone);
+	}
+
+	public function enum(string $key, string $class, BackedEnum|null $default = null): BackedEnum|null
+	{
+		return $this->getInputData()->enum($key, $class, $default);
 	}
 
 	public function float(string $key, float $default = 0.00): float
@@ -144,19 +110,9 @@ trait RequestInput
 		return $this->getInputData()->float($key, $default);
 	}
 
-	public function array(string $key, array $default = []): array
+	public function int(string $key, int $default = 0): int
 	{
-		return $this->getInputData()->array($key, $default);
-	}
-
-	public function collection(string $key, array $default = []): Collection
-	{
-		return $this->getInputData()->collection($key, $default);
-	}
-
-	public function date(string $key, DateTimeZone|null $timezone = null): DateTime|null
-	{
-		return $this->getInputData()->date($key, $timezone);
+		return $this->getInputData()->int($key, $default);
 	}
 
 	public function moment(string $key, DateTimeZone|string|null $timezone = null): Moment|null
@@ -164,9 +120,9 @@ trait RequestInput
 		return $this->getInputData()->moment($key, $timezone);
 	}
 
-	public function enum(string $key, string $class, BackedEnum|null $default = null): BackedEnum|null
+	public function string(string $key, string $default = ''): string
 	{
-		return $this->getInputData()->enum($key, $class, $default);
+		return $this->getInputData()->string($key, $default);
 	}
 
 	// -----------------
@@ -178,12 +134,12 @@ trait RequestInput
 
 	public function keepOnly(string|array $keys): void
 	{
-		Session::flashMany($this->getInputData()->only($keys));
+		Session::flashMany($this->getInputData()->only($keys)->all());
 	}
 
 	public function keepExcept(string|array $keys): void
 	{
-		Session::flashMany($this->getInputData()->except($keys));
+		Session::flashMany($this->getInputData()->except($keys)->all());
 	}
 
 	public function old(string $key, mixed $default = null): mixed
@@ -242,17 +198,22 @@ trait RequestInput
 		return [];
 	}
 
-	public function jsonAsCollection(): Collection
+	public function jsonAsBucket(): Bucket
 	{
-		return new Collection($this->jsonAsArray());
+		return new Bucket($this->jsonAsArray());
+	}
+
+	public function jsonAsMap(): Map
+	{
+		return new Map($this->jsonAsArray());
 	}
 
 	// -----------------
 
-	protected function getInputData(): Bucket
+	protected function getInputData(): RequestData
 	{
 		if ($this->input_data === null) {
-			$this->input_data = new Bucket(array_merge($this->query->export(), $this->post->export()));
+			$this->input_data = new RequestData(array_merge($this->query->all(), $this->post->all()));
 		}
 		return $this->input_data;
 	}

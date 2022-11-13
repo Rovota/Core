@@ -17,7 +17,6 @@ use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Routing\Route as RouteObject;
 use Rovota\Core\Routing\UrlBuilder;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Bucket;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Errors;
@@ -45,8 +44,8 @@ final class Request
 	public function __construct(string|null $body, array $post, array $query, array $headers)
 	{
 		$this->body = $body;
-		$this->post = new Bucket($post);
-		$this->query = new Bucket($query);
+		$this->post = new RequestData($post);
+		$this->query = new RequestData($query);
 		$this->headers = $headers;
 
 		$this->client_names = include base_path('vendor/rovota/core/src/Http/client_names.php');
@@ -55,7 +54,7 @@ final class Request
 
 	public function __get(string $name): mixed
 	{
-		return $this->input($name);
+		return $this->has($name) ? $this->get($name) : null;
 	}
 
 	// -----------------
@@ -170,12 +169,12 @@ final class Request
 
 	public function fullUrlWithQuery(array|string $include): string
 	{
-		return $this->url().UrlBuilder::arrayToQuery($this->query->only($include));
+		return $this->url().UrlBuilder::arrayToQuery($this->query->only($include)->all());
 	}
 
 	public function fullUrlWithoutQuery(array|string $exclude): string
 	{
-		return $this->url().UrlBuilder::arrayToQuery($this->query->except($exclude));
+		return $this->url().UrlBuilder::arrayToQuery($this->query->except($exclude)->all());
 	}
 
 	public function getPassword(): string|null
