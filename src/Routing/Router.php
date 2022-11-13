@@ -92,11 +92,9 @@ final class Router
 
 	public function findRouteByName(string $name): Route|null
 	{
-		$key = $this->routes->search(function (Route $route) use ($name) {
+		return $this->routes->first(function (Route $route) use ($name) {
 			return $route->getName() === $name;
 		});
-
-		return $key !== false ? $this->routes->get($key) : null;
 	}
 
 	public function findRoutesWithGroupName(string $name): Bucket
