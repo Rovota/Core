@@ -33,7 +33,7 @@ final class ResponseManager
 	public static function initialize(): void
 	{
 		try {
-			self::$headers = Header::where('status', Status::Enabled)->get()->pluck('value', 'name')->all();
+			self::$headers = Header::where('status', Status::Enabled)->get()->pluck('value', 'name')->toArray();
 		} catch (Throwable $throwable) {
 			ExceptionHandler::addThrowable($throwable, true);
 		}

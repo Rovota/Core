@@ -9,8 +9,7 @@
 namespace Rovota\Core\Kernel;
 
 use BackedEnum;
-use Rovota\Core\Support\Bucket;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\Moment;
 use Throwable;
@@ -40,9 +39,10 @@ final class Registry
 
 	// -----------------
 
-	public function string(string $name, string $default = ''): string
+	public function array(string $name, array $default = []): array
 	{
-		return $this->get($name)->value ?? $default;
+		$option = $this->get($name);
+		return ($option !== null) ? explode(',', $option->value) : $default;
 	}
 
 	public function bool(string $name, bool $default = false): bool
@@ -51,28 +51,22 @@ final class Registry
 		return ($option !== null) ? filter_var($option->value, FILTER_VALIDATE_BOOLEAN) : $default;
 	}
 
-	public function int(string $name, int $default = 0): int
-	{
-		$option = $this->get($name);
-		return ($option !== null) ? filter_var($option->value, FILTER_VALIDATE_INT) : $default;
-	}
-
 	public function float(string $name, float $default = 0.00): float
 	{
 		$option = $this->get($name);
 		return ($option !== null) ? filter_var($option->value, FILTER_VALIDATE_FLOAT) : $default;
 	}
 
-	public function array(string $name, array $default = []): array
+	public function int(string $name, int $default = 0): int
 	{
 		$option = $this->get($name);
-		return ($option !== null) ? explode(',', $option->value) : $default;
+		return ($option !== null) ? filter_var($option->value, FILTER_VALIDATE_INT) : $default;
 	}
 
-	public function collection(string $name, Collection $default = new Collection()): Collection
+	public function enum(string $name, BackedEnum|string $class, BackedEnum|null $default = null): BackedEnum|null
 	{
 		$option = $this->get($name);
-		return ($option !== null) ? new Collection(explode(',', $option->value)) : $default;
+		return ($option !== null) ? $class::TryFrom($option->value) : $default;
 	}
 
 	public function moment(string $name, Moment|null $default = null): Moment|null
@@ -86,10 +80,9 @@ final class Registry
 		return null;
 	}
 
-	public function enum(string $name, BackedEnum|string $class, BackedEnum|null $default = null): BackedEnum|null
+	public function string(string $name, string $default = ''): string
 	{
-		$option = $this->get($name);
-		return ($option !== null) ? $class::TryFrom($option->value) : $default;
+		return $this->get($name)->value ?? $default;
 	}
 
 	// -----------------
@@ -109,7 +102,7 @@ final class Registry
 		if ($vendor !== null) {
 			return $this->options->get($vendor);
 		} else {
-			return $this->options->export();
+			return $this->options->toArray();
 		}
 	}
 
@@ -167,7 +160,7 @@ final class Registry
 			is_bool($value) => $value ? 1 : 0,
 			is_float($value), $value instanceof FluentString => (string)$value,
 			is_array($value) => implode(',', $value),
-			$value instanceof Collection => $value->join(','),
+			$value instanceof Bucket => $value->join(','),
 			$value instanceof BackedEnum => $value->value,
 			default => $value,
 		};

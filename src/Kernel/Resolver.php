@@ -12,7 +12,10 @@ use BackedEnum;
 use BadMethodCallException;
 use Closure;
 use DateTime;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\Map;
+use Rovota\Core\Structures\Sequence;
+use Rovota\Core\Structures\Set;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\Moment;
 
@@ -49,7 +52,10 @@ final class Resolver
 	{
 		return match(true) {
 			$value instanceof BackedEnum => 'enum',
-			$value instanceof Collection => 'collection',
+			$value instanceof Bucket => 'bucket',
+			$value instanceof Map => 'map',
+			$value instanceof Sequence => 'sequence',
+			$value instanceof Set => 'set',
 			$value instanceof Moment => 'moment',
 			$value instanceof DateTime => 'datetime',
 			$value instanceof FluentString => 'fluent_string',

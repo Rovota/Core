@@ -10,7 +10,6 @@ namespace Rovota\Core\Http\Client;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use Rovota\Core\Support\Collection;
 
 final class Response
 {
@@ -59,11 +58,6 @@ final class Response
 			return is_array($json) ? $json : [$json];
 		}
 		return [];
-	}
-
-	public function jsonAsCollection(): Collection
-	{
-		return new Collection($this->jsonAsArray());
 	}
 
 }

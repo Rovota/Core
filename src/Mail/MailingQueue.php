@@ -14,8 +14,8 @@ use Iterator;
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\User;
 use Rovota\Core\Mail\Interfaces\Mailable;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Macroable;
@@ -60,8 +60,8 @@ class MailingQueue implements ArrayAccess, Iterator, Countable, Arrayable
 			return new static();
 		}
 
-		/** @var Collection $users */
-		/** @var Collection $guests */
+		/** @var Bucket $users */
+		/** @var Bucket $guests */
 		[$users, $guests] = $list->subscribers->partition(function (MailingListSubscriber $subscriber) {
 			return $subscriber->user_id !== null;
 		});

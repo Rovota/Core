@@ -19,7 +19,7 @@ use Rovota\Core\Http\Response;
 use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Kernel\MiddlewareManager;
 use Rovota\Core\Kernel\Resolver;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Text;
 
 /**
@@ -28,9 +28,9 @@ use Rovota\Core\Support\Text;
 final class Router
 {
 	/**
-	 * @var Collection<int, Route>
+	 * @var Bucket<int, Route>
 	 */
-	protected Collection $routes;
+	protected Bucket $routes;
 	protected Route|null $current = null;
 
 	protected array $attributes = [];
@@ -41,7 +41,7 @@ final class Router
 
 	public function __construct()
 	{
-		$this->routes = new Collection();
+		$this->routes = new Bucket();
 
 		$this->setFallback(StatusCode::NotFound);
 	}
@@ -70,7 +70,7 @@ final class Router
 	public function addRoute(array|string $methods, string $path, mixed $target = null): Route
 	{
 		$route = new Route($methods, $path, $target, $this->attributes);
-		$this->routes->add($route);
+		$this->routes->append($route);
 
 		return $route;
 	}
@@ -99,7 +99,7 @@ final class Router
 		return $key !== false ? $this->routes->get($key) : null;
 	}
 
-	public function findRoutesWithGroupName(string $name): Collection
+	public function findRoutesWithGroupName(string $name): Bucket
 	{
 		return $this->routes->filter(function (Route $route) use ($name) {
 			if ($route->getName() === null) {

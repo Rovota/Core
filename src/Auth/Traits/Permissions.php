@@ -10,15 +10,15 @@ namespace Rovota\Core\Auth\Traits;
 
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\Permission;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 
 trait Permissions
 {
 
 	/**
-	 * @var Collection<string, Permission>
+	 * @var Bucket<string, Permission>
 	 */
-	public Collection $permissions;
+	public Bucket $permissions;
 
 	// -----------------
 
@@ -28,8 +28,8 @@ trait Permissions
 			$identifier = AccessManager::getOrLoadPermission($identifier);
 		}
 
-		$this->permissions->put($identifier->name, $identifier);
-		$this->permission_list = $this->permissions->pluck('id')->all();
+		$this->permissions->set($identifier->name, $identifier);
+		$this->permission_list = $this->permissions->pluck('id')->toArray();
 
 		if ($save) {
 			$this->save();
@@ -75,7 +75,7 @@ trait Permissions
 		return $this->permissions->get($identifier);
 	}
 
-	public function getPermissions(): Collection
+	public function getPermissions(): Bucket
 	{
 		return $this->permissions;
 	}
@@ -101,7 +101,7 @@ trait Permissions
 
 	protected function preparePermissions(): void
 	{
-		$this->permissions = new Collection();
+		$this->permissions = new Bucket();
 	}
 
 }

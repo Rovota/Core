@@ -8,7 +8,7 @@
 
 namespace Rovota\Core\Views\Traits;
 
-use Rovota\Core\Support\Bucket;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Views\Components\Meta;
 use Rovota\Core\Views\Components\Script;
 use Rovota\Core\Views\Components\Style;

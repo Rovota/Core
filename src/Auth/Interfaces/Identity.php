@@ -12,7 +12,7 @@ use Rovota\Core\Auth\Permission;
 use Rovota\Core\Auth\Role;
 use Rovota\Core\Auth\Suspension;
 use Rovota\Core\Localization\Language;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Moment;
 
 interface Identity
@@ -74,7 +74,7 @@ interface Identity
 
 	public function getPermission(string|int $identifier): Permission|null;
 
-	public function getPermissions(): Collection;
+	public function getPermissions(): Bucket;
 
 	// -----------------
 	// Meta

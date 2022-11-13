@@ -40,7 +40,6 @@ use Rovota\Core\Structures\Map;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Structures\Set;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
@@ -342,12 +341,12 @@ if (!function_exists('as_set')) {
 // -----------------
 // Misc
 
-if (!function_exists('collect')) {
-   function collect(mixed $items = []): Collection
-   {
-      return new Collection($items);
-   }
-}
+// if (!function_exists('collect')) {
+//    function collect(mixed $items = []): Collection
+//    {
+//       return new Collection($items);
+//    }
+// }
 
 if (!function_exists('quit')) {
    function quit(StatusCode $code = StatusCode::InternalServerError): never
@@ -662,8 +661,8 @@ if (!function_exists('data_get')) {
          }
 
          if ($segment === '*') {
-            if ($target instanceof Collection) {
-               $target = $target->all();
+            if ($target instanceof Arrayable) {
+               $target = $target->toArray();
             } elseif (!is_iterable($target)) {
                return $default;
             }

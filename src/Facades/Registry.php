@@ -11,7 +11,6 @@ namespace Rovota\Core\Facades;
 use BackedEnum;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\RegistryOption;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\Moment;
 
 final class Registry
@@ -23,9 +22,9 @@ final class Registry
 
 	// -----------------
 
-	public static function string(string $name, string $default = ''): string
+	public static function array(string $name, array $default = []): array
 	{
-		return Application::$registry->string($name, $default);
+		return Application::$registry->array($name, $default);
 	}
 
 	public static function bool(string $name, bool $default = false): bool
@@ -33,24 +32,19 @@ final class Registry
 		return Application::$registry->bool($name, $default);
 	}
 
-	public static function int(string $name, int $default = 0): int
-	{
-		return Application::$registry->int($name, $default);
-	}
-
 	public static function float(string $name, float $default = 0.00): float
 	{
 		return Application::$registry->float($name, $default);
 	}
 
-	public static function array(string $name, array $default = []): array
+	public static function int(string $name, int $default = 0): int
 	{
-		return Application::$registry->array($name, $default);
+		return Application::$registry->int($name, $default);
 	}
 
-	public static function collection(string $name, Collection $default = new Collection()): Collection
+	public static function enum(string $name, string $class, BackedEnum|null $default = null): BackedEnum|null
 	{
-		return Application::$registry->collection($name, $default);
+		return Application::$registry->enum($name, $class, $default);
 	}
 
 	public static function moment(string $name, Moment $default = new Moment()): Moment
@@ -58,9 +52,9 @@ final class Registry
 		return Application::$registry->moment($name, $default);
 	}
 
-	public static function enum(string $name, string $class, BackedEnum|null $default = null): BackedEnum|null
+	public static function string(string $name, string $default = ''): string
 	{
-		return Application::$registry->enum($name, $class, $default);
+		return Application::$registry->string($name, $default);
 	}
 
 	// -----------------

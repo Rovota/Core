@@ -11,6 +11,7 @@ namespace Rovota\Core\Support;
 use Closure;
 use DateTimeZone;
 use JsonSerializable;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Macroable;
 use Stringable;
@@ -275,12 +276,12 @@ final class FluentString implements Stringable, JsonSerializable
 		return new FluentString($matches[1] ?? '');
 	}
 
-	public function matchAll(string $pattern): Collection
+	public function matchAll(string $pattern): Bucket
 	{
 		$pattern = Text::startAndFinish($pattern, '/');
 		preg_match($pattern, $this->string, $matches);
 		array_shift($matches);
-		return new Collection($matches);
+		return new Bucket($matches);
 	}
 
 	public function matches(string $pattern): bool
@@ -384,9 +385,9 @@ final class FluentString implements Stringable, JsonSerializable
 		return $this;
 	}
 
-	public function scan(string $format): Collection
+	public function scan(string $format): Bucket
 	{
-		return new Collection(Text::scan($this->string, $format));
+		return new Bucket(Text::scan($this->string, $format));
 	}
 
 	public function scramble(): FluentString

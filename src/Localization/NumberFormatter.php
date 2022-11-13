@@ -19,12 +19,12 @@ final class NumberFormatter extends Formatter
 
 	public function __toString(): string
 	{
-		return $this->asNormal();
+		return $this->asNumber();
 	}
 
 	public function jsonSerialize(): string
 	{
-		return $this->asNormal();
+		return $this->asNumber();
 	}
 
 	// -----------------
@@ -43,12 +43,12 @@ final class NumberFormatter extends Formatter
 
 	// -----------------
 
-	public function asNormal(int|null $decimals = null, string|null $format = null): string
+	public function asNumber(int|null $decimals = null, string|null $format = null): string
 	{
 		$format = $format ?? $this->format;
 		$decimals = $decimals ?? $this->decimals;
 
-		if ($this->formats->missing('number.format.'.$format)) {
+		if ($this->formats->has('number.format.'.$format) === false) {
 			$format = 'default';
 		}
 
@@ -68,7 +68,7 @@ final class NumberFormatter extends Formatter
 			'suffix' => $suffixes[$class],
 		];
 
-		$result['value'] = self::create($result['value'], $this->locale)->asNormal($decimals, $format);
+		$result['value'] = self::create($result['value'], $this->locale)->asNumber($decimals, $format);
 		return sprintf('%s %s', $result['value'], $result['suffix']);
 	}
 

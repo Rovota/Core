@@ -9,7 +9,7 @@
 namespace Rovota\Core\Localization;
 
 use JsonSerializable;
-use Rovota\Core\Support\Bucket;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Macroable;
 
 class Formatter implements JsonSerializable

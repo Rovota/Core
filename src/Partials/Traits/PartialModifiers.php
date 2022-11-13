@@ -9,7 +9,7 @@
 namespace Rovota\Core\Partials\Traits;
 
 use Rovota\Core\Partials\Partial;
-use Rovota\Core\Support\Bucket;
+use Rovota\Core\Structures\Bucket;
 
 trait PartialModifiers
 {

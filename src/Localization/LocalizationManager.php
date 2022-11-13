@@ -11,8 +11,7 @@ namespace Rovota\Core\Localization;
 use DateTimeZone;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Bucket;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Enums\Status;
 use Throwable;
 
@@ -22,9 +21,9 @@ use Throwable;
 final class LocalizationManager
 {
 	/**
-	 * @var Collection<int, Language>
+	 * @var Bucket<int, Language>
 	 */
-	protected static Collection $languages;
+	protected static Bucket $languages;
 
 	protected static array $locales = [];
 	protected static string $active_locale;
@@ -106,17 +105,17 @@ final class LocalizationManager
 	}
 
 	/**
-	 * @returns Collection<int, Language>
+	 * @returns Bucket<int, Language>
 	 */
-	public static function getLanguages(): Collection
+	public static function getLanguages(): Bucket
 	{
 		return self::$languages;
 	}
 
 	/**
-	 * @returns Collection<int, Language>
+	 * @returns Bucket<int, Language>
 	 */
-	public static function getLanguagesWithPrefix(string $prefix): Collection
+	public static function getLanguagesWithPrefix(string $prefix): Bucket
 	{
 		return self::$languages->filter(function (Language $language) use ($prefix) {
 			return str_starts_with($language->locale, $prefix);
@@ -155,7 +154,7 @@ final class LocalizationManager
 
 	public static function getTimezonesWithPrefix(string $prefix): array
 	{
-		return collect(self::$timezones)->filter(function ($timezone) use ($prefix) {
+		return as_bucket(self::$timezones)->filter(function ($timezone) use ($prefix) {
 			return str_starts_with($timezone, $prefix);
 		})->values()->all();
 	}
@@ -240,7 +239,7 @@ final class LocalizationManager
 		if (empty($sources)) {
 			return self::$loaded;
 		}
-		return collect(self::$sources)->only($sources)->all();
+		return as_bucket(self::$sources)->only($sources)->toArray();
 	}
 
 	public static function getStringTranslation(string $string, string|null $source = null): string

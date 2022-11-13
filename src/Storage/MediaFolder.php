@@ -10,7 +10,7 @@ namespace Rovota\Core\Storage;
 
 use Rovota\Core\Database\Model;
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Moment;
 use Throwable;
 
@@ -68,42 +68,42 @@ class MediaFolder extends Model
 	// -----------------
 
 	/**
-	 * @return Collection<int, MediaFolder>
+	 * @return Bucket<int, MediaFolder>
 	 */
-	public function parents(): Collection
+	public function parents(): Bucket
 	{
 		if ($this->parent_id !== null) {
-			return collect($this->parent->parents())->put($this->parent_id, $this->parent);
+			return as_bucket($this->parent->parents())->set($this->parent_id, $this->parent);
 		}
 
-		return collect([]);
+		return as_bucket([]);
 	}
 
 	// -----------------
 
 	/**
-	 * @return Collection<int, Media>
+	 * @return Bucket<int, Media>
 	 */
-	public function media(): Collection
+	public function media(): Bucket
 	{
 		try {
 			return Media::where(['folder_id' => $this->id])->getBy('id');
 		} catch (Throwable $throwable) {
 			ExceptionHandler::addThrowable($throwable);
-			return new Collection();
+			return new Bucket();
 		}
 	}
 
 	/**
-	 * @return Collection<int, MediaFolder>
+	 * @return Bucket<int, MediaFolder>
 	 */
-	public function folders(): Collection
+	public function folders(): Bucket
 	{
 		try {
 			return MediaFolder::where(['parent_id' => $this->id])->getBy('id');
 		} catch (Throwable $throwable) {
 			ExceptionHandler::addThrowable($throwable);
-			return new Collection();
+			return new Bucket();
 		}
 	}
 

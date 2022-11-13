@@ -48,7 +48,7 @@ final class Text
 				if (array_is_list($args)) {
 					return sprintf($string, ...$args);
 				}
-				$args = collect($args)->sortBy(fn ($variable, $key) => strlen($key), descending: true);
+				$args = as_bucket($args)->sortBy(fn ($variable, $key) => strlen($key), descending: true);
 				foreach ($args as $name => $value) {
 					$string = str_replace(':'.$name, Text::translate($value, source: $source), $string);
 				}

@@ -8,6 +8,8 @@
 
 namespace Rovota\Core\Support;
 
+use Rovota\Core\Structures\Bucket;
+
 class MessageBucket extends Bucket
 {
 

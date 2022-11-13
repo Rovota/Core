@@ -9,7 +9,7 @@
 namespace Rovota\Core\Validation;
 
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Enums\Status;
 use Throwable;
 
@@ -22,7 +22,7 @@ final class ValidationManager
 
 	protected static string $default = 'default';
 
-	protected static Collection $filters;
+	protected static Bucket $filters;
 
 	protected static array $mime_types = [];
 	protected static array $mime_types_reverse = [];
@@ -97,7 +97,7 @@ final class ValidationManager
 	 */
 	public static function getFilters(): array
 	{
-		return self::$filters->all();
+		return self::$filters->toArray();
 	}
 
 	// -----------------

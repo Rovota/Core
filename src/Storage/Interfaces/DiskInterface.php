@@ -21,7 +21,7 @@ use League\Flysystem\UnableToWriteFile;
 use Rovota\Core\Storage\Directory;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Media;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 
@@ -84,17 +84,17 @@ interface DiskInterface
 	/**
 	 * @throws FilesystemException
 	 */
-	public function contents(string $location = '/'): Collection;
+	public function contents(string $location = '/'): Bucket;
 
 	/**
 	 * @throws FilesystemException
 	 */
-	public function files(string $location = '/'): Collection;
+	public function files(string $location = '/'): Bucket;
 
 	/**
 	 * @throws FilesystemException
 	 */
-	public function directories(string $location = '/'): Collection;
+	public function directories(string $location = '/'): Bucket;
 
 	// -----------------
 

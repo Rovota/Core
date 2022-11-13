@@ -12,7 +12,7 @@ use Rovota\Core\Cookie\Cookie;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Enums\Status;
 use Rovota\Core\Support\Text;
 use Throwable;
@@ -21,16 +21,16 @@ final class AccessManager
 {
 
 	/**
-	 * @var Collection<int, Permission>
+	 * @var Bucket<int, Permission>
 	 */
-	protected static Collection $permissions;
+	protected static Bucket $permissions;
 
 	protected static array $permission_map = [];
 
 	/**
-	 * @var Collection<int, Role>
+	 * @var Bucket<int, Role>
 	 */
-	protected static Collection $roles;
+	protected static Bucket $roles;
 
 	protected static array $role_map = [];
 
@@ -49,8 +49,8 @@ final class AccessManager
 	 */
 	public static function initialize(): void
 	{
-		self::$permissions = new Collection();
-		self::$roles = new Collection();
+		self::$permissions = new Bucket();
+		self::$roles = new Bucket();
 
 		self::initializeCsrfToken();
 	}
@@ -96,9 +96,9 @@ final class AccessManager
 	}
 
 	/**
-	 * @returns Collection<int, Permission>
+	 * @returns Bucket<int, Permission>
 	 */
-	public static function getPermissions(): Collection
+	public static function getPermissions(): Bucket
 	{
 		return self::$permissions;
 	}
@@ -144,9 +144,9 @@ final class AccessManager
 	}
 
 	/**
-	 * @returns Collection<int, Role>
+	 * @returns Bucket<int, Role>
 	 */
-	public static function getRoles(): Collection
+	public static function getRoles(): Bucket
 	{
 		return self::$roles;
 	}

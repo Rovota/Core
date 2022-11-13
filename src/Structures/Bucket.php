@@ -22,7 +22,7 @@ use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\TypeAccessors;
 use Traversable;
 
-final class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, JsonSerializable
+class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, JsonSerializable
 {
 	use TypeAccessors, Conditionable;
 

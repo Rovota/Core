@@ -28,12 +28,15 @@ abstract class Meta extends Model
 		'type' => [
 			'array',
 			'bool',
-			'collection',
+			'bucket',
 			'datetime',
 			'float',
 			'fluent_string',
 			'int',
+			'map',
 			'moment',
+			'sequence',
+			'set',
 			'string',
 		],
 	];

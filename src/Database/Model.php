@@ -15,7 +15,6 @@ use Rovota\Core\Database\Traits\QueryFunctions;
 use Rovota\Core\Facades\DB;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -154,19 +153,9 @@ abstract class Model implements JsonSerializable
 
 	// -----------------
 
-	public function collect(): Collection
-	{
-		return new Collection(array_merge($this->attributes, $this->attributes_modified));
-	}
-
 	public function toArray(): array
 	{
-		return $this->collect()->except($this->hidden)->all();
-	}
-
-	public function jsonSerialize(): array
-	{
-		return $this->toArray();
+		return as_bucket(array_merge($this->attributes, $this->attributes_modified))->except($this->hidden)->toArray();
 	}
 
 	public function toJson(): string
@@ -651,6 +640,14 @@ abstract class Model implements JsonSerializable
 
 	// -----------------
 	// Internal Helpers
+
+	/**
+	 * @internal
+	 */
+	public function jsonSerialize(): array
+	{
+		return $this->toArray();
+	}
 
 	/**
 	 * @internal

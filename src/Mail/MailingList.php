@@ -10,7 +10,7 @@ namespace Rovota\Core\Mail;
 
 use Rovota\Core\Database\Model;
 use Rovota\Core\Facades\Cache;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Moment;
 
 /**
@@ -21,7 +21,7 @@ use Rovota\Core\Support\Moment;
  * @property Moment|null $edited
  * @property Moment|null $deleted
  *
- * @property-read Collection $subscribers
+ * @property-read Bucket $subscribers
  */
 class MailingList extends Model
 {
@@ -32,7 +32,7 @@ class MailingList extends Model
 
 	// -----------------
 
-	protected function getSubscribersAttribute(): Collection
+	protected function getSubscribersAttribute(): Bucket
 	{
 		return Cache::remember('mailing_list_subscribers_'.$this->id, function () {
 			return MailingListSubscriber::where('mailing_list_id', $this->id)->get();

@@ -21,7 +21,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
@@ -152,16 +152,16 @@ abstract class Disk implements DiskInterface
 
 	// -----------------
 
-	public function contents(string $location = '/'): Collection
+	public function contents(string $location = '/'): Bucket
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
 			$listing[] = $item;
 		}
-		return new Collection($listing);
+		return new Bucket($listing);
 	}
 
-	public function files(string $location = '/'): Collection
+	public function files(string $location = '/'): Bucket
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
@@ -169,10 +169,10 @@ abstract class Disk implements DiskInterface
 				$listing[] = $item;
 			}
 		}
-		return new Collection($listing);
+		return new Bucket($listing);
 	}
 
-	public function directories(string $location = '/'): Collection
+	public function directories(string $location = '/'): Bucket
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
@@ -180,7 +180,7 @@ abstract class Disk implements DiskInterface
 				$listing[] = $item;
 			}
 		}
-		return new Collection($listing);
+		return new Bucket($listing);
 	}
 
 	// -----------------

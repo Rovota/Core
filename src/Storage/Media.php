@@ -14,8 +14,8 @@ use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Enums\MediaType;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
@@ -182,20 +182,20 @@ class Media extends Model
 	// -----------------
 
 	/**
-	 * @return Collection<int, MediaFolder>
+	 * @return Bucket<int, MediaFolder>
 	 */
-	public function folders(): Collection
+	public function folders(): Bucket
 	{
 		if ($this->folder_id !== null) {
-			return collect($this->folder->parents())->put($this->folder_id, $this->folder);
+			return as_bucket($this->folder->parents())->set($this->folder_id, $this->folder);
 		}
 
-		return collect([]);
+		return as_bucket([]);
 	}
 
 	public function foldersAsString(string $separator = ' / '): string
 	{
-		return implode($separator, $this->folders()->pluck('label')->all());
+		return implode($separator, $this->folders()->pluck('label')->toArray());
 	}
 
 	// -----------------
