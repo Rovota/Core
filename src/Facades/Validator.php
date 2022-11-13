@@ -20,12 +20,12 @@ final class Validator
 
 	// -----------------
 
-	public static function create(Bucket|array $data = [], array $rules = [], array $messages = []): ValidatorInstance
+	public static function create(mixed $data = [], array $rules = [], array $messages = []): ValidatorInstance
 	{
 		return new ValidatorInstance($data, $rules, $messages);
 	}
 
-	public static function validate(Bucket|array $data = [], array $rules = [], array $messages = []): bool
+	public static function validate(mixed $data = [], array $rules = [], array $messages = []): bool
 	{
 		return self::create($data, $rules, $messages)->validate();
 	}

@@ -32,11 +32,11 @@ trait RequestValidation
 
 		if ($validator->fails()) {
 			$this->passErrors($validator->getErrors());
-			$this->fillSafeData($validator->validated());
+			$this->fillSafeData($validator->safe()->toArray());
 			return false;
 		}
 
-		$this->fillSafeData($validator->validated());
+		$this->fillSafeData($validator->safe()->toArray());
 		return true;
 	}
 
