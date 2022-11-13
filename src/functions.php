@@ -39,6 +39,7 @@ use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
+use Rovota\Core\Support\Structures\Bucket;
 use Rovota\Core\Support\Structures\Map;
 use Rovota\Core\Support\Structures\Sequence;
 use Rovota\Core\Support\Structures\Set;
@@ -308,6 +309,13 @@ if (!function_exists('token')) {
 
 // -----------------
 // Structures
+
+if (!function_exists('as_bucket')) {
+	function as_bucket(mixed $items = []): Bucket
+	{
+		return new Bucket($items);
+	}
+}
 
 if (!function_exists('as_map')) {
 	function as_map(mixed $items = []): Map
@@ -622,16 +630,14 @@ if (!function_exists('value_retriever')) {
 }
 
 if (!function_exists('convert_to_array')) {
-	function convert_to_array(mixed $items): array
+	function convert_to_array(mixed $value): array
 	{
-		if (is_array($items)) {
-			return $items;
-		}
-		if ($items instanceof Arrayable) {
-			return $items->toArray();
-		}
-
-		return [$items];
+		return match(true) {
+			is_array($value) => $value,
+			$value instanceof Arrayable => $value->toArray(),
+			$value instanceof JsonSerializable => convert_to_array($value->jsonSerialize()),
+			default => [$value],
+		};
 	}
 }
 
