@@ -6,6 +6,7 @@
  * @license     Rovota License
  */
 
+use Dflydev\DotAccessData\Data;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\ApiToken;
 use Rovota\Core\Auth\AuthManager;
@@ -633,9 +634,11 @@ if (!function_exists('convert_to_array')) {
 	function convert_to_array(mixed $value): array
 	{
 		return match(true) {
+			$value === null => [],
 			is_array($value) => $value,
 			$value instanceof Arrayable => $value->toArray(),
 			$value instanceof JsonSerializable => convert_to_array($value->jsonSerialize()),
+			$value instanceof Data => $value->export(),
 			default => [$value],
 		};
 	}
