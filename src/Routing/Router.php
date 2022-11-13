@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  *
  * The parameter extraction logic has been derived from bramus/router:
  * @author      Bram(us) Van Damme <bramus@bram.us>
