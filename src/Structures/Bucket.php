@@ -150,6 +150,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return new Sequence(array_keys($this->items->export()));
 	}
 
+	public function last(callable|null $callback = null, mixed $default = null): mixed
+	{
+		return Arr::last($this->items, $callback, $default);
+	}
+
 	public function max(string|null $field = null, float|int|null $limit = null): float|int
 	{
 		return Arr::max($field !== null ? $this->pluck($field) : $this->items, $limit);

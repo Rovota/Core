@@ -76,6 +76,17 @@ final class Arr
 		return $default;
 	}
 
+	public static function last(mixed $array, callable|null $callback = null, mixed $default = null): mixed
+	{
+		$array = convert_to_array($array);
+
+		if (is_null($callback)) {
+			return empty($array) ? $default : end($array);
+		}
+
+		return Arr::first(array_reverse($array, true), $callback, $default);
+	}
+
 	/**
 	 * Returns the highest value present in the array.
 	 */
