@@ -6,7 +6,7 @@
  * @license     Rovota License
  */
 
-namespace Rovota\Core\Structures\Traits;
+namespace Rovota\Core\Support\Traits;
 
 use BackedEnum;
 use DateTime;
@@ -67,7 +67,7 @@ trait TypeAccessors
 
 	public function string(string $key, string $default = ''): string
 	{
-		return (string)$this->get($key) ?? $default;
+		return (string)$this->get($key, $default);
 	}
 
 }
