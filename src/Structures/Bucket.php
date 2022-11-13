@@ -19,12 +19,14 @@ use JsonSerializable;
 use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Traits\Conditionable;
+use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Support\Traits\TypeAccessors;
+use Stringable;
 use Traversable;
 
 class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, JsonSerializable
 {
-	use TypeAccessors, Conditionable;
+	use TypeAccessors, Conditionable, Macroable;
 
 	protected Data $items;
 
@@ -68,6 +70,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	{
 		return $this->copy()->remove($keys);
 	}
+	
+	public function first(callable|null $callback = null, mixed $default = null): mixed
+	{
+		return Arr::first($this->items, $callback, $default);
+	}
 
 	public function flush(): Bucket
 	{
@@ -94,6 +101,17 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return true;
 	}
 
+	public function implode(string $value, string|null $glue = null): string
+	{
+		$first = $this->first();
+
+		if (is_array($first) || (is_object($first) && !$first instanceof Stringable)) {
+			return implode($glue ?? '', $this->pluck($value)->toArray());
+		}
+
+		return implode($value, $this->items->export());
+	}
+
 	public function import(mixed $data, bool $preserve = false): Bucket
 	{
 		$mode = $preserve ? DataInterface::PRESERVE : DataInterface::MERGE;
@@ -104,6 +122,27 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	public function isEmpty(): bool
 	{
 		return empty($this->items->export());
+	}
+
+	public function join(string $glue, string $final_glue = ''): string
+	{
+		if ($final_glue === '') {
+			return $this->implode($glue);
+		}
+
+		$count = $this->count();
+
+		if ($count === 0) {
+			return '';
+		}
+		if ($count === 1) {
+			return $this->first();
+		}
+
+		$bucket = new Bucket($this->items);
+		$final_item = (string) $bucket->pop();
+
+		return $bucket->implode($glue).$final_glue.$final_item;
 	}
 
 	public function keys(): Sequence
@@ -138,6 +177,31 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	public function pluck(string $field, string|null $key = null): Bucket
 	{
 		return new Bucket(Arr::pluck($this->items, $field, $key));
+	}
+
+	public function pop(int $count = 1): mixed
+	{
+		$items = $this->items->export();
+
+		if ($count === 1) {
+			$value = array_pop($items);
+			$this->items = new Data($items);
+			return $value;
+		}
+
+		if ($this->isEmpty()) {
+			return null;
+		}
+
+		$results = [];
+		$item_count = $this->count();
+
+		foreach (range(1, min($count, $item_count)) as $ignored) {
+			$results[] = array_pop($items);
+		}
+
+		$this->items = new Data($items);
+		return new Sequence($results);
 	}
 
 	public function prepend(mixed $value): Bucket
@@ -258,7 +322,9 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
 		if (is_null($offset)) {
-			$this->items->set(null, $value);
+			$items = $this->items->export();
+			$items[] = $value;
+			$this->items = new Data($items);
 		} else {
 			if (is_object($offset)) {
 				$offset = spl_object_hash($offset);
