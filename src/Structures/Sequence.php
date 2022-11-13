@@ -6,8 +6,7 @@
  * @license     Rovota License
  */
 
-
-namespace Rovota\Core\Support\Structures;
+namespace Rovota\Core\Structures;
 
 use TypeError;
 
@@ -20,6 +19,7 @@ class Sequence extends Collection
 	}
 
 	// -----------------
+	// Shared
 
 	public function reverse(): static
 	{
@@ -38,6 +38,7 @@ class Sequence extends Collection
 	}
 
 	// -----------------
+	// Structure Specific
 
 	// -----------------
 

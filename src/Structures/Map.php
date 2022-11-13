@@ -7,10 +7,13 @@
  */
 
 
-namespace Rovota\Core\Support\Structures;
+namespace Rovota\Core\Structures;
 
 class Map extends Collection
 {
+
+	// -----------------
+	// Shared
 
 	public function get(mixed $key): mixed
 	{
@@ -18,6 +21,7 @@ class Map extends Collection
 	}
 
 	// -----------------
+	// Structure Specific
 
 	public function keys(): Sequence
 	{

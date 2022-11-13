@@ -6,8 +6,7 @@
  * @license     Rovota License
  */
 
-
-namespace Rovota\Core\Support\Structures;
+namespace Rovota\Core\Structures;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -35,6 +34,7 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, Countable, 
 	}
 
 	// -----------------
+	// Shared
 
 	public function clear(): static
 	{
@@ -66,6 +66,8 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, Countable, 
 	}
 
 	// -----------------
+	// TODO: Decide which ones need to go in Shared and which move to specific structures.
+	// Also, they should use Helper\Arr where possible.
 
 	public function contains(mixed $values): bool
 	{
