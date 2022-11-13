@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Facades;
 
-use Rovota\Core\Support\Bucket;
 use Rovota\Core\Validation\Validator as ValidatorInstance;
 
 final class Validator
