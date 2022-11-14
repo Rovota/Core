@@ -9,6 +9,7 @@
 namespace Rovota\Core\Support\Helpers;
 
 use ArrayAccess;
+use Closure;
 
 final class Arr
 {
@@ -164,6 +165,30 @@ final class Arr
 			$result = $callback($result, $value, $key);
 		}
 		return $result;
+	}
+
+	/**
+	 * Returns the corresponding key of the searched value when found. Uses strict comparisons by default.
+	 * Optionally, you can pass a closure to search for the first item that matches a truth test.
+	 */
+	public static function search(mixed $array, mixed $value, bool $strict = true): string|int|bool
+	{
+		if (is_object($value)) {
+			$value = spl_object_hash($value);
+		}
+
+		if ($value instanceof Closure === false) {
+			return array_search($value, convert_to_array($array), $strict);
+		}
+
+		$callable = $value;
+		foreach (convert_to_array($array) as $key => $value) {
+			if ($callable($value, $key)) {
+				return $key;
+			}
+		}
+
+		return false;
 	}
 
 	/**
