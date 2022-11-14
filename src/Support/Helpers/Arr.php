@@ -52,6 +52,21 @@ final class Arr
 	}
 
 	/**
+	 * Returns the items from the array that pass a given truth test.
+	 */
+	public static function filter(mixed $array, callable $callback): array
+	{
+		$new = [];
+		foreach (convert_to_array($array) as $key => $value) {
+			if ($callback($value, $key) === true) {
+				$new[$key] = $value;
+			}
+		}
+
+		return $new;
+	}
+
+	/**
 	 * Returns the first item in the array, optionally the first that passes a given truth test.
 	 */
 	public static function first(mixed $array, callable|null $callback = null, mixed $default = null): mixed

@@ -70,6 +70,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	{
 		return $this->copy()->remove($keys);
 	}
+
+	public function filter(callable $callback): Bucket
+	{
+		return new Bucket(Arr::filter($this->items, $callback));
+	}
 	
 	public function first(callable|null $callback = null, mixed $default = null): mixed
 	{
