@@ -59,8 +59,15 @@ final class Arr
 	{
 		$new = [];
 		foreach (convert_to_array($array) as $key => $value) {
-			if ($callback($value, $key) === true) {
-				$new[$key] = $value;
+			if (is_array($value)) {
+				$new[$key] = Arr::filter($value, $callback);
+				if (empty($new[$key])) {
+					unset($new[$key]);
+				}
+			} else {
+				if ($callback($value, $key) === true) {
+					$new[$key] = $value;
+				}
 			}
 		}
 
