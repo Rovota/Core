@@ -156,7 +156,7 @@ final class LocalizationManager
 	{
 		return as_bucket(self::$timezones)->filter(function ($timezone) use ($prefix) {
 			return str_starts_with($timezone, $prefix);
-		})->values()->all();
+		})->values()->toArray();
 	}
 
 	// -----------------

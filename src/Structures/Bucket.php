@@ -286,6 +286,12 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return new Set($this->items->export());
 	}
 
+	public function transform(callable $callback): Bucket
+	{
+		$this->items = new Data(Arr::map($this->items, $callback));
+		return $this;
+	}
+
 	public function values(): Sequence
 	{
 		return new Sequence(array_values($this->items->export()));

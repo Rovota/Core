@@ -110,6 +110,15 @@ final class Arr
 		return Arr::first(array_reverse($array, true), $callback, $default);
 	}
 
+	public static function map(mixed $array, callable $callback): array
+	{
+		$array = convert_to_array($array);
+		$keys = array_keys($array);
+		$items = array_map($callback, $array, $keys);
+
+		return array_combine($keys, $items);
+	}
+
 	/**
 	 * Returns the highest value present in the array.
 	 */
