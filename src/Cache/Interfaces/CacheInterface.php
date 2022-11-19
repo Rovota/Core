@@ -31,7 +31,7 @@ interface CacheInterface
 
 	public function has(string|int|array $key): bool;
 
-	public function missing(string|int $key): bool;
+	public function missing(string|int|array $key): bool;
 
 	/**
 	 * Returns the cached value (or the default), and then removes it from cache.

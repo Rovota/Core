@@ -63,9 +63,15 @@ class ArrayStore extends CacheStore
 		return true;
 	}
 
-	public function missing(string|int $key): bool
+	public function missing(string|int|array $key): bool
 	{
-		return isset($this->storage[$this->prefix.$key]) === false;
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if (isset($this->storage[$this->prefix.$key]) === true) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// -----------------

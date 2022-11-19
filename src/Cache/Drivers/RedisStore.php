@@ -101,9 +101,15 @@ class RedisStore extends CacheStore
 	/**
 	 * @throws RedisException
 	 */
-	public function missing(string|int $key): bool
+	public function missing(string|int|array $key): bool
 	{
-		return $this->redis->exists($this->prefix.$key) === 0;
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if ($this->redis->exists($this->prefix.$key) === true) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// -----------------
