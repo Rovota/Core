@@ -40,6 +40,51 @@ class Sequence extends Collection
 	// -----------------
 	// Structure Specific
 
+	public function join(string $glue, string|null $final_glue = null): string
+	{
+		if ($final_glue === null) {
+			return implode($glue ?? '', $this->values);
+		}
+
+		if ($this->count() === 0) {
+			return '';
+		}
+
+		if ($this->count() === 1) {
+			return (string) $this->first();
+		}
+
+		$sequence = new Sequence($this->values);
+		$final_item = (string) $sequence->pop();
+
+		return $sequence->join($glue).$final_glue.$final_item;
+	}
+
+	public function pop(int $count = 1): mixed
+	{
+		if ($count === 1) {
+			$value = $this->last();
+			$this->offsetUnset($this->retrieveKeyForValue($value));
+			return $value;
+		}
+
+		if ($this->isEmpty()) {
+			return null;
+		}
+
+		$results = [];
+		$item_count = $this->count();
+
+		foreach (range(1, min($count, $item_count)) as $ignored) {
+			$value = $this->last();
+			$key = $this->retrieveKeyForValue($value);
+			$results[$key] = $value;
+			$this->pop();
+		}
+
+		return new Sequence($results);
+	}
+
 	// -----------------
 
 	public function offsetExists(mixed $offset): bool
