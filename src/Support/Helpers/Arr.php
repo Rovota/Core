@@ -10,6 +10,7 @@ namespace Rovota\Core\Support\Helpers;
 
 use ArrayAccess;
 use Closure;
+use Rovota\Core\Support\Enums\Sort;
 
 final class Arr
 {
@@ -31,9 +32,8 @@ final class Arr
 	/**
 	 * Returns the average of a given array. When the array is empty or contains non-numeric values, `0` will be returned.
 	 */
-	public static function average(mixed $array, bool $round = false, int $precision = 0): float|int
+	public static function average(array $array, bool $round = false, int $precision = 0): float|int
 	{
-		$array = convert_to_array($array);
 		$count = count($array);
 
 		if ($count < 2) {
@@ -47,18 +47,18 @@ final class Arr
 	/**
 	 * Returns how many elements are in the given array.
 	 */
-	public static function count(mixed $array): int
+	public static function count(array $array): int
 	{
-		return count(convert_to_array($array));
+		return count($array);
 	}
 
 	/**
 	 * Returns the items from the array that pass a given truth test.
 	 */
-	public static function filter(mixed $array, callable $callback): array
+	public static function filter(array $array, callable $callback): array
 	{
 		$new = [];
-		foreach (convert_to_array($array) as $key => $value) {
+		foreach ($array as $key => $value) {
 			if (is_array($value)) {
 				$new[$key] = Arr::filter($value, $callback);
 				if (empty($new[$key])) {
@@ -77,10 +77,8 @@ final class Arr
 	/**
 	 * Returns the first item in the array, optionally the first that passes a given truth test.
 	 */
-	public static function first(mixed $array, callable|null $callback = null, mixed $default = null): mixed
+	public static function first(array $array, callable|null $callback = null, mixed $default = null): mixed
 	{
-		$array = convert_to_array($array);
-
 		if (is_null($callback)) {
 			if (empty($array)) {
 				return $default;
@@ -99,10 +97,8 @@ final class Arr
 		return $default;
 	}
 
-	public static function last(mixed $array, callable|null $callback = null, mixed $default = null): mixed
+	public static function last(array $array, callable|null $callback = null, mixed $default = null): mixed
 	{
-		$array = convert_to_array($array);
-
 		if (is_null($callback)) {
 			return empty($array) ? $default : end($array);
 		}
@@ -110,9 +106,8 @@ final class Arr
 		return Arr::first(array_reverse($array, true), $callback, $default);
 	}
 
-	public static function map(mixed $array, callable $callback): array
+	public static function map(array $array, callable $callback): array
 	{
-		$array = convert_to_array($array);
 		$keys = array_keys($array);
 		$items = array_map($callback, $array, $keys);
 
@@ -122,9 +117,9 @@ final class Arr
 	/**
 	 * Returns the highest value present in the array.
 	 */
-	public static function max(mixed $array, float|int|null $limit = null): float|int
+	public static function max(array $array, float|int|null $limit = null): float|int
 	{
-		$maximum = max(convert_to_array($array));
+		$maximum = max($array);
 		return ($limit !== null && $maximum >= $limit) ? $limit : $maximum;
 	}
 
@@ -133,25 +128,24 @@ final class Arr
 	 */
 	public static function merge(mixed $first, mixed $second): array
 	{
-		return array_merge(convert_to_array($first), convert_to_array($second));
+		return array_merge($first, $second);
 	}
 
 	/**
 	 * Returns the lowest value present in the array.
 	 */
-	public static function min(mixed $array, float|int|null $limit = null): float|int
+	public static function min(array $array, float|int|null $limit = null): float|int
 	{
-		$minimum = min(convert_to_array($array));
+		$minimum = min($array);
 		return ($limit !== null && $minimum <= $limit) ? $limit : $minimum;
 	}
 
 	/**
 	 * Returns a new array with each entry only containing the specified field, optionally keyed by the given key.
 	 */
-	public static function pluck(mixed $array, string $field, string|null $key = null): array
+	public static function pluck(array $array, string $field, string|null $key = null): array
 	{
 		$results = [];
-		$array = convert_to_array($array);
 		$fields = explode('.', $field);
 		$key = is_string($key) ? explode('.', $key) : $key;
 
@@ -174,10 +168,10 @@ final class Arr
 	/**
 	 * Reduces the array to a single value, passing the result of each iteration into the next:
 	 */
-	public static function reduce(mixed $array, callable $callback, mixed $initial = null): mixed
+	public static function reduce(array $array, callable $callback, mixed $initial = null): mixed
 	{
 		$result = $initial;
-		foreach (convert_to_array($array) as $key => $value) {
+		foreach ($array as $key => $value) {
 			$result = $callback($result, $value, $key);
 		}
 		return $result;
@@ -187,18 +181,18 @@ final class Arr
 	 * Returns the corresponding key of the searched value when found. Uses strict comparisons by default.
 	 * Optionally, you can pass a closure to search for the first item that matches a truth test.
 	 */
-	public static function search(mixed $array, mixed $value, bool $strict = true): string|int|bool
+	public static function search(array $array, mixed $value, bool $strict = true): string|int|bool
 	{
 		if (is_object($value)) {
 			$value = spl_object_hash($value);
 		}
 
 		if ($value instanceof Closure === false) {
-			return array_search($value, convert_to_array($array), $strict);
+			return array_search($value, $array, $strict);
 		}
 
 		$callable = $value;
-		foreach (convert_to_array($array) as $key => $value) {
+		foreach ($array as $key => $value) {
 			if ($callable($value, $key)) {
 				return $key;
 			}
@@ -207,13 +201,47 @@ final class Arr
 		return false;
 	}
 
+	public static function sort(array $array, callable|null $callback = null, bool $descending = false): array
+	{
+		if (is_callable($callback)) {
+			uasort($array, $callback);
+		} else {
+			$descending ? arsort($array) : asort($array);
+		}
+		return $array;
+	}
+
+	public static function sortBy(array $array, mixed $callback, bool $descending = false): array
+	{
+		$results = [];
+		$callback = value_retriever($callback);
+
+		foreach ($array as $key => $value) {
+			$results[$key] = $callback($value, $key);
+		}
+
+		$descending ? arsort($results) : asort($results);
+
+		foreach (array_keys($results) as $key) {
+			$results[$key] = $array[$key];
+		}
+
+		return $results;
+	}
+
+	public static function sortKeys(array $array, bool $descending = false): array
+	{
+		$descending ? krsort($array) : ksort($array);
+		return $array;
+	}
+
 	/**
 	 * Returns the sum of all items in the array, the specified key or using a closure:
 	 */
-	public static function sum(mixed $array, callable|string|null $callback = null): int|float
+	public static function sum(array $array, callable|string|null $callback = null): int|float
 	{
 		$callback = is_null($callback) ? self::valueCallable() : value_retriever($callback);
-		return self::reduce(convert_to_array($array), function ($result, $item) use ($callback) {
+		return self::reduce($array, function ($result, $item) use ($callback) {
 			return $result + $callback($item);
 		}, 0);
 	}
