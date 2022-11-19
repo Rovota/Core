@@ -90,19 +90,6 @@ final class ArrOld
 		return array_key_exists($key, $array);
 	}
 
-	public static function except(array $array, string|array $keys): array
-	{
-		if (is_string($keys)) {
-			$keys = [$keys];
-		}
-
-		foreach ($keys as $key) {
-			unset($array[$key]);
-		}
-
-		return $array;
-	}
-
 	public static function median(array $array): float|int|null
 	{
 		$count = count($array);
@@ -141,17 +128,6 @@ final class ArrOld
 		$modes = array_keys($appearances, max($appearances));
 		sort($modes);
 		return $modes;
-	}
-
-	public static function only(array $array, array $keys): array
-	{
-		$new = [];
-		foreach ($array as $key => $value) {
-			if (in_array($key, $keys)) {
-				$new[$key] = $value;
-			}
-		}
-		return $new;
 	}
 
 	public static function random(array $array, int $items = 1): mixed

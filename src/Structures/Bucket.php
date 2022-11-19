@@ -190,6 +190,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return Arr::last($this->items->export(), $callback, $default);
 	}
 
+	public function map(callable $callback): Bucket
+	{
+		return new Bucket(Arr::map($this->items->export(), $callback));
+	}
+
 	public function max(string|null $field = null, float|int|null $limit = null): float|int
 	{
 		return Arr::max($field !== null ? $this->pluck($field) : $this->items->export(), $limit);
@@ -223,6 +228,22 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 			$bucket->set($key, $this->items->get($key));
 		}
 		return $bucket;
+	}
+
+	public function partition(callable $callback): Bucket
+	{
+		$passed = new Bucket();
+		$failed = new Bucket();
+
+		foreach ($this->items as $key => $item) {
+			if ($callback($item, $key)) {
+				$passed->set($key, $item);
+			} else {
+				$failed->set($key, $item);
+			}
+		}
+
+		return new Bucket([$passed, $failed]);
 	}
 
 	public function pluck(string $field, string|null $key = null): Bucket

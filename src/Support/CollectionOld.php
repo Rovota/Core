@@ -254,14 +254,6 @@ final class CollectionOld
 	}
 
 	/**
-	 * Iterates through the collection allowing modification of each item, returning a new collection with the result.
-	 */
-	public function map(callable $callback): CollectionOld
-	{
-		return new CollectionOld(ArrOld::map($this->items, $callback));
-	}
-
-	/**
 	 * Returns the median of the collection or for a given key.
 	 */
 	public function median(string|null $key = null): float|int|null
@@ -292,25 +284,6 @@ final class CollectionOld
 	public function occurrences(string $value): int
 	{
 		return $this->countBy()[$value] ?? 0;
-	}
-
-	/**
-	 * Splits the collection into two collections, where one has items passing the truth test, and the other has items failing the truth test.
-	 */
-	public function partition(callable $callback): CollectionOld
-	{
-		$passed = [];
-		$failed = [];
-
-		foreach ($this->items as $key => $item) {
-			if ($callback($item, $key)) {
-				$passed[$key] = $item;
-			} else {
-				$failed[$key] = $item;
-			}
-		}
-
-		return new CollectionOld([new CollectionOld($passed), new CollectionOld($failed)]);
 	}
 
 	/**
