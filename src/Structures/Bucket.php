@@ -90,6 +90,27 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return count($key !== null ? $this->get($key) : $this->items->export());
 	}
 
+	public function countBy(callable|null $callback = null): Bucket
+	{
+		$counted = new Bucket();
+
+		if ($callback === null) {
+			$counted->import(array_count_values($this->items->export()));
+		} else {
+			foreach ($this->items->export() as $key => $value) {
+				$counted->increment($callback($value, $key));
+			}
+		}
+
+		return $counted;
+	}
+
+	public function decrement(mixed $key, int $step = 1): Bucket
+	{
+		$this->set($key, (int) $this->get($key, 0) - $step);
+		return $this;
+	}
+
 	public function except(array $keys): Bucket
 	{
 		return $this->copy()->remove($keys);
@@ -150,6 +171,12 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	{
 		$mode = $preserve ? DataInterface::PRESERVE : DataInterface::MERGE;
 		$this->items->import(convert_to_array($data), $mode);
+		return $this;
+	}
+
+	public function increment(mixed $key, int $step = 1): Bucket
+	{
+		$this->set($key, (int) $this->get($key, 0) + $step);
 		return $this;
 	}
 

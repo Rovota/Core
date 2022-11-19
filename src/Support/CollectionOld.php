@@ -62,27 +62,6 @@ final class CollectionOld
 	}
 
 	/**
-	 * Counts all occurrences of each value in the collection. Optionally, uses a callback to group occurrences.
-	 */
-	public function countBy(callable|null $callback = null): CollectionOld
-	{
-		if ($callback === null) {
-			return new CollectionOld(array_count_values($this->items));
-		}
-
-		$counts = [];
-		foreach ($this->items as $key => $value) {
-			$group = $callback($value, $key);
-			if (isset($counts[$group]) === false) {
-				$counts[$group] = 0;
-			}
-			$counts[$group]++;
-		}
-
-		return new CollectionOld($counts);
-	}
-
-	/**
 	 * Returns the values in the current collection that are not present in the given collection.
 	 */
 	public function diff(mixed $items): CollectionOld
