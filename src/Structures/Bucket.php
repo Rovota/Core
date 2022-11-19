@@ -16,6 +16,9 @@ use Dflydev\DotAccessData\Data;
 use Dflydev\DotAccessData\DataInterface;
 use IteratorAggregate;
 use JsonSerializable;
+use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\CollectionOld;
+use Rovota\Core\Support\Enums\Sort;
 use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -53,7 +56,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function average(string|null $field = null, bool $round = false, int $precision = 0): float|int
 	{
-		return Arr::average($field !== null ? $this->pluck($field) : $this->items, $round, $precision);
+		return Arr::average($field !== null ? $this->pluck($field) : $this->items->export(), $round, $precision);
 	}
 
 	public function copy(): Bucket
@@ -63,7 +66,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function count(mixed $key = null): int
 	{
-		return Arr::count($key !== null ? $this->get($key) : $this->items);
+		return Arr::count($key !== null ? $this->get($key) : $this->items->export());
 	}
 
 	public function except(array $keys): Bucket
@@ -73,17 +76,17 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function filter(callable $callback): Bucket
 	{
-		return new Bucket(Arr::filter($this->items, $callback));
+		return new Bucket(Arr::filter($this->items->export(), $callback));
 	}
 
 	public function find(mixed $value, bool $strict = true): string|int|bool
 	{
-		return Arr::search($this->items, $value, $strict);
+		return Arr::search($this->items->export(), $value, $strict);
 	}
 	
 	public function first(callable|null $callback = null, mixed $default = null): mixed
 	{
-		return Arr::first($this->items, $callback, $default);
+		return Arr::first($this->items->export(), $callback, $default);
 	}
 
 	public function flush(): Bucket
@@ -146,7 +149,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 			return '';
 		}
 		if ($count === 1) {
-			return $this->first();
+			return (string) $this->first();
 		}
 
 		$bucket = new Bucket($this->items);
@@ -162,12 +165,12 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function last(callable|null $callback = null, mixed $default = null): mixed
 	{
-		return Arr::last($this->items, $callback, $default);
+		return Arr::last($this->items->export(), $callback, $default);
 	}
 
 	public function max(string|null $field = null, float|int|null $limit = null): float|int
 	{
-		return Arr::max($field !== null ? $this->pluck($field) : $this->items, $limit);
+		return Arr::max($field !== null ? $this->pluck($field) : $this->items->export(), $limit);
 	}
 
 	public function merge(mixed $with, bool $preserve = false): Bucket
@@ -177,7 +180,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function min(string|null $field = null, float|int|null $limit = null): float|int
 	{
-		return Arr::min($field !== null ? $this->pluck($field) : $this->items, $limit);
+		return Arr::min($field !== null ? $this->pluck($field) : $this->items->export(), $limit);
 	}
 
 	public function only(array $keys): Bucket
@@ -191,7 +194,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function pluck(string $field, string|null $key = null): Bucket
 	{
-		return new Bucket(Arr::pluck($this->items, $field, $key));
+		return new Bucket(Arr::pluck($this->items->export(), $field, $key));
 	}
 
 	public function pop(int $count = 1): mixed
@@ -227,9 +230,16 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function pull(mixed $key, mixed $default = null): mixed
+	{
+		$value = $this->offsetGet($key) ?? $default;
+		$this->offsetUnset($key);
+		return $value;
+	}
+
 	public function reduce(callable $callback, mixed $initial = null): mixed
 	{
-		return Arr::reduce($this->items, $callback, $initial);
+		return Arr::reduce($this->items->export(), $callback, $initial);
 	}
 
 	public function remove(mixed $key): Bucket
@@ -256,9 +266,27 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function sort(callable|null $callback = null, bool $descending = false): Bucket
+	{
+		$this->items = new Data(Arr::sort($this->items->export(), $callback, $descending));
+		return $this;
+	}
+
+	public function sortBy(mixed $callback, bool $descending = false): Bucket
+	{
+		$this->items = new Data(Arr::sortBy($this->items->export(), $callback, $descending));
+		return $this;
+	}
+
+	public function sortKeys(bool $descending = false): Bucket
+	{
+		$this->items = new Data(Arr::sortKeys($this->items->export(), $descending));
+		return $this;
+	}
+
 	public function sum(Closure|string|null $field = null): float|int
 	{
-		return Arr::sum($this->items, $field);
+		return Arr::sum($this->items->export(), $field);
 	}
 
 	public function toArray(): array
@@ -288,7 +316,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function transform(callable $callback): Bucket
 	{
-		$this->items = new Data(Arr::map($this->items, $callback));
+		$this->items = new Data(Arr::map($this->items->export(), $callback));
 		return $this;
 	}
 
