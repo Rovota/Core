@@ -52,15 +52,11 @@ class ArrayStore extends CacheStore
 
 	// -----------------
 
-	public function has(string|int $key): bool
+	public function has(string|int|array $key): bool
 	{
-		return isset($this->storage[$this->prefix.$key]);
-	}
-
-	public function hasAll(array $keys): bool
-	{
+		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
-			if ($this->has($key) === false) {
+			if (isset($this->storage[$this->prefix.$key]) === false) {
 				return false;
 			}
 		}
