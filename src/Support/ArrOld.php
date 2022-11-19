@@ -196,34 +196,4 @@ final class ArrOld
 		return $array;
 	}
 
-	public static function whereNull(array $array): array
-	{
-		foreach ($array as $key => $value) {
-			if (is_array($value)) {
-				$array[$key] = ArrOld::whereNull($value);
-			}
-
-			if ($array[$key] !== null) {
-				unset($array[$key]);
-			}
-		}
-
-		return $array;
-	}
-
-	public static function whereNotNull(array $array): array
-	{
-		foreach ($array as $key => $value) {
-			if (is_array($value)) {
-				$array[$key] = ArrOld::whereNotNull($value);
-			}
-
-			if ($array[$key] === null) {
-				unset($array[$key]);
-			}
-		}
-
-		return $array;
-	}
-
 }

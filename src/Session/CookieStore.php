@@ -11,6 +11,7 @@ namespace Rovota\Core\Session;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Session\Interfaces\SessionInterface;
 use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\Helpers\Arr;
 
 class CookieStore implements SessionInterface
 {
@@ -120,7 +121,9 @@ class CookieStore implements SessionInterface
 			$result[$key] = $_SESSION['data'][$key] ?? ($defaults[$key] ?? null);
 			unset($_SESSION['data'][$key]);
 		}
-		return ArrOld::whereNotNull($result);
+		return Arr::filter($result, function ($value) {
+			return $value !== null;
+		});
 	}
 
 	public function read(string|int $key, mixed $default = null): mixed
@@ -136,7 +139,9 @@ class CookieStore implements SessionInterface
 		foreach ($keys as $key) {
 			$entries[$key] = $_SESSION['data'][$key] ?? ($defaults[$key] ?? null);
 		}
-		return ArrOld::whereNotNull($entries);
+		return Arr::filter($entries, function ($value) {
+			return $value !== null;
+		});
 	}
 
 	public function remember(string|int $key, callable $callback): mixed
