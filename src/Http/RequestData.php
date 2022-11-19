@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Http;
 
+use ArrayAccess;
 use ArrayIterator;
 use Closure;
 use Countable;
@@ -20,7 +21,7 @@ use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Traits\TypeAccessors;
 use Traversable;
 
-final class RequestData implements IteratorAggregate, Countable, Arrayable, JsonSerializable
+final class RequestData implements ArrayAccess, IteratorAggregate, Countable, Arrayable, JsonSerializable
 {
 	use TypeAccessors;
 
@@ -71,12 +72,12 @@ final class RequestData implements IteratorAggregate, Countable, Arrayable, Json
 		return $this;
 	}
 
-	public function get(mixed $key, mixed $default = null): mixed
+	public function get(string $key, mixed $default = null): mixed
 	{
 		return $this->items->get($key, ($default instanceof Closure ? $default() : $default));
 	}
 
-	public function has(mixed $key): bool
+	public function has(string|array $key): bool
 	{
 		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
@@ -92,7 +93,7 @@ final class RequestData implements IteratorAggregate, Countable, Arrayable, Json
 		return empty($this->items->export());
 	}
 
-	public function missing(mixed $key): bool
+	public function missing(string|array $key): bool
 	{
 		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
@@ -174,4 +175,35 @@ final class RequestData implements IteratorAggregate, Countable, Arrayable, Json
 		return $this->toArray();
 	}
 
+	/**
+	 * @internal
+	 */
+	public function offsetExists(mixed $offset): bool
+	{
+		return $this->items->has($offset);
+	}
+
+	/**
+	 * @internal
+	 */
+	public function offsetGet(mixed $offset): mixed
+	{
+		return $this->items->get($offset);
+	}
+
+	/**
+	 * @internal
+	 */
+	public function offsetSet(mixed $offset, mixed $value): void
+	{
+		$this->items->set($offset, $value);
+	}
+
+	/**
+	 * @internal
+	 */
+	public function offsetUnset(mixed $offset): void
+	{
+		$this->items->remove($offset);
+	}
 }
