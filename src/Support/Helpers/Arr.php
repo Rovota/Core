@@ -10,6 +10,7 @@ namespace Rovota\Core\Support\Helpers;
 
 use ArrayAccess;
 use Closure;
+use Rovota\Core\Support\Text;
 
 final class Arr
 {
@@ -235,6 +236,24 @@ final class Arr
 		return self::reduce($array, function ($result, $item) use ($callback) {
 			return $result + $callback($item);
 		}, 0);
+	}
+
+	// -----------------
+
+	public static function fromAcceptHeader(string|null $header): array
+	{
+		$header = trim($header ?? '');
+		if (strlen($header) === 0) {
+			return [];
+		}
+		return array_reduce(explode(',', $header),
+			function ($carry, $element) {
+				$type = Text::before($element, ';');
+				$quality = str_contains($element, ';q=') ? Text::afterLast($element, ';q=') : 1.00;
+				$carry[trim($type)] = (float) $quality;
+				return $carry;
+			},[]
+		);
 	}
 
 	// -----------------
