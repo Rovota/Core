@@ -10,7 +10,6 @@ namespace Rovota\Core\Session;
 
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Session\Interfaces\SessionInterface;
-use Rovota\Core\Support\ArrOld;
 use Rovota\Core\Support\Helpers\Arr;
 
 class CookieStore implements SessionInterface
