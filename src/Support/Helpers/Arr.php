@@ -10,6 +10,7 @@ namespace Rovota\Core\Support\Helpers;
 
 use ArrayAccess;
 use Closure;
+use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Text;
 
 final class Arr
@@ -42,6 +43,27 @@ final class Arr
 
 		$average = array_sum($array) / $count;
 		return $round ? round($average, $precision) : $average;
+	}
+
+	/**
+	 * Collapse an array or collection of arrays into a single, flat array.
+	 */
+	public static function collapse(array $array): array
+	{
+		$normalized = [];
+
+		foreach ($array as $item) {
+			if ($item instanceof Arrayable) {
+				$item = $item->toArray();
+			} else {
+				if (!is_array($item)) {
+					continue;
+				}
+			}
+			$normalized[] = $item;
+		}
+
+		return array_merge([], ...$normalized);
 	}
 
 	/**
@@ -89,6 +111,17 @@ final class Arr
 		return $default;
 	}
 
+	public static function has(array $array, mixed $key): bool
+	{
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if (array_key_exists($key, $array) === false) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static function last(array $array, callable|null $callback = null, mixed $default = null): mixed
 	{
 		if (is_null($callback)) {
@@ -116,20 +149,23 @@ final class Arr
 	}
 
 	/**
-	 * Merges the given arrays into a single array. Existing keys will be overwritten.
-	 */
-	public static function merge(mixed $first, mixed $second): array
-	{
-		return array_merge($first, $second);
-	}
-
-	/**
 	 * Returns the lowest value present in the array.
 	 */
 	public static function min(array $array, float|int|null $limit = null): float|int
 	{
 		$minimum = min($array);
 		return ($limit !== null && $minimum <= $limit) ? $limit : $minimum;
+	}
+
+	public static function missing(array $array, mixed $key): bool
+	{
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if (array_key_exists($key, $array) === true) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
