@@ -44,14 +44,6 @@ final class Arr
 	}
 
 	/**
-	 * Returns how many elements are in the given array.
-	 */
-	public static function count(array $array): int
-	{
-		return count($array);
-	}
-
-	/**
 	 * Returns the items from the array that pass a given truth test.
 	 */
 	public static function filter(array $array, callable $callback): array

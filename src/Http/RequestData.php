@@ -43,7 +43,7 @@ final class RequestData implements IteratorAggregate, Countable, Arrayable, Json
 
 	public function count(): int
 	{
-		return Arr::count($this->items);
+		return count($this->items->export());
 	}
 
 	public function except(array $keys): RequestData

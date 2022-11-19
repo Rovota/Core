@@ -63,7 +63,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function count(mixed $key = null): int
 	{
-		return Arr::count($key !== null ? $this->get($key) : $this->items->export());
+		return count($key !== null ? $this->get($key) : $this->items->export());
 	}
 
 	public function except(array $keys): Bucket
