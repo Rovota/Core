@@ -148,6 +148,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		if ($count === 0) {
 			return '';
 		}
+
 		if ($count === 1) {
 			return (string) $this->first();
 		}
@@ -199,11 +200,9 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function pop(int $count = 1): mixed
 	{
-		$items = $this->items->export();
-
 		if ($count === 1) {
-			$value = array_pop($items);
-			$this->items = new Data($items);
+			$value = $this->last();
+			$this->remove(array_search($value, $this->items->export()));
 			return $value;
 		}
 
@@ -215,10 +214,10 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		$item_count = $this->count();
 
 		foreach (range(1, min($count, $item_count)) as $ignored) {
-			$results[] = array_pop($items);
+			$results[] = $this->last();
+			$this->pop();
 		}
 
-		$this->items = new Data($items);
 		return new Sequence($results);
 	}
 

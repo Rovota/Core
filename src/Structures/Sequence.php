@@ -76,9 +76,7 @@ class Sequence extends Collection
 		$item_count = $this->count();
 
 		foreach (range(1, min($count, $item_count)) as $ignored) {
-			$value = $this->last();
-			$key = $this->retrieveKeyForValue($value);
-			$results[$key] = $value;
+			$results[] = $this->last();
 			$this->pop();
 		}
 
