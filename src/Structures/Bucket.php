@@ -56,9 +56,28 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return Arr::average($field !== null ? $this->pluck($field) : $this->items->export(), $round, $precision);
 	}
 
+	public function chunk(int $size): Bucket
+	{
+		$chunks = new Bucket();
+		foreach (array_chunk($this->items->export(), $size, true) as $chunk) {
+			$chunks->append(new Bucket($chunk));
+		}
+		return $chunks;
+	}
+
 	public function collapse(): Bucket
 	{
-		return new Bucket(Arr::collapse($this->items->export()));
+		$collapsed = Arr::collapse($this->items->export());
+		$this->items = new Data($collapsed);
+		return $this;
+	}
+
+	public function concat(mixed $data): Bucket
+	{
+		foreach (convert_to_array($data) as $item) {
+			$this->append($item);
+		}
+		return $this;
 	}
 
 	public function copy(): Bucket

@@ -22,38 +22,11 @@ final class CollectionOld
 	// -----------------
 
 	/**
-	 * Split the collection into chunks of a given size.
-	 */
-	public function chunk(int $size): CollectionOld
-	{
-		$chunks = [];
-
-		foreach (array_chunk($this->items, $size, true) as $chunk) {
-			$chunks[] = new CollectionOld($chunk);
-		}
-
-		return new CollectionOld($chunks);
-	}
-
-	/**
 	 * Combines the values of the current collection (as keys) with the values provided.
 	 */
 	public function combine(mixed $values): CollectionOld
 	{
 		return new CollectionOld(ArrOld::combine($this->items, $values));
-	}
-
-	/**
-	 * Appends the values of a given array or collection onto the end of the current collection.
-	 */
-	public function concat(mixed $source): CollectionOld
-	{
-		$result = new CollectionOld($this);
-
-		foreach (convert_to_array($source) as $item) {
-			$result->push($item);
-		}
-		return $result;
 	}
 
 	/**
