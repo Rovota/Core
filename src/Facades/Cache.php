@@ -56,17 +56,12 @@ final class Cache
 		CacheManager::get()->forever($key, $value);
 	}
 
-	public static function has(string|int $key): bool
+	public static function has(string|int|array $key): bool
 	{
 		return CacheManager::get()->has($key);
 	}
 
-	public static function hasAll(array $keys): bool
-	{
-		return CacheManager::get()->hasAll($keys);
-	}
-
-	public static function missing(string|int $key): bool
+	public static function missing(string|int|array $key): bool
 	{
 		return CacheManager::get()->missing($key);
 	}

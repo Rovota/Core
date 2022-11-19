@@ -82,15 +82,10 @@ class CookieStore implements SessionInterface
 		}
 	}
 
-	public function has(string|int $key): bool
+	public function has(string|int|array $key): bool
 	{
 		$this->loadSession();
-		return isset($_SESSION['data'][$key]);
-	}
-
-	public function hasAll(array $keys): bool
-	{
-		$this->loadSession();
+		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
 			if (isset($_SESSION['data'][$key]) === false) {
 				return false;
@@ -99,10 +94,16 @@ class CookieStore implements SessionInterface
 		return true;
 	}
 
-	public function missing(string|int $key): bool
+	public function missing(string|int|array $key): bool
 	{
 		$this->loadSession();
-		return isset($_SESSION['data'][$key]) === false;
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if (isset($_SESSION['data'][$key]) === true) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public function pull(string|int $key, mixed $default = null): mixed

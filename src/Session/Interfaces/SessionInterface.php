@@ -25,11 +25,9 @@ interface SessionInterface
 
 	public function putAllExcept(array $values, string|array $except): void;
 
-	public function has(string|int $key): bool;
+	public function has(string|int|array $key): bool;
 
-	public function hasAll(array $keys): bool;
-
-	public function missing(string|int $key): bool;
+	public function missing(string|int|array $key): bool;
 
 	/**
 	 * Returns the cached value (or the default), and then removes it from cache.
