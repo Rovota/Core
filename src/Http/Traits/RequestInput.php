@@ -34,29 +34,34 @@ trait RequestInput
 		return $this->getInputData()->all();
 	}
 
-	public function get(string $key, mixed $default = null): mixed
-	{
-		return $this->getInputData()->get($key, $default);
-	}
-
-	public function only(string|array $keys): RequestData
-	{
-		return $this->getInputData()->only($keys);
-	}
-
 	public function except(string|array $keys): RequestData
 	{
 		return $this->getInputData()->except($keys);
 	}
 
-	public function has(string $key): bool
+	public function filled(string|array $keys): bool
+	{
+		return $this->getInputData()->filled($keys);
+	}
+
+	public function get(string $key, mixed $default = null): mixed
+	{
+		return $this->getInputData()->get($key, $default);
+	}
+
+	public function has(string|array $key): bool
 	{
 		return $this->getInputData()->has($key);
 	}
 
-	public function filled(string|array $keys): bool
+	public function missing(string|array $key): bool
 	{
-		return $this->getInputData()->filled($keys);
+		return $this->getInputData()->missing($key);
+	}
+
+	public function only(string|array $keys): RequestData
+	{
+		return $this->getInputData()->only($keys);
 	}
 
 	public function whenFilled(string $key, callable $callback): mixed
