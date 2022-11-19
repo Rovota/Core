@@ -11,7 +11,7 @@ namespace Rovota\Core\Addon;
 use Rovota\Core\Facades\DB;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 use Rovota\Core\Support\Enums\Status;
 use Throwable;
 
@@ -116,7 +116,7 @@ final class AddonManager
 		try {
 			$libraries = DB::table('addons')->where(['type' => 'library', 'status' => Status::Enabled])->get();
 			foreach ($libraries as $library) {
-				if ($library->domain_list === '*' || Arr::contains(explode(',', $library->domain_list), Application::$server->get('server_name'))) {
+				if ($library->domain_list === '*' || ArrOld::contains(explode(',', $library->domain_list), Application::$server->get('server_name'))) {
 					$class = sprintf('Library\%s\%s', $library->name, $library->name);
 					if (class_exists($class)) {
 						$addon = $class::newFromBuilder($library);
@@ -134,7 +134,7 @@ final class AddonManager
 		try {
 			$modules = DB::table('addons')->where(['type' => 'module', 'status' => Status::Enabled])->get();
 			foreach ($modules as $module) {
-				if ($module->domain_list === '*' || Arr::contains(explode(',', $module->domain_list), Application::$server->get('server_name'))) {
+				if ($module->domain_list === '*' || ArrOld::contains(explode(',', $module->domain_list), Application::$server->get('server_name'))) {
 					$class = sprintf('Module\%s\%s', $module->name, $module->name);
 					if (class_exists($class)) {
 						$addon = $class::newFromBuilder($module);
@@ -152,7 +152,7 @@ final class AddonManager
 		try {
 			$themes = DB::table('addons')->where(['type' => 'theme', 'status' => Status::Enabled])->get();
 			foreach ($themes as $theme) {
-				if ($theme->domain_list === '*' || Arr::contains(explode(',', $theme->domain_list), Application::$server->get('server_name'))) {
+				if ($theme->domain_list === '*' || ArrOld::contains(explode(',', $theme->domain_list), Application::$server->get('server_name'))) {
 					$class = sprintf('Theme\%s\%s', $theme->name, $theme->name);
 					if (class_exists($class)) {
 						self::$theme = $class::newFromBuilder($theme);

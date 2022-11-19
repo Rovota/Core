@@ -9,14 +9,14 @@
 namespace Rovota\Core\Database\Casts;
 
 use BackedEnum;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 
 final class EnumCast extends Cast
 {
 
 	public function allowedValue(mixed $value, array $options): bool
 	{
-		if (Arr::containsNone($options[0]::cases(), [$value])) {
+		if (ArrOld::containsNone($options[0]::cases(), [$value])) {
 			return false;
 		}
 		return $value instanceof BackedEnum;

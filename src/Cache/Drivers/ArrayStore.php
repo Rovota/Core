@@ -9,7 +9,7 @@
 namespace Rovota\Core\Cache\Drivers;
 
 use Rovota\Core\Cache\CacheStore;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 
 class ArrayStore extends CacheStore
 {
@@ -90,7 +90,7 @@ class ArrayStore extends CacheStore
 			$result[$key] = $this->read($key, $defaults[$key] ?? null);
 		}
 		$this->forgetMany($keys);
-		return Arr::whereNotNull($result);
+		return ArrOld::whereNotNull($result);
 	}
 
 	// -----------------
@@ -106,7 +106,7 @@ class ArrayStore extends CacheStore
 		foreach ($keys as $key) {
 			$entries[$key] = $this->read($key, $defaults[$key] ?? null);
 		}
-		return Arr::whereNotNull($entries);
+		return ArrOld::whereNotNull($entries);
 	}
 
 	// -----------------

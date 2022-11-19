@@ -14,7 +14,7 @@ use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Database\Traits\QueryFunctions;
 use Rovota\Core\Facades\DB;
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -254,13 +254,13 @@ abstract class Model implements JsonSerializable
 			$allowed = $this->restricted[$attribute];
 
 			if (is_string($allowed) || $allowed instanceof BackedEnum) {
-				if (Arr::containsNone($allowed::cases(), [$value])) {
+				if (ArrOld::containsNone($allowed::cases(), [$value])) {
 					throw new TypeError(
 						sprintf('Value must be of type %s, %s given.', $allowed, is_object($value) ? $value::class : gettype($value))
 					);
 				}
 			} else {
-				if (Arr::containsNone($allowed, [$value])) {
+				if (ArrOld::containsNone($allowed, [$value])) {
 					return false;
 				}
 			}

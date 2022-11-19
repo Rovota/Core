@@ -15,7 +15,7 @@ use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Enums\MediaType;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
 use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
@@ -166,7 +166,7 @@ class Media extends Model
 
 	public function hasVariant(array|string $variant): bool
 	{
-		return Arr::containsAny($this->variants, is_string($variant) ? [$variant] : $variant);
+		return ArrOld::containsAny($this->variants, is_string($variant) ? [$variant] : $variant);
 	}
 
 	public function publicUrl(string|null $variant = null): string
@@ -208,7 +208,7 @@ class Media extends Model
 		$count = 0;
 
 		foreach ($variants as $variant) {
-			if (Arr::contains($this->variants, $variant) === false) {
+			if (ArrOld::contains($this->variants, $variant) === false) {
 				continue;
 			}
 			$result .= $this->getPublicLocationForVariant($variant).$sizes[$count];

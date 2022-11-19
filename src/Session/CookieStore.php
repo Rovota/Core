@@ -10,7 +10,7 @@ namespace Rovota\Core\Session;
 
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Session\Interfaces\SessionInterface;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 
 class CookieStore implements SessionInterface
 {
@@ -120,7 +120,7 @@ class CookieStore implements SessionInterface
 			$result[$key] = $_SESSION['data'][$key] ?? ($defaults[$key] ?? null);
 			unset($_SESSION['data'][$key]);
 		}
-		return Arr::whereNotNull($result);
+		return ArrOld::whereNotNull($result);
 	}
 
 	public function read(string|int $key, mixed $default = null): mixed
@@ -136,7 +136,7 @@ class CookieStore implements SessionInterface
 		foreach ($keys as $key) {
 			$entries[$key] = $_SESSION['data'][$key] ?? ($defaults[$key] ?? null);
 		}
-		return Arr::whereNotNull($entries);
+		return ArrOld::whereNotNull($entries);
 	}
 
 	public function remember(string|int $key, callable $callback): mixed

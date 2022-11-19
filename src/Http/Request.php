@@ -16,7 +16,8 @@ use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Routing\Route as RouteObject;
 use Rovota\Core\Routing\UrlBuilder;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Errors;
@@ -207,10 +208,10 @@ final class Request
 	{
 		$filter = ValidationManager::getFilter('access_control');
 		if ($filter !== null && $filter->action === FilterAction::Block) {
-			return Arr::contains($filter->values, $ip ?? $this->ip()) === false;
+			return ArrOld::contains($filter->values, $ip ?? $this->ip()) === false;
 		}
 		if ($filter !== null && $filter->action === FilterAction::Allow) {
-			return Arr::contains($filter->values, $ip ?? $this->ip());
+			return ArrOld::contains($filter->values, $ip ?? $this->ip());
 		}
 		return true;
 	}
@@ -267,7 +268,7 @@ final class Request
 		$method = Application::$server->get('REQUEST_METHOD');
 		if ($method === 'POST' && $this->hasHeader('X-HTTP-Method-Override')) {
 			$header_value = $this->header('X-HTTP-Method-Override');
-			if (Arr::contains(['PUT', 'DELETE', 'PATCH'], $header_value)) {
+			if (ArrOld::contains(['PUT', 'DELETE', 'PATCH'], $header_value)) {
 				$method = $header_value;
 			}
 		}
@@ -379,7 +380,7 @@ final class Request
 
 		$types = is_array($content_types) ? $content_types : [$content_types];
 		foreach ($accepts as $type => $value) {
-			if (Arr::contains(['*/*', '*'], $type)) {
+			if (ArrOld::contains(['*/*', '*'], $type)) {
 				return true;
 			}
 			foreach ($types as $name) {
@@ -517,7 +518,7 @@ final class Request
 
 		$types = is_array($content_types) ? $content_types : [$content_types];
 		foreach ($accepts as $accept => $value) {
-			if (Arr::contains(['*/*', '*'], $accept)) {
+			if (ArrOld::contains(['*/*', '*'], $accept)) {
 				return $types[0];
 			}
 
@@ -540,7 +541,7 @@ final class Request
 
 		$encodings = is_array($encodings) ? $encodings : [$encodings];
 		foreach ($accepts as $accept => $value) {
-			if (Arr::contains($encodings, $accept)) {
+			if (ArrOld::contains($encodings, $accept)) {
 				return $accept;
 			}
 		}
@@ -561,7 +562,7 @@ final class Request
 
 		$locales = is_array($locales) ? $locales : [$locales];
 		foreach ($accepts as $accept => $value) {
-			if (Arr::contains($locales, $accept)) {
+			if (ArrOld::contains($locales, $accept)) {
 				return $accept;
 			}
 		}

@@ -11,7 +11,7 @@ namespace Rovota\Core\Cache\Drivers;
 use Redis;
 use RedisException;
 use Rovota\Core\Cache\CacheStore;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 
 class RedisStore extends CacheStore
 {
@@ -137,7 +137,7 @@ class RedisStore extends CacheStore
 			$result[$key] = $this->read($key, $defaults[$key] ?? null);
 		}
 		$this->forgetMany($keys);
-		return Arr::whereNotNull($result);
+		return ArrOld::whereNotNull($result);
 	}
 
 	// -----------------
@@ -159,7 +159,7 @@ class RedisStore extends CacheStore
 		foreach ($keys as $key) {
 			$entries[$key] = $this->read($key, $defaults[$key] ?? null);
 		}
-		return Arr::whereNotNull($entries);
+		return ArrOld::whereNotNull($entries);
 	}
 
 	// -----------------

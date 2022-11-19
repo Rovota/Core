@@ -39,8 +39,9 @@ use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Structures\Map;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Structures\Set;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 use Rovota\Core\Support\FluentString;
+use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
@@ -119,7 +120,7 @@ if (!function_exists('moment')) {
 if (!function_exists('sanitize_select')) {
 	function sanitize_select(string $option, array $options, string $fallback): string
 	{
-		return Arr::contains($options, $option) ? $option : $fallback;
+		return ArrOld::contains($options, $option) ? $option : $fallback;
 	}
 }
 
@@ -128,7 +129,7 @@ if (!function_exists('sanitize_extension')) {
 	{
 		$extensions = ValidationManager::mimeTypeExtensions($type);
 
-		if (Arr::contains($extensions, $extension)) {
+		if (ArrOld::contains($extensions, $extension)) {
 			return $extension;
 		}
 
@@ -141,7 +142,7 @@ if (!function_exists('sanitize_mime_type')) {
 	{
 		$mime_types = ValidationManager::extensionMimeTypes($extension);
 
-		if (Arr::contains($mime_types, $type)) {
+		if (ArrOld::contains($mime_types, $type)) {
 			return $type;
 		}
 
@@ -675,7 +676,7 @@ if (!function_exists('data_get')) {
             return in_array('*', $key) ? Arr::collapse($result) : $result;
          }
 
-         if (Arr::accessible($target) && Arr::exists($target, $segment)) {
+         if (Arr::accessible($target) && ArrOld::exists($target, $segment)) {
             $target = $target[$segment];
          } else if (is_object($target) && isset($target->{$segment})) {
             $target = $target->{$segment};

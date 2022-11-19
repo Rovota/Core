@@ -13,7 +13,8 @@ use Rovota\Core\Database\DatabaseManager;
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
@@ -114,13 +115,13 @@ class Validator
 			return true;
 		}
 
-		if (Arr::hasNone($rules, ['nullable', 'required_if_enabled', 'required_if_disabled']) && $data === null) {
+		if (Arr::missing($rules, ['nullable', 'required_if_enabled', 'required_if_disabled']) && $data === null) {
 			$this->addError($field, 'nullable');
 			return false;
 		}
 
 		foreach ($rules as $name => $options) {
-			if (Arr::contains(['required', 'sometimes', 'nullable', 'bail'], $name)) {
+			if (ArrOld::contains(['required', 'sometimes', 'nullable', 'bail'], $name)) {
 				continue;
 			}
 

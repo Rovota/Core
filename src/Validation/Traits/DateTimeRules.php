@@ -9,7 +9,7 @@
 namespace Rovota\Core\Validation\Traits;
 
 use DateTime;
-use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\ArrOld;
 
 trait DateTimeRules
 {
@@ -105,7 +105,7 @@ trait DateTimeRules
 			return false;
 		}
 
-		if (Arr::contains(timezone_identifiers_list(), $data) === false) {
+		if (ArrOld::contains(timezone_identifiers_list(), $data) === false) {
 			$this->addError($field, 'timezone');
 			return false;
 		}
