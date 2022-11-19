@@ -181,6 +181,17 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return Arr::min($field !== null ? $this->pluck($field) : $this->items->export(), $limit);
 	}
 
+	public function missing(mixed $key): bool
+	{
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if ($this->items->has($key) === true) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public function only(array $keys): Bucket
 	{
 		$bucket = new Bucket();

@@ -93,6 +93,17 @@ final class RequestData implements IteratorAggregate, Countable, Arrayable, Json
 		return empty($this->items->export());
 	}
 
+	public function missing(mixed $key): bool
+	{
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if ($this->items->has($key) === true) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public function only(array $keys): RequestData
 	{
 		$bucket = new RequestData();
