@@ -128,7 +128,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	{
 		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
-			if ($this->items->has($key) === false) {
+			if ($this->offsetExists($key) === false) {
 				return false;
 			}
 		}
@@ -209,7 +209,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	{
 		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
-			if ($this->items->has($key) === true) {
+			if ($this->offsetExists($key) === true) {
 				return false;
 			}
 		}
