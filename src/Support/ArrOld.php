@@ -73,17 +73,4 @@ final class ArrOld
 		return array_replace_recursive($array, convert_to_array($items));
 	}
 
-	public static function shuffle(array $array, int|null $seed = null): array
-	{
-		if (is_null($seed)) {
-			shuffle($array);
-		} else {
-			mt_srand($seed);
-			shuffle($array);
-			mt_srand();
-		}
-
-		return $array;
-	}
-
 }

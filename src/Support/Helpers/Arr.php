@@ -307,6 +307,12 @@ final class Arr
 		return false;
 	}
 
+	public static function shuffle(array $array): array
+	{
+		shuffle($array);
+		return $array;
+	}
+
 	public static function sort(array $array, callable|null $callback = null, bool $descending = false): array
 	{
 		if (is_callable($callback)) {

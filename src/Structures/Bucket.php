@@ -389,6 +389,12 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function reverse(): Bucket
+	{
+		$this->items = new Data(array_reverse($this->items->export(), true));
+		return $this;
+	}
+
 	public function set(mixed $key, mixed $value = null): Bucket
 	{
 		if (is_array($key)) {
@@ -398,6 +404,35 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		} else {
 			$this->offsetSet($key, $value);
 		}
+		return $this;
+	}
+
+	public function shift(int $count = 1): mixed
+	{
+		if ($count === 1) {
+			$value = $this->first();
+			$this->remove(array_search($value, $this->items->export()));
+			return $value;
+		}
+
+		if ($this->isEmpty()) {
+			return null;
+		}
+
+		$results = [];
+		$item_count = $this->count();
+
+		foreach (range(1, min($count, $item_count)) as $ignored) {
+			$results[] = $this->first();
+			$this->shift();
+		}
+
+		return new Sequence($results);
+	}
+
+	public function shuffle(int|null $seed = null): Bucket
+	{
+		$this->items = new Data(Arr::shuffle($this->items->export()));
 		return $this;
 	}
 

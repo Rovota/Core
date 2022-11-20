@@ -217,48 +217,6 @@ final class CollectionOld
 	}
 
 	/**
-	 * Reverses the order of the items in the collection while preserving the keys.
-	 */
-	public function reverse(): CollectionOld
-	{
-		return new CollectionOld(array_reverse($this->items, true));
-	}
-
-	/**
-	 * Removes and returns the first item or `x` items from the collection. Defaults to `1`.
-	 */
-	public function shift(int $count = 1): mixed
-	{
-		if ($count === 1) {
-			$value = array_shift($this->items);
-			$this->keys = array_keys($this->items);
-			return $value;
-		}
-
-		if ($this->isEmpty()) {
-			return null;
-		}
-
-		$results = [];
-		$item_count = $this->count();
-
-		foreach (range(1, min($count, $item_count)) as $ignored) {
-			$results[] = array_shift($this->items);
-		}
-
-		$this->keys = array_keys($this->items);
-		return new CollectionOld($results);
-	}
-
-	/**
-	 * Changes the order of the items in the collection to be random.
-	 */
-	public function shuffle(int|null $seed = null): CollectionOld
-	{
-		return new CollectionOld(ArrOld::shuffle($this->items, $seed));
-	}
-
-	/**
 	 * Skips over `x` items from the collection, and returns the remaining items.
 	 */
 	public function skip(int $count): CollectionOld
