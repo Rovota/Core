@@ -53,7 +53,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function average(string|null $field = null, bool $round = false, int $precision = 0): float|int
 	{
-		return Arr::average($field !== null ? $this->pluck($field) : $this->items->export(), $round, $precision);
+		return Arr::average($field !== null ? $this->pluck($field)->toArray() : $this->items->export(), $round, $precision);
 	}
 
 	public function chunk(int $size): Bucket
@@ -224,7 +224,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function max(string|null $field = null, float|int|null $limit = null): float|int
 	{
-		return Arr::max($field !== null ? $this->pluck($field) : $this->items->export(), $limit);
+		return Arr::max($field !== null ? $this->pluck($field)->toArray() : $this->items->export(), $limit);
 	}
 
 	public function merge(mixed $with, bool $preserve = false): Bucket
@@ -234,7 +234,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function min(string|null $field = null, float|int|null $limit = null): float|int
 	{
-		return Arr::min($field !== null ? $this->pluck($field) : $this->items->export(), $limit);
+		return Arr::min($field !== null ? $this->pluck($field)->toArray() : $this->items->export(), $limit);
 	}
 
 	public function missing(mixed $key): bool
@@ -246,6 +246,16 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 			}
 		}
 		return true;
+	}
+
+	public function mode(string|null $key = null): array
+	{
+		return Arr::mode($key !== null ? $this->pluck($key)->toArray() : $this->items->export());
+	}
+
+	public function occurrences(string $value): int
+	{
+		return $this->countBy()[$value] ?? 0;
 	}
 
 	public function only(array $keys): Bucket

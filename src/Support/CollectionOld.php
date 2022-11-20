@@ -241,28 +241,12 @@ final class CollectionOld
 	}
 
 	/**
-	 *	Returns the mode of the collection or given key.
-	 */
-	public function mode(string|null $key = null): array
-	{
-		return ArrOld::mode($key !== null ? $this->pluck($key)->all() : $this->items);
-	}
-
-	/**
 	 * Allows modifying the collection using a closure.
 	 */
 	public function modify(Closure $closure): CollectionOld
 	{
 		$closure($this);
 		return $this;
-	}
-
-	/**
-	 * Returns how many times a given value exists in the collection.
-	 */
-	public function occurrences(string $value): int
-	{
-		return $this->countBy()[$value] ?? 0;
 	}
 
 	/**
