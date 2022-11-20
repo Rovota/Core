@@ -12,7 +12,7 @@ use Rovota\Core\Auth\Enums\TokenStatus;
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Database\Model;
 use Rovota\Core\Http\Throttling\Enums\PeriodType;
-use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 use function now;
@@ -79,7 +79,7 @@ class ApiToken extends Model
 			return true;
 		}
 
-		return ArrOld::containsAny($this->endpoints ?? [], array_merge($endpoints, ['*']));
+		return Arr::containsAny($this->endpoints ?? [], array_merge($endpoints, ['*']));
 	}
 
 	// -----------------

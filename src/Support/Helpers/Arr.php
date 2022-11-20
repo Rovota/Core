@@ -66,6 +66,45 @@ final class Arr
 		return array_merge([], ...$normalized);
 	}
 
+	public static function contains(array $haystack, mixed $needle): bool
+	{
+		$needles = is_array($needle) ? $needle : [$needle];
+
+		foreach ($needles as $needle) {
+			if ($needle instanceof Closure) {
+				foreach ($haystack as $key => $value) {
+					if ($needle($value, $key) === false) {
+						return false;
+					}
+				}
+			} else {
+				if (in_array($needle, $haystack, true) === false) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	public static function containsAny(array $haystack, array $needles): bool
+	{
+		foreach ($needles as $needle) {
+			if ($needle instanceof Closure) {
+				foreach ($haystack as $key => $value) {
+					if ($needle($value, $key)) {
+						return true;
+					}
+				}
+			} else {
+				if (in_array($needle, $haystack, true)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Returns the items from the array that pass a given truth test.
 	 */
@@ -148,6 +187,26 @@ final class Arr
 		return ($limit !== null && $maximum >= $limit) ? $limit : $maximum;
 	}
 
+	public static function median(array $array): float|int|null
+	{
+		$count = count($array);
+		sort($array);
+
+		$values = array_values($array);
+
+		if ($count === 0) {
+			return null;
+		}
+
+		$middle = (int) ($count / 2);
+
+		if ($count % 2) {
+			return $values[$middle];
+		}
+
+		return Arr::average([$values[$middle - 1], $values[$middle]]);
+	}
+
 	/**
 	 * Returns the lowest value present in the array.
 	 */
@@ -166,6 +225,25 @@ final class Arr
 			}
 		}
 		return true;
+	}
+
+	public static function mode(array $array): array|null
+	{
+		if (count($array) === 0) {
+			return null;
+		}
+
+		$appearances = [];
+		foreach ($array as $item) {
+			if (!isset($appearances[$item])) {
+				$appearances[$item] = 0;
+			}
+			$appearances[$item]++;
+		}
+
+		$modes = array_keys($appearances, max($appearances));
+		sort($modes);
+		return $modes;
 	}
 
 	/**

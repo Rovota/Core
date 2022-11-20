@@ -15,7 +15,6 @@ use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\User;
 use Rovota\Core\Mail\Interfaces\Mailable;
 use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\ArrOld;
 use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -96,10 +95,10 @@ class MailingQueue implements ArrayAccess, Iterator, Countable, Arrayable
 		}
 
 		foreach ($this->receivers as $key => $receiver) {
-			if ($receiver instanceof Identity && ArrOld::contains($addresses, $receiver->getEmail())) {
+			if ($receiver instanceof Identity && Arr::contains($addresses, $receiver->getEmail())) {
 				$this->offsetUnset($key);
 			}
-			if (is_array($receiver) && ArrOld::contains($addresses, $receiver['address'])) {
+			if (is_array($receiver) && Arr::contains($addresses, $receiver['address'])) {
 				$this->offsetUnset($key);
 			}
 		}

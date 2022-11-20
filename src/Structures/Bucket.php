@@ -85,6 +85,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return Arr::contains($this->items->export(), $value);
 	}
 
+	public function containsAny(array $values): bool
+	{
+		return Arr::containsAny($this->items->export(), $values);
+	}
+
 	public function copy(): Bucket
 	{
 		return clone $this;

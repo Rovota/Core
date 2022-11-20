@@ -28,7 +28,7 @@ use Rovota\Core\Mail\MailManager;
 use Rovota\Core\Routing\RouteManager;
 use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Storage\StorageManager;
-use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Version;
 use Rovota\Core\Validation\ValidationManager;
@@ -119,7 +119,7 @@ final class Application
 
 	public static function isEnvironment(array|string $name): bool
 	{
-		Return ArrOld::contains(is_array($name) ? $name : [$name], self::$environment);
+		Return Arr::containsAny([self::$environment], is_array($name) ? $name : [$name]);
 	}
 
 	public static function debugEnabled(): bool

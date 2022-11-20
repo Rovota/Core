@@ -120,7 +120,7 @@ if (!function_exists('moment')) {
 if (!function_exists('sanitize_select')) {
 	function sanitize_select(string $option, array $options, string $fallback): string
 	{
-		return ArrOld::contains($options, $option) ? $option : $fallback;
+		return Arr::contains($options, $option) ? $option : $fallback;
 	}
 }
 
@@ -129,7 +129,7 @@ if (!function_exists('sanitize_extension')) {
 	{
 		$extensions = ValidationManager::mimeTypeExtensions($type);
 
-		if (ArrOld::contains($extensions, $extension)) {
+		if (Arr::contains($extensions, $extension)) {
 			return $extension;
 		}
 
@@ -142,7 +142,7 @@ if (!function_exists('sanitize_mime_type')) {
 	{
 		$mime_types = ValidationManager::extensionMimeTypes($extension);
 
-		if (ArrOld::contains($mime_types, $type)) {
+		if (Arr::contains($mime_types, $type)) {
 			return $type;
 		}
 

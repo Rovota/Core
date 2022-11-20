@@ -9,8 +9,6 @@
 namespace Rovota\Core\Support;
 
 use ArrayAccess;
-use Closure;
-use Rovota\Core\Support\Helpers\Arr;
 
 final class ArrOld
 {
@@ -20,50 +18,6 @@ final class ArrOld
 	public static function combine(mixed $keys, mixed $values): array
 	{
 		return array_combine(convert_to_array($keys), convert_to_array($values));
-	}
-
-	public static function contains(array $haystack, mixed $value): bool
-	{
-		if ($value instanceof Closure) {
-			$callback = $value;
-			foreach ($haystack as $key => $value) {
-				if ($callback($value, $key)) {
-					return $value;
-				}
-			}
-			return false;
-		}
-		return in_array($value, $haystack, true);
-	}
-
-	public static function containsAll(array $haystack, array $values): bool
-	{
-		foreach ($values as $value) {
-			if (!in_array($value, $haystack, true)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static function containsAny(array $haystack, array $values): bool
-	{
-		foreach ($values as $value) {
-			if (in_array($value, $haystack, true)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static function containsNone(array $haystack, array $values): bool
-	{
-		foreach ($values as $value) {
-			if (in_array($value, $haystack, true)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	public static function diff(mixed $first, mixed $second): array
@@ -88,46 +42,6 @@ final class ArrOld
 		}
 
 		return array_key_exists($key, $array);
-	}
-
-	public static function median(array $array): float|int|null
-	{
-		$count = count($array);
-		sort($array);
-
-		$values = array_values($array);
-
-		if ($count === 0) {
-			return null;
-		}
-
-		$middle = (int) ($count / 2);
-
-		if ($count % 2) {
-			return $values[$middle];
-		}
-
-		return Arr::average([$values[$middle - 1], $values[$middle]]);
-	}
-
-	public static function mode(array $array): array|null
-	{
-		if (count($array) === 0) {
-			return null;
-		}
-
-		$appearances = [];
-
-		foreach ($array as $item) {
-			if (!isset($appearances[$item])) {
-				$appearances[$item] = 0;
-			}
-			$appearances[$item]++;
-		}
-
-		$modes = array_keys($appearances, max($appearances));
-		sort($modes);
-		return $modes;
 	}
 
 	public static function random(array $array, int $items = 1): mixed

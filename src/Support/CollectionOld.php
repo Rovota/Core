@@ -11,15 +11,9 @@
 namespace Rovota\Core\Support;
 
 use Closure;
-use Rovota\Core\Support\Traits\Conditionable;
-use Rovota\Core\Support\Traits\Macroable;
-use Stringable;
 
 final class CollectionOld
 {
-	use Macroable, Conditionable;
-
-	// -----------------
 
 	/**
 	 * Combines the values of the current collection (as keys) with the values provided.
@@ -27,22 +21,6 @@ final class CollectionOld
 	public function combine(mixed $values): CollectionOld
 	{
 		return new CollectionOld(ArrOld::combine($this->items, $values));
-	}
-
-	/**
-	 * Checks whether at least one of the given values is present.
-	 */
-	public function containsAny(array $values): bool
-	{
-		return ArrOld::containsAny($this->items, $values);
-	}
-
-	/**
-	 * Checks whether none of the given values are present.
-	 */
-	public function containsNone(array $values): bool
-	{
-		return ArrOld::containsNone($this->items, $values);
 	}
 
 	/**

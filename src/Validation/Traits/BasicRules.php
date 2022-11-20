@@ -9,7 +9,7 @@
 namespace Rovota\Core\Validation\Traits;
 
 use BackedEnum;
-use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 
@@ -24,7 +24,7 @@ trait BasicRules
 		}
 		if (!empty($allowed)) {
 			foreach ($data as $key => $value) {
-				if (ArrOld::contains($allowed, $key) === false) {
+				if (Arr::contains($allowed, $key) === false) {
 					$this->addError($field, 'array');
 					return false;
 				}
@@ -241,7 +241,7 @@ trait BasicRules
 			$this->addError($field, 'contains', [$needle]);
 			return false;
 		}
-		if (is_array($data) && !ArrOld::contains($data, $needle)) {
+		if (is_array($data) && Arr::contains($data, $needle) === false) {
 			$this->addError($field, 'contains', [$needle]);
 			return false;
 		}
@@ -254,7 +254,7 @@ trait BasicRules
 			$this->addError($field, 'contains_any', $needles);
 			return false;
 		}
-		if (is_array($data) && !ArrOld::containsAny($data, $needles)) {
+		if (is_array($data) && Arr::containsAny($data, $needles) === false) {
 			$this->addError($field, 'contains_any', $needles);
 			return false;
 		}
@@ -267,7 +267,7 @@ trait BasicRules
 			$this->addError($field, 'contains_all', $needles);
 			return false;
 		}
-		if (is_array($data) && !ArrOld::containsAll($data, $needles)) {
+		if (is_array($data) && Arr::contains($data, $needles) === false) {
 			$this->addError($field, 'contains_all', $needles);
 			return false;
 		}
@@ -276,11 +276,11 @@ trait BasicRules
 
 	protected function ruleContainsNone(string $field, mixed $data, array $needles): bool
 	{
-		if (is_string($data) && !Text::containsNone($data, $needles)) {
+		if (is_string($data) && Text::containsAny($data, $needles)) {
 			$this->addError($field, 'contains_none', $needles);
 			return false;
 		}
-		if (is_array($data) && !ArrOld::containsNone($data, $needles)) {
+		if (is_array($data) && Arr::containsAny($data, $needles)) {
 			$this->addError($field, 'contains_none', $needles);
 			return false;
 		}
@@ -289,7 +289,7 @@ trait BasicRules
 
 	protected function ruleIn(string $field, mixed $data, array $needles): bool
 	{
-		if (ArrOld::contains($needles, $data) === false) {
+		if (Arr::contains($needles, $data) === false) {
 			$this->addError($field, 'in', $needles);
 			return false;
 		}
@@ -298,7 +298,7 @@ trait BasicRules
 
 	protected function ruleNotIn(string $field, mixed $data, array $needles): bool
 	{
-		if (ArrOld::contains($needles, $data)) {
+		if (Arr::contains($needles, $data)) {
 			$this->addError($field, 'not_in', $needles);
 			return false;
 		}

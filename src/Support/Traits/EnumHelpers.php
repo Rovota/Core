@@ -8,19 +8,19 @@
 
 namespace Rovota\Core\Support\Traits;
 
-use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\Helpers\Arr;
 
 trait EnumHelpers
 {
 
 	public function isAny(array $items): bool
 	{
-		return ArrOld::containsAny($items, [$this]);
+		return Arr::containsAny($items, [$this]);
 	}
 
 	public function isNone(array $items): bool
 	{
-		return ArrOld::containsNone($items, [$this]);
+		return Arr::containsAny($items, [$this]) === false;
 	}
 
 }

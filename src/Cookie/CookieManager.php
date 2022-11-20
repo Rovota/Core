@@ -10,7 +10,7 @@ namespace Rovota\Core\Cookie;
 
 use Rovota\Core\Facades\Crypt;
 use Rovota\Core\Facades\Registry;
-use Rovota\Core\Support\ArrOld;
+use Rovota\Core\Support\Helpers\Arr;
 use Throwable;
 
 final class CookieManager
@@ -158,7 +158,7 @@ final class CookieManager
 	
 	public static function hasEncryptionEnabled(string $name): bool
 	{
-		return ArrOld::contains(self::$except, $name) === false;
+		return Arr::contains(self::$except, $name) === false;
 	}
 
 }
