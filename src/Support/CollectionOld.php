@@ -30,22 +30,6 @@ final class CollectionOld
 	}
 
 	/**
-	 * Checks whether the provided value exists in the collection. Alternatively, you can use a closure to check whether an item exists matching a truth test.
-	 */
-	public function contains(mixed $value): bool
-	{
-		return ArrOld::contains($this->items, $value);
-	}
-
-	/**
-	 * Checks whether all given values are present.
-	 */
-	public function containsAll(array $values): bool
-	{
-		return ArrOld::containsAll($this->items, $values);
-	}
-
-	/**
 	 * Checks whether at least one of the given values is present.
 	 */
 	public function containsAny(array $values): bool
@@ -166,42 +150,6 @@ final class CollectionOld
 	}
 
 	/**
-	 * Return a new collection grouped by the given key, or a value returned from a callback.
-	 */
-	public function groupBy(callable|string $group_by, bool $preserve_keys = false): CollectionOld
-	{
-		// Inspired by the Laravel CollectionOld::groupBy() method.
-		$group_by = value_retriever($group_by);
-
-		$results = [];
-
-		foreach ($this->items as $key => $value) {
-
-			$group_keys = $group_by($value, $key);
-
-			if (is_array($group_keys) === false) {
-				$group_keys = [$group_keys];
-			}
-
-			foreach ($group_keys as $group_key) {
-				$group_key = match (true) {
-					is_bool($group_key) => (int) $group_key,
-					$group_key instanceof Stringable => (string) $group_key,
-					default => $group_key,
-				};
-
-				if (array_key_exists($group_key, $results) === false) {
-					$results[$group_key] = new CollectionOld();
-				}
-
-				$results[$group_key]->offsetSet($preserve_keys ? $key : null, $value);
-			}
-		}
-
-		return new CollectionOld($results);
-	}
-
-	/**
 	 * Removes all values from the collection that are not present in the given collection.
 	 */
 	public function intersect(mixed $items): CollectionOld
@@ -230,14 +178,6 @@ final class CollectionOld
 		}
 
 		return new CollectionOld($results);
-	}
-
-	/**
-	 * Returns the median of the collection or for a given key.
-	 */
-	public function median(string|null $key = null): float|int|null
-	{
-		return ArrOld::median($key !== null ? $this->pluck($key)->all() : $this->items);
 	}
 
 	/**

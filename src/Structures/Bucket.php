@@ -80,6 +80,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function contains(mixed $value): bool
+	{
+		return Arr::contains($this->items->export(), $value);
+	}
+
 	public function copy(): Bucket
 	{
 		return clone $this;
@@ -143,6 +148,37 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 			$key = spl_object_hash($key);
 		}
 		return $this->items->get($key, ($default instanceof Closure ? $default() : $default));
+	}
+
+	public function groupBy(callable|string $group_by, bool $preserve_keys = false): Bucket
+	{
+		$group_by = value_retriever($group_by);
+		$results = new Bucket();
+
+		foreach ($this->items->export() as $key => $value) {
+
+			$group_keys = $group_by($value, $key);
+
+			if (is_array($group_keys) === false) {
+				$group_keys = [$group_keys];
+			}
+
+			foreach ($group_keys as $group_key) {
+				$group_key = match (true) {
+					is_bool($group_key) => (int) $group_key,
+					$group_key instanceof Stringable => (string) $group_key,
+					default => $group_key,
+				};
+
+				if ($results->missing($group_key)) {
+					$results[$group_key] = new Bucket();
+				}
+
+				$results[$group_key]->offsetSet($preserve_keys ? $key : null, $value);
+			}
+		}
+
+		return $results;
 	}
 
 	public function has(mixed $key): bool
@@ -227,6 +263,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return Arr::max($field !== null ? $this->pluck($field)->toArray() : $this->items->export(), $limit);
 	}
 
+	public function median(string|null $field = null): float|int|null
+	{
+		return Arr::median($field !== null ? $this->pluck($field)->toArray() : $this->items->export());
+	}
+
 	public function merge(mixed $with, bool $preserve = false): Bucket
 	{
 		return $this->copy()->import($with, $preserve);
@@ -248,9 +289,9 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return true;
 	}
 
-	public function mode(string|null $key = null): array
+	public function mode(string|null $field = null): array
 	{
-		return Arr::mode($key !== null ? $this->pluck($key)->toArray() : $this->items->export());
+		return Arr::mode($field !== null ? $this->pluck($field)->toArray() : $this->items->export());
 	}
 
 	public function occurrences(string $value): int
