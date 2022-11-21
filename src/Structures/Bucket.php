@@ -430,7 +430,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return new Sequence($results);
 	}
 
-	public function shuffle(int|null $seed = null): Bucket
+	public function shuffle(): Bucket
 	{
 		$this->items = new Data(Arr::shuffle($this->items->export()));
 		return $this;
