@@ -48,50 +48,6 @@ final class CollectionOld
 	}
 
 	/**
-	 * Returns all duplicate values in the collection. Optionally, a key or callback can be provided.
-	 */
-	public function duplicates(callable|string|null $callback = null): CollectionOld
-	{
-		$items = $this->map(value_retriever($callback));
-
-		$counters = [];
-		$duplicates = [];
-
-		foreach ($items as $key => $value) {
-			if (isset($counters[$value]) === false) {
-				$counters[$value] = 1;
-				continue;
-			}
-			$duplicates[$key] = $value;
-		}
-
-		return new CollectionOld($duplicates);
-	}
-
-	/**
-	 * Creates a new collection with each item only keeping the fields specified.
-	 */
-	public function fields(array $fields): CollectionOld
-	{
-		$result = [];
-
-		foreach ($this->items as $key => $item) {
-			$new = [];
-			foreach ($fields as $name) {
-				if (is_array($item)) {
-					$new[$name] = $item[$name] ?? null;
-				}
-				if (is_object($item)) {
-					$new[$name] = $item->{$name} ?? null;
-				}
-			}
-			$result[$key] = $new;
-		}
-
-		return new CollectionOld($result);
-	}
-
-	/**
 	 * Removes all values from the collection that are not present in the given collection.
 	 */
 	public function intersect(mixed $items): CollectionOld
