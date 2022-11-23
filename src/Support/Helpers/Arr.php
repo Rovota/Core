@@ -124,7 +124,7 @@ final class Arr
 	 */
 	public static function first(array $array, callable|null $callback = null, mixed $default = null): mixed
 	{
-		if (is_null($callback)) {
+		if ($callback === null) {
 			if (empty($array)) {
 				return $default;
 			}
@@ -155,7 +155,7 @@ final class Arr
 
 	public static function last(array $array, callable|null $callback = null, mixed $default = null): mixed
 	{
-		if (is_null($callback)) {
+		if ($callback === null) {
 			return empty($array) ? $default : end($array);
 		}
 
@@ -249,7 +249,7 @@ final class Arr
 
 		foreach ($array as $item) {
 			$item_value = data_get($item, $fields);
-			if (is_null($key)) {
+			if ($key === null) {
 				$results[] = $item_value;
 			} else {
 				$item_key = data_get($item, $key);
@@ -363,7 +363,7 @@ final class Arr
 	 */
 	public static function sum(array $array, callable|string|null $callback = null): int|float
 	{
-		$callback = is_null($callback) ? self::valueCallable() : value_retriever($callback);
+		$callback = $callback === null ? self::valueCallable() : value_retriever($callback);
 		return self::reduce($array, function ($result, $item) use ($callback) {
 			return $result + $callback($item);
 		}, 0);

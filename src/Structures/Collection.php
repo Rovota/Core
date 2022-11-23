@@ -107,7 +107,7 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, Countable, 
 		if (empty($this->values)) {
 			return null;
 		}
-		if (is_null($callback)) {
+		if ($callback === null) {
 			foreach ($this->values as $value) {
 				return $value;
 			}
@@ -125,7 +125,7 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, Countable, 
 		if (empty($this->values)) {
 			return null;
 		}
-		if (is_null($callback)) {
+		if ($callback === null) {
 			return end($this->values);
 		}
 		foreach (array_reverse($this->values, true) as $key => $value) {
@@ -206,7 +206,7 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, Countable, 
 	 */
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		if (is_null($offset)) {
+		if ($offset === null) {
 			$this->values[] = $value;
 			$this->keys[] = array_key_last($this->values);
 		} else {

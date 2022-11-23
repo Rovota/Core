@@ -36,7 +36,7 @@ final class App
 
 	public static function environment(array|string|null $name = null): string|bool
 	{
-		return is_null($name) ? Application::getEnvironment() : Application::isEnvironment($name);
+		return $name === null ? Application::getEnvironment() : Application::isEnvironment($name);
 	}
 
 	public static function isLocal(): bool

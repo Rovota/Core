@@ -103,7 +103,7 @@ class Sequence extends Collection
 
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		if (is_null($offset)) {
+		if ($offset === null) {
 			$this->values[] = $value;
 			$this->keys[] = array_key_last($this->values);
 		} else {

@@ -63,7 +63,7 @@ final class FluentString implements Stringable, JsonSerializable
 
 	public function toMoment(string $format = null, DateTimeZone|string|null $timezone = null): Moment
 	{
-		if (is_null($format)) {
+		if ($format === null) {
 			return Moment::create($this->string, $timezone);
 		}
 		return Moment::createFromFormat($format, $this->string, $timezone);

@@ -219,7 +219,7 @@ class MailingQueue implements ArrayAccess, Iterator, Countable, Arrayable
 
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		if (is_null($offset)) {
+		if ($offset === null) {
 			$this->receivers[] = $value;
 			$this->keys[] = array_key_last($this->receivers);
 		} else {

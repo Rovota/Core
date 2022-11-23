@@ -648,7 +648,7 @@ if (!function_exists('data_get')) {
    function data_get(mixed $target, string|array|null $key, mixed $default = null): mixed
    {
       // Inspired by the Laravel data_get() helper.
-      if (is_null($key)) {
+      if ($key === null) {
          return $target;
       }
 
@@ -657,7 +657,7 @@ if (!function_exists('data_get')) {
       foreach ($key as $i => $segment) {
          unset($key[$i]);
 
-         if (is_null($segment)) {
+         if ($segment === null) {
             return $target;
          }
 

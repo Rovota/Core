@@ -630,7 +630,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	 */
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		if (is_null($offset)) {
+		if ($offset === null) {
 			$items = $this->items->export();
 			$items[] = $value;
 			$this->items = new Data($items);
