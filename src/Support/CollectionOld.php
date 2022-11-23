@@ -176,23 +176,6 @@ final class CollectionOld
 	}
 
 	/**
-	 * Returns `x` random items from the collection. Defaults to `1`.
-	 */
-	public function random(int $items = 1): mixed
-	{
-		return ArrOld::random($this->items, $items);
-	}
-
-	/**
-	 * Returns the result of the maximum value minus the minimum value.
-	 */
-	public function range(string|null $key = null): int|float
-	{
-		$values = $key !== null ? $this->pluck($key)->all() : $this->items;
-		return max($values) - min($values);
-	}
-
-	/**
 	 * Replaces the items in the current collection with the items in the given collection.
 	 */
 	public function replace(mixed $items): CollectionOld
@@ -206,14 +189,6 @@ final class CollectionOld
 	public function replaceRecursive(mixed $items): CollectionOld
 	{
 		return new CollectionOld(ArrOld::replaceRecursive($this->items, $items));
-	}
-
-	/**
-	 * Remove existing keys and replace them with consecutive keys starting from 0.
-	 */
-	public function resetKeys(): CollectionOld
-	{
-		return new CollectionOld(array_values($this->items));
 	}
 
 	/**
@@ -275,79 +250,6 @@ final class CollectionOld
 			break;
 		}
 		return new CollectionOld($items);
-	}
-
-	/**
-	 * Returns a slice of the collection starting at the given index, with a maximum number of items if defined.
-	 */
-	public function slice(int $offset, int|null $length = null, bool $preserve_keys = true): CollectionOld
-	{
-		return new CollectionOld(array_slice($this->items, $offset, $length, $preserve_keys));
-	}
-
-	/**
-	 * Returns `x` number of items from the original collection.
-	 */
-	public function take(int $count): CollectionOld
-	{
-		if ($count < 0) {
-			return $this->slice($count, abs($count));
-		}
-
-		return $this->slice(0, $count);
-	}
-
-	/**
-	 * Returns all items after the specified value or when an item passes the truth test.
-	 */
-	public function takeFrom(mixed $closure): CollectionOld
-	{
-		$result = [];
-		$found = false;
-		foreach ($this->items as $key => $value) {
-			if ($found === false) {
-				if (($closure instanceof Closure && $closure($value, $key)) || $value === $closure) {
-					$found = true;
-				}
-			} else {
-				$result[$key] = $value;
-			}
-		}
-		return new CollectionOld($result);
-	}
-
-	/**
-	 * Returns all items up until the value has been found or an item passes a truth test.
-	 */
-	public function takeUntil(mixed $closure): CollectionOld
-	{
-		$result = [];
-		foreach ($this->items as $key => $value) {
-			if ($closure instanceof Closure && $closure($value, $key)) {
-				break;
-			} else if ($value === $closure) {
-				break;
-			} else {
-				$result[$key] = $value;
-			}
-		}
-		return new CollectionOld($result);
-	}
-
-	/**
-	 * Returns all items until an item fails the given truth test.
-	 */
-	public function takeWhile(Closure $closure): CollectionOld
-	{
-		$result = [];
-		foreach ($this->items as $key => $value) {
-			if ($closure($value, $key) === false) {
-				break;
-			} else {
-				$result[$key] = $value;
-			}
-		}
-		return new CollectionOld($result);
 	}
 
 }

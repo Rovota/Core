@@ -372,6 +372,18 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $value;
 	}
 
+	public function random(int $amount = 1): mixed
+	{
+		$result = Arr::random($this->items->export(), $amount);
+		return is_array($result) ? new Sequence($result) : $result;
+	}
+
+	public function range(string|null $field = null): int|float
+	{
+		$values = $field !== null ? $this->pluck($field)->toArray() : $this->items->export();
+		return max($values) - min($values);
+	}
+
 	public function reduce(callable $callback, mixed $initial = null): mixed
 	{
 		return Arr::reduce($this->items->export(), $callback, $initial);
@@ -386,6 +398,12 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		} else {
 			$this->offsetUnset($key);
 		}
+		return $this;
+	}
+
+	public function resetKeys(): Bucket
+	{
+		$this->items = new Data(array_values($this->items->export()));
 		return $this;
 	}
 
@@ -436,6 +454,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function slice(int $offset, int|null $length = null, bool $preserve_keys = true): Bucket
+	{
+		return new Bucket(array_slice($this->items->export(), $offset, $length, $preserve_keys));
+	}
+
 	public function sort(callable|null $callback = null, bool $descending = false): Bucket
 	{
 		$this->items = new Data(Arr::sort($this->items->export(), $callback, $descending));
@@ -457,6 +480,47 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	public function sum(Closure|string|null $field = null): float|int
 	{
 		return Arr::sum($this->items->export(), $field);
+	}
+
+	public function take(int $count): Bucket
+	{
+		if ($count < 0) {
+			return $this->slice($count, abs($count));
+		}
+
+		return $this->slice(0, $count);
+	}
+
+	public function takeFrom(mixed $closure): Bucket
+	{
+		$result = new Bucket();
+		$found = false;
+
+		foreach ($this->items->export() as $key => $value) {
+			if ($found === true) {
+				$result->set($key, $value);
+				continue;
+			}
+
+			if (($closure instanceof Closure && $closure($value, $key)) || $value === $closure) {
+				$result->set($key, $value);
+				$found = true;
+			}
+		}
+		return $result;
+	}
+
+	public function takeUntil(mixed $closure): Bucket
+	{
+		$result = new Bucket();
+
+		foreach ($this->items->export() as $key => $value) {
+			if (($closure instanceof Closure && $closure($value, $key)) || $value === $closure) {
+				break;
+			}
+			$result->set($key, $value);
+		}
+		return $result;
 	}
 
 	public function toArray(): array
