@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Routing;
 
+use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Conditionable;
 
@@ -74,6 +75,24 @@ final class UrlBuilder
 	}
 
 	// -----------------
+
+	public function previous(array $query = []): string
+	{
+		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer();
+		return $this->external($location, $query);
+	}
+
+	public function intended(string $default = '/', array $query = []): string
+	{
+		$location = SessionManager::get()->pull('location.intended') ?? $default;
+		return $this->external($location, $query);
+	}
+
+	public function continue(array $query = []): string
+	{
+		$location = SessionManager::get()->pull('location.continue');
+		return $this->external($location, $query);
+	}
 
 	public function external(string $location, array $query = []): string
 	{
