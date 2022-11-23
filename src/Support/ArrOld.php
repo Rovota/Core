@@ -35,15 +35,6 @@ final class ArrOld
 		return array_diff_key(convert_to_array($first), convert_to_array($second));
 	}
 
-	public static function exists(mixed $array, string|int $key): bool
-	{
-		if ($array instanceof ArrayAccess) {
-			return $array->offsetExists($key);
-		}
-
-		return array_key_exists($key, $array);
-	}
-
 	public static function replace(array $array, mixed $items): array
 	{
 		return array_replace($array, convert_to_array($items));

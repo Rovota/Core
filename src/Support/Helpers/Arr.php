@@ -23,14 +23,6 @@ final class Arr
 	// -----------------
 
 	/**
-	 * Determines whether the given value is an accessible array or implements ArrayAccess.
-	 */
-	public static function accessible(mixed $value): bool
-	{
-		return is_array($value) || $value instanceof ArrayAccess;
-	}
-
-	/**
 	 * Returns the average of a given array. When the array is empty or contains non-numeric values, `0` will be returned.
 	 */
 	public static function average(array $array, bool $round = false, int $precision = 0): float|int

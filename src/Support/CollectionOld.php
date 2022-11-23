@@ -69,34 +69,6 @@ final class CollectionOld
 	}
 
 	/**
-	 * Iterates over all items in the collection and passes the item to the given callback. Stops iterating when `false` is returned, or the end of the collection is reached.
-	 */
-	public function each(callable $callback): CollectionOld
-	{
-		foreach ($this->items as $key => $value) {
-			if ($callback($value, $key) === false) {
-				break;
-			}
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Returns `true` when all items pass a given truth test using the given closure.
-	 */
-	public function every(callable $callback): bool
-	{
-		foreach ($this->items as $key => $value) {
-			if ($callback($value, $key) === false) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Creates a new collection with each item only keeping the fields specified.
 	 */
 	public function fields(array $fields): CollectionOld
@@ -117,14 +89,6 @@ final class CollectionOld
 		}
 
 		return new CollectionOld($result);
-	}
-
-	/**
-	 * Swaps the keys with their corresponding values.
-	 */
-	public function flip(): CollectionOld
-	{
-		return new CollectionOld(array_flip($this->items));
 	}
 
 	/**
@@ -156,15 +120,6 @@ final class CollectionOld
 		}
 
 		return new CollectionOld($results);
-	}
-
-	/**
-	 * Allows modifying the collection using a closure.
-	 */
-	public function modify(Closure $closure): CollectionOld
-	{
-		$closure($this);
-		return $this;
 	}
 
 	/**
