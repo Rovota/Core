@@ -8,8 +8,6 @@
 
 namespace Rovota\Core\Support;
 
-use ArrayAccess;
-
 final class ArrOld
 {
 

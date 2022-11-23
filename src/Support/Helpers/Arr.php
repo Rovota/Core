@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Support\Helpers;
 
-use ArrayAccess;
 use Closure;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Text;
