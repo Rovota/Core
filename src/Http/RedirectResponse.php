@@ -68,11 +68,19 @@ class RedirectResponse extends Response
 		return $this;
 	}
 
+	public function previous(array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
+	{
+		$this->setHttpCode($code);
+		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer();
+		$this->header('Location', $this->builder->external($location, $query));
+		return $this;
+	}
+
 	public function intended(string $default = '/', array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
 	{
 		$this->setHttpCode($code);
 		$location = SessionManager::get()->pull('location.intended') ?? $default;
-		$this->header('Location', $this->builder->path($location, $query));
+		$this->header('Location', $this->builder->external($location, $query));
 		return $this;
 	}
 
