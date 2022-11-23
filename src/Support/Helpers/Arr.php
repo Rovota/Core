@@ -271,6 +271,25 @@ final class Arr
 		return $results;
 	}
 
+	public static function random(array $array, int $amount = 1): mixed
+	{
+		$count = count($array);
+		$requested = $amount === 0 ? 1 : (($amount > $count) ? $count : $amount);
+
+		if ($requested === 1) {
+			return $array[array_rand($array)];
+		}
+
+		$keys = array_rand($array, $requested);
+		$result = [];
+
+		foreach ($keys as $key) {
+			$result[$key] = $array[$key];
+		}
+
+		return $result;
+	}
+
 	/**
 	 * Reduces the array to a single value, passing the result of each iteration into the next:
 	 */

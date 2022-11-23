@@ -44,25 +44,6 @@ final class ArrOld
 		return array_key_exists($key, $array);
 	}
 
-	public static function random(array $array, int $items = 1): mixed
-	{
-		$count = count($array);
-		$requested = $items === 0 ? 1 : (($items > $count) ? $count : $items);
-
-		if ($requested === 1) {
-			return $array[array_rand($array)];
-		}
-
-		$keys = array_rand($array, $requested);
-		$result = [];
-
-		foreach ($keys as $key) {
-			$result[$key] = $array[$key];
-		}
-
-		return $result;
-	}
-
 	public static function replace(array $array, mixed $items): array
 	{
 		return array_replace($array, convert_to_array($items));
