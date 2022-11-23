@@ -121,6 +121,26 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function each(callable $callback): Bucket
+	{
+		foreach ($this->items->export() as $key => $value) {
+			if ($callback($value, $key) === false) {
+				break;
+			}
+		}
+		return $this;
+	}
+
+	public function every(callable $callback): bool
+	{
+		foreach ($this->items->export() as $key => $value) {
+			if ($callback($value, $key) === false) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public function except(array $keys): Bucket
 	{
 		return $this->copy()->remove($keys);
@@ -139,6 +159,12 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	public function first(callable|null $callback = null, mixed $default = null): mixed
 	{
 		return Arr::first($this->items->export(), $callback, $default);
+	}
+
+	public function flip(): Bucket
+	{
+		$this->items = new Data(array_flip($this->items->export()));
+		return $this;
 	}
 
 	public function flush(): Bucket
