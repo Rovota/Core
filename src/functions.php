@@ -676,15 +676,17 @@ if (!function_exists('data_get')) {
             return in_array('*', $key) ? Arr::collapse($result) : $result;
          }
 
-         if (Arr::accessible($target) && ArrOld::exists($target, $segment)) {
-            $target = $target[$segment];
-         } else if (is_object($target) && isset($target->{$segment})) {
-            $target = $target->{$segment};
-         } else if (is_object($target) && method_exists($target, $segment)) {
-			 $target = $target->{$segment}();
-		 } else {
-            return $default;
-         }
+		 $target = match (true) {
+			 $target instanceof ArrayAccess => $target->offsetGet($segment),
+			 is_object($target) && isset($target->{$segment}) => $target->{$segment},
+			 is_object($target) && method_exists($target, $segment) => $target->{$segment}(),
+			 is_array($target) && array_key_exists($segment, $target) => $target[$segment],
+			 default => null,
+		 };
+
+		 if ($target === null) {
+			 return $default;
+		 }
       }
 
       return $target;
