@@ -71,7 +71,7 @@ class RedirectResponse extends Response
 	public function previous(array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
 	{
 		$this->setHttpCode($code);
-		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer();
+		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer() ?? request()->targetHost();
 		$this->header('Location', $this->builder->external($location, $query));
 		return $this;
 	}

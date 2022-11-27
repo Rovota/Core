@@ -78,7 +78,7 @@ final class UrlBuilder
 
 	public function previous(array $query = []): string
 	{
-		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer();
+		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer() ?? request()->targetHost();
 		return $this->external($location, $query);
 	}
 
