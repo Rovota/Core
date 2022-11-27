@@ -16,30 +16,6 @@ final class CollectionOld
 {
 
 	/**
-	 * Returns the values in the current collection that are not present in the given collection.
-	 */
-	public function diff(mixed $items): CollectionOld
-	{
-		return new CollectionOld(ArrOld::diff($this->items, $items));
-	}
-
-	/**
-	 * Returns the key and value pairs in the current collection that are not present in the given collection.
-	 */
-	public function diffAssoc(mixed $items): CollectionOld
-	{
-		return new CollectionOld(ArrOld::diffAssoc($this->items, $items));
-	}
-
-	/**
-	 * Returns the keys with their values in the current collection that are not present in the given collection.
-	 */
-	public function diffKeys(mixed $items): CollectionOld
-	{
-		return new CollectionOld(ArrOld::diffKeys($this->items, $items));
-	}
-
-	/**
 	 * Removes all values from the collection that are not present in the given collection.
 	 */
 	public function intersect(mixed $items): CollectionOld
@@ -76,22 +52,6 @@ final class CollectionOld
 	public function pipe(callable $callback): mixed
 	{
 		return $callback($this);
-	}
-
-	/**
-	 * Replaces the items in the current collection with the items in the given collection.
-	 */
-	public function replace(mixed $items): CollectionOld
-	{
-		return new CollectionOld(ArrOld::replace($this->items, $items));
-	}
-
-	/**
-	 * Similar to `replace()`, but applies the same process to inner values.
-	 */
-	public function replaceRecursive(mixed $items): CollectionOld
-	{
-		return new CollectionOld(ArrOld::replaceRecursive($this->items, $items));
 	}
 
 	/**

@@ -478,6 +478,18 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function replace(mixed $replacements): Bucket
+	{
+		$this->items = new Data(array_replace($this->items->export(), convert_to_array($replacements)));
+		return $this;
+	}
+
+	public function replaceRecursive(mixed $replacements): Bucket
+	{
+		$this->items = new Data(array_replace_recursive($this->items->export(), convert_to_array($replacements)));
+		return $this;
+	}
+
 	public function resetKeys(): Bucket
 	{
 		$this->items = new Data(array_values($this->items->export()));
