@@ -8,7 +8,7 @@
 
 namespace Rovota\Core\Views\Components;
 
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 
 class Asset
@@ -45,7 +45,7 @@ class Asset
 		if ($value === null) {
 			unset($this->attributes[$name]);
 		}
-		if (Text::length($name) > 0 && Text::length($value) > 0) {
+		if (Str::length($name) > 0 && Str::length($value) > 0) {
 			$this->attributes[$name] = $value;
 		}
 	}

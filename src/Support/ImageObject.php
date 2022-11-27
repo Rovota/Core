@@ -101,7 +101,7 @@ class ImageObject
 	public function format(string $format): ImageObject
 	{
 		$this->format = $format;
-		if (Text::contains($this->mime_type, $format) === false) {
+		if (Str::contains($this->mime_type, $format) === false) {
 			$this->image->setFormat($format);
 		}
 		return $this;

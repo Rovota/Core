@@ -20,7 +20,7 @@ use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Media;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\ImageObject;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Views\View;
@@ -155,7 +155,7 @@ class Response
 					}
 				}
 			} else {
-				if (Text::contains($image->mime_type, 'webp')) {
+				if (Str::contains($image->mime_type, 'webp')) {
 					$image->mime_type = 'image/jpeg';
 					$image->flatten('white');
 					$image->format('jpg');

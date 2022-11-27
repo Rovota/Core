@@ -9,7 +9,7 @@
 namespace Rovota\Core\Http;
 
 use Rovota\Core\Session\SessionManager;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 /**
  * @internal
@@ -73,7 +73,7 @@ final class RequestManager
 
 	protected static function getRequestQueryData(): array
 	{
-		parse_str(Text::after($_SERVER['REQUEST_URI'], '?'), $parameters);
+		parse_str(Str::after($_SERVER['REQUEST_URI'], '?'), $parameters);
 		return self::filterParameters($parameters);
 	}
 

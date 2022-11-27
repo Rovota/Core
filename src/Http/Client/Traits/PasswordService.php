@@ -9,7 +9,7 @@
 namespace Rovota\Core\Http\Client\Traits;
 
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Throwable;
 
 trait PasswordService
@@ -27,8 +27,8 @@ trait PasswordService
 	 */
 	public function countPasswordMatches(string $hash): int
 	{
-		$hash = Text::upper($hash);
-		$prefix = Text::limit($hash, 0, 5);
+		$hash = Str::upper($hash);
+		$prefix = Str::limit($hash, 0, 5);
 		$suffix = substr($hash, 5);
 
 		$results = $this->retrievePasswordResults($prefix);

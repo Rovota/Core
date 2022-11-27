@@ -10,7 +10,7 @@ namespace Rovota\Core\Facades;
 
 use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Cache\CacheStore;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 final class Cache
 {
@@ -31,7 +31,7 @@ final class Cache
 	 */
 	public static function build(array $options, string|null $name = null): CacheStore
 	{
-		return CacheManager::build($name ?? Text::random(20), $options);
+		return CacheManager::build($name ?? Str::random(20), $options);
 	}
 
 	// -----------------

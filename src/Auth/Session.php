@@ -13,7 +13,7 @@ use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Database\Model;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use function now;
 
 /**
@@ -57,7 +57,7 @@ class Session extends Model
 			'user_id' => $identity->getId(),
 			'ip' => request()->ip(),
 			'client' => request()->client(),
-			'hash' => Text::random(80),
+			'hash' => Str::random(80),
 			'expiration' => now()->addDays(Registry::int('user_session_duration', 7)),
 		], $attributes);
 

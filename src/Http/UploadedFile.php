@@ -17,7 +17,7 @@ use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Support\ImageObject;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use SplFileInfo;
 use const PATHINFO_EXTENSION;
 
@@ -103,7 +103,7 @@ class UploadedFile extends SplFileInfo
 			return false;
 		}
 
-		$this->variants['original']->path = Text::finish(trim($path), '/');
+		$this->variants['original']->path = Str::finish(trim($path), '/');
 		$this->variants['original']->disk = $disk instanceof DiskInterface ? $disk : StorageManager::get($disk);
 
 		if (empty($variants)) {

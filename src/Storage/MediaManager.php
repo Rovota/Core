@@ -10,7 +10,7 @@ namespace Rovota\Core\Storage;
 
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Enums\MediaType;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Throwable;
 
 final class MediaManager
@@ -78,12 +78,12 @@ final class MediaManager
 	public static function getMediaType(string $mime_type): MediaType|null
 	{
 		return match(true) {
-			Text::containsAny($mime_type, ['officedocument', 'pdf', 'ms-']) => MediaType::Document,
-			Text::containsAny($mime_type, ['image', 'pdf']) => MediaType::Image,
-			Text::containsAny($mime_type, ['video']) => MediaType::Video,
-			Text::containsAny($mime_type, ['audio']) => MediaType::Audio,
-			Text::containsAny($mime_type, ['font']) => MediaType::Font,
-			Text::containsAny($mime_type, ['gzip', 'zip', 'compressed']) => MediaType::Archive,
+			Str::containsAny($mime_type, ['officedocument', 'pdf', 'ms-']) => MediaType::Document,
+			Str::containsAny($mime_type, ['image', 'pdf']) => MediaType::Image,
+			Str::containsAny($mime_type, ['video']) => MediaType::Video,
+			Str::containsAny($mime_type, ['audio']) => MediaType::Audio,
+			Str::containsAny($mime_type, ['font']) => MediaType::Font,
+			Str::containsAny($mime_type, ['gzip', 'zip', 'compressed']) => MediaType::Archive,
 			default => MediaType::Unknown,
 		};
 	}

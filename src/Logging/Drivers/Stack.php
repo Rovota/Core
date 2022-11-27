@@ -12,7 +12,7 @@ use Monolog\Logger;
 use Rovota\Core\Logging\Interfaces\LogInterface;
 use Rovota\Core\Logging\LoggingManager;
 use Rovota\Core\Logging\Traits\SharedFunctions;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Stringable;
 
 final class Stack implements LogInterface
@@ -38,7 +38,7 @@ final class Stack implements LogInterface
 	 */
 	public static function createUsing(array $channels): LogInterface
 	{
-		return LoggingManager::build(Text::random(20), [
+		return LoggingManager::build(Str::random(20), [
 			'driver' => 'stack',
 			'channels' => $channels,
 		]);

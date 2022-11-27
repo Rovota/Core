@@ -10,7 +10,7 @@ namespace Rovota\Core\Routing;
 
 use Rovota\Core\Auth\AuthManager;
 use Rovota\Core\Routing\Traits\RouteModifiers;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 
 final class Route
@@ -49,7 +49,7 @@ final class Route
 
 		$path = trim($path, '/');
 		$prefix = trim($this->prefix ?? '', '/');
-		$this->path = Text::start(empty($path) ? $prefix : implode('/', [$prefix, $path]), '/');
+		$this->path = Str::start(empty($path) ? $prefix : implode('/', [$prefix, $path]), '/');
 	}
 
 	// -----------------

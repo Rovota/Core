@@ -288,8 +288,9 @@ collect([1, 2, 2, 2, 3])->countBy();
 Alternatively, you could pass a callback to count all values using custom logic:
 
 {% code overflow="wrap" %}
+
 ```php
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 $addresses = [
     'cherles@hotmail.com',
@@ -298,7 +299,7 @@ $addresses = [
 ];
 
 collect($addresses)->countBy(function ($email) {
-    return Text::after($email, '@');
+    return Str::after($email, '@');
 });
 
 // ['hotmail.com' => 2, 'gmail.com' => 1]
@@ -361,7 +362,7 @@ collect([
 Or, you could provide a callback in which you customize the values used:
 
 ```php
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 collect([
     'alicia.daniels@gmail.com',
@@ -369,7 +370,7 @@ collect([
     'alicia.keys@gmail.com',
     'peter.s.williams@gmail.com',
 ])->duplicates(function ($email) {
-    return Text::before($email, '@');
+    return Str::before($email, '@');
 });
 
 // [2 => 'alicia.daniels']

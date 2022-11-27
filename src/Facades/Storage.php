@@ -26,7 +26,7 @@ use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 final class Storage
 {
@@ -47,7 +47,7 @@ final class Storage
 	 */
 	public static function build(array $options, string|null $name = null): DiskInterface
 	{
-		return StorageManager::build($name ?? Text::random(20), $options);
+		return StorageManager::build($name ?? Str::random(20), $options);
 	}
 
 	// -----------------

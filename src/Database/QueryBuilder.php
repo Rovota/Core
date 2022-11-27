@@ -14,7 +14,7 @@ use Envms\FluentPDO\Query;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Interfaces\Arrayable;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 use stdClass;
 
@@ -64,7 +64,7 @@ final class QueryBuilder
 			$operator = '=';
 		}
 
-		$column = Text::before($column, ' ');
+		$column = Str::before($column, ' ');
 		$this->addStatement('where', sprintf('%s %s ?', $column, $operator), self::normalized($column, $value));
 
 		return $this;
@@ -84,7 +84,7 @@ final class QueryBuilder
 			$operator = '=';
 		}
 
-		$column = Text::before($column, ' ');
+		$column = Str::before($column, ' ');
 		$this->addStatement('where', sprintf('NOT %s %s ?', $column, $operator), self::normalized($column, $value));
 
 		return $this;
@@ -190,7 +190,7 @@ final class QueryBuilder
 			$operator = '=';
 		}
 
-		$column = Text::before($column, ' ');
+		$column = Str::before($column, ' ');
 		$this->addStatement('whereOr', sprintf('%s %s ?', $column, $operator), self::normalized($column, $value));
 
 		return $this;
@@ -290,7 +290,7 @@ final class QueryBuilder
 			$operator = '=';
 		}
 
-		$column = Text::before($column, ' ');
+		$column = Str::before($column, ' ');
 		$this->addStatement('having', sprintf('%s %s ?', $column, $operator), $value);
 
 		return $this;

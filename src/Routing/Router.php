@@ -20,7 +20,7 @@ use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Kernel\MiddlewareManager;
 use Rovota\Core\Kernel\Resolver;
 use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 /**
  * @internal
@@ -198,14 +198,14 @@ final class Router
 	protected function getNameAttribute(string $name): string
 	{
 		if (empty($this->attributes['name']) === false) {
-			return $this->attributes['name'].Text::finish($name, '.');
+			return $this->attributes['name'].Str::finish($name, '.');
 		}
-		return Text::finish($name, '.');
+		return Str::finish($name, '.');
 	}
 
 	protected function getPrefixAttribute(string $prefix): string
 	{
-		$prefix = Text::start(Text::trim($prefix, '/'), '/');
+		$prefix = Str::start(Str::trim($prefix, '/'), '/');
 		if (empty($this->attributes['prefix']) === false) {
 			return $this->attributes['prefix'].$prefix;
 		}

@@ -11,7 +11,7 @@ namespace Rovota\Core\Http;
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Enums\Status;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Throwable;
 
 /**
@@ -75,7 +75,7 @@ final class ResponseManager
 
 	public static function addHeader(string $name, string $value): void
 	{
-		if (Text::length($name) > 0 && Text::length($value) > 0) {
+		if (Str::length($name) > 0 && Str::length($value) > 0) {
 			self::$headers[$name] = $value;
 		}
 	}

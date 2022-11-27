@@ -14,7 +14,7 @@ use Rovota\Core\Facades\Registry;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Enums\Status;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Throwable;
 
 final class AccessManager
@@ -201,7 +201,7 @@ final class AccessManager
 			return;
 		}
 
-		$token_value = Text::random(80);
+		$token_value = Str::random(80);
 		self::$csrf_token = $token_value;
 	}
 
