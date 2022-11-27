@@ -72,6 +72,11 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function combine(mixed $values): Bucket
+	{
+		return new Bucket(array_combine($this->items->export(), convert_to_array($values)));
+	}
+
 	public function concat(mixed $data): Bucket
 	{
 		foreach (convert_to_array($data) as $item) {

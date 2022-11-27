@@ -16,14 +16,6 @@ final class CollectionOld
 {
 
 	/**
-	 * Combines the values of the current collection (as keys) with the values provided.
-	 */
-	public function combine(mixed $values): CollectionOld
-	{
-		return new CollectionOld(ArrOld::combine($this->items, $values));
-	}
-
-	/**
 	 * Returns the values in the current collection that are not present in the given collection.
 	 */
 	public function diff(mixed $items): CollectionOld

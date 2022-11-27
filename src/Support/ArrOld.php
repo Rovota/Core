@@ -11,13 +11,6 @@ namespace Rovota\Core\Support;
 final class ArrOld
 {
 
-	// -----------------
-
-	public static function combine(mixed $keys, mixed $values): array
-	{
-		return array_combine(convert_to_array($keys), convert_to_array($values));
-	}
-
 	public static function diff(mixed $first, mixed $second): array
 	{
 		return array_diff(convert_to_array($first), convert_to_array($second));
