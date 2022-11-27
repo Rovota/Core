@@ -543,6 +543,42 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function skip(int $count): Bucket
+	{
+		if ($this->count() <= $count) {
+			return new Bucket();
+		}
+
+		$iterations = 0;
+		$result = $this->copy();
+
+		foreach ($this->items->export() as $key => $value) {
+			if ($iterations === $count) {
+				break;
+			}
+			$result->remove($key);
+			$iterations++;
+		}
+		return $result;
+	}
+
+	public function skipUntil(mixed $target): Bucket
+	{
+		if ($this->count() === 0) {
+			return new Bucket();
+		}
+
+		$result = $this->copy();
+
+		foreach ($this->items->export() as $key => $value) {
+			if (($target instanceof Closure && $target($value, $key)) || $target === $value) {
+				break;
+			}
+			$result->remove($key);
+		}
+		return $result;
+	}
+
 	public function slice(int $offset, int|null $length = null, bool $preserve_keys = true): Bucket
 	{
 		return new Bucket(array_slice($this->items->export(), $offset, $length, $preserve_keys));
