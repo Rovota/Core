@@ -125,6 +125,20 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		$this->set($key, (int) $this->get($key, 0) - $step);
 		return $this;
 	}
+	public function diff(mixed $items): Bucket
+	{
+		return new Bucket(array_diff($this->items->export(), convert_to_array($items)));
+	}
+
+	public function diffAssoc(mixed $items): Bucket
+	{
+		return new Bucket(array_diff_assoc($this->items->export(), convert_to_array($items)));
+	}
+
+	public function diffKeys(mixed $items): Bucket
+	{
+		return new Bucket(array_diff_key($this->items->export(), convert_to_array($items)));
+	}
 
 	public function duplicates(callable|string|null $callback = null): Bucket
 	{
