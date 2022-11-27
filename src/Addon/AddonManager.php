@@ -9,10 +9,10 @@
 namespace Rovota\Core\Addon;
 
 use Rovota\Core\Facades\DB;
+use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Enums\Status;
-use Rovota\Core\Support\Helpers\Arr;
 use Throwable;
 
 final class AddonManager

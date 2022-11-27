@@ -10,10 +10,10 @@ namespace Rovota\Core\Validation;
 
 use Closure;
 use Rovota\Core\Database\DatabaseManager;
+use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\Helpers\Arr;
 use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;

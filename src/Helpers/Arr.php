@@ -6,7 +6,7 @@
  * @license     MIT
  */
 
-namespace Rovota\Core\Support\Helpers;
+namespace Rovota\Core\Helpers;
 
 use Closure;
 use Rovota\Core\Support\Interfaces\Arrayable;

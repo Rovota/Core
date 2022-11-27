@@ -16,7 +16,7 @@ use Dflydev\DotAccessData\Data;
 use Dflydev\DotAccessData\DataInterface;
 use IteratorAggregate;
 use JsonSerializable;
-use Rovota\Core\Support\Helpers\Arr;
+use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Macroable;

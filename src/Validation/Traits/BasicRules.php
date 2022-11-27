@@ -9,7 +9,7 @@
 namespace Rovota\Core\Validation\Traits;
 
 use BackedEnum;
-use Rovota\Core\Support\Helpers\Arr;
+use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 
