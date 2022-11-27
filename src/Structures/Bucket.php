@@ -298,6 +298,18 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		return $this;
 	}
 
+	public function intersect(mixed $items): Bucket
+	{
+		$this->items = new Data(array_intersect($this->items->export(), convert_to_array($items)));
+		return $this;
+	}
+
+	public function intersectByKeys(mixed $items): Bucket
+	{
+		$this->items = new Data(array_intersect_key($this->items->export(), convert_to_array($items)));
+		return $this;
+	}
+
 	public function isEmpty(): bool
 	{
 		return empty($this->items->export());
@@ -323,6 +335,18 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 		$final_item = (string) $bucket->pop();
 
 		return $bucket->implode($glue).$final_glue.$final_item;
+	}
+
+	public function keyBy(callable|string $value): Bucket
+	{
+		$value = value_retriever($value);
+		$results = new Bucket();
+
+		foreach ($this->items->export() as $key => $item) {
+			$results->set((string) $value($item, $key), $item);
+		}
+
+		return $results;
 	}
 
 	public function keys(): Sequence
