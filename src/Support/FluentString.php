@@ -331,12 +331,6 @@ final class FluentString implements Stringable, JsonSerializable
 		return $this;
 	}
 
-	public function pipe(callable $callback): FluentString
-	{
-		$result = $callback instanceof Closure ? $callback($this) : $callback($this->string);
-		return $result instanceof FluentString ? $result : new FluentString($result);
-	}
-
 	public function plural(mixed $count = 2): FluentString
 	{
 		$this->string = Text::plural($this->string, $count);

@@ -10,8 +10,6 @@
 
 namespace Rovota\Core\Support;
 
-use Closure;
-
 final class CollectionOld
 {
 
@@ -44,75 +42,6 @@ final class CollectionOld
 		}
 
 		return new CollectionOld($results);
-	}
-
-	/**
-	 * Passes the collection to the callback and returns the result.
-	 */
-	public function pipe(callable $callback): mixed
-	{
-		return $callback($this);
-	}
-
-	/**
-	 * Skips over `x` items from the collection, and returns the remaining items.
-	 */
-	public function skip(int $count): CollectionOld
-	{
-		if ($this->count() <= $count) {
-			return new CollectionOld();
-		}
-
-		$iterations = 0;
-		$items = $this->items;
-
-		foreach ($this->items as $key => $value) {
-			if ($iterations === $count) {
-				break;
-			}
-			unset($items[$key]);
-			$iterations++;
-		}
-		return new CollectionOld($items);
-	}
-
-	/**
-	 * Skips over the items from the collection until the closure returns `true`, and returns the remaining items.
-	 */
-	public function skipUntil(mixed $target): CollectionOld
-	{
-		if ($this->count() === 0) {
-			return new CollectionOld();
-		}
-
-		$items = $this->items;
-		foreach ($this->items as $key => $value) {
-			if (($target instanceof Closure && $target($value, $key)) || $target === $value) {
-				break;
-			}
-			unset($items[$key]);
-		}
-		return new CollectionOld($items);
-	}
-
-	/**
-	 * Skips over the items from the collection as long as the closure returns `true`, and returns the remaining items.
-	 */
-	public function skipWhile(Closure $closure): CollectionOld
-	{
-		if ($this->count() === 0) {
-			return new CollectionOld();
-		}
-
-		$items = $this->items;
-		foreach ($this->items as $key => $value) {
-			if ($closure($value, $key)) {
-				unset($items[$key]);
-				continue;
-			}
-			break;
-		}
-		return new CollectionOld($items);
 	}
 
 }
