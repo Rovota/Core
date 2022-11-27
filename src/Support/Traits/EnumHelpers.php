@@ -8,7 +8,7 @@
 
 namespace Rovota\Core\Support\Traits;
 
-use Rovota\Core\Helpers\Arr;
+use Rovota\Core\Support\Arr;
 
 trait EnumHelpers
 {

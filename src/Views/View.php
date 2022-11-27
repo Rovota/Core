@@ -9,7 +9,6 @@
 namespace Rovota\Core\Views;
 
 use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\MessageBucket;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
@@ -23,7 +22,7 @@ class View
 
 	// -----------------
 
-	public function __construct(string|null $file, array $data, MessageBucket $errors)
+	public function __construct(string|null $file, array $data, Bucket $errors)
 	{
 		$this->variables = new Bucket();
 

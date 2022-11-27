@@ -9,7 +9,7 @@
 namespace Rovota\Core\Validation\Traits;
 
 use DateTime;
-use Rovota\Core\Helpers\Arr;
+use Rovota\Core\Support\Arr;
 
 trait DateTimeRules
 {

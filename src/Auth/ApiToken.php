@@ -11,10 +11,10 @@ namespace Rovota\Core\Auth;
 use Rovota\Core\Auth\Enums\TokenStatus;
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Database\Model;
-use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Http\Throttling\Enums\PeriodType;
+use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use function now;
 
 /**
@@ -62,7 +62,7 @@ class ApiToken extends Model
 	{
 		$attributes = array_merge([
 			'user_id' => $identity->getId(),
-			'token' => Text::random(80),
+			'token' => Str::random(80),
 			'expiration' => now()->addYear(),
 		], $attributes);
 

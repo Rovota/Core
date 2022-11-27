@@ -10,15 +10,15 @@ namespace Rovota\Core\Storage;
 
 use League\Flysystem\UnableToDeleteFile;
 use Rovota\Core\Database\Model;
-use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Enums\MediaType;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
 use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Metadata;
 use Throwable;
 
@@ -270,7 +270,7 @@ class Media extends Model
 
 	protected function getDiskLocationForVariant(string $variant): string
 	{
-		$base = Text::finish($this->file_path, '/');
+		$base = Str::finish($this->file_path, '/');
 		if ($variant !== 'original' && in_array($variant, $this->variants)) {
 			return $base.$variant.'/'.$this->file_name;
 		}

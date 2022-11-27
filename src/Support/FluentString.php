@@ -73,13 +73,13 @@ final class FluentString implements Stringable, JsonSerializable
 
 	public function translate(array|object $args = [], string|null $source = null): FluentString
 	{
-		$this->string = Text::translate($this->string, $args, $source);
+		$this->string = Str::translate($this->string, $args, $source);
 		return $this;
 	}
 
 	public function escape(string $encoding = 'UTF-8'): FluentString
 	{
-		$this->string = Text::escape($this->string, $encoding);
+		$this->string = Str::escape($this->string, $encoding);
 		return $this;
 	}
 
@@ -87,198 +87,198 @@ final class FluentString implements Stringable, JsonSerializable
 
 	public function after(Stringable|string $target): FluentString
 	{
-		$this->string = Text::after($this->string, $target);
+		$this->string = Str::after($this->string, $target);
 		return $this;
 	}
 
 	public function afterLast(Stringable|string $target): FluentString
 	{
-		$this->string = Text::afterLast($this->string, $target);
+		$this->string = Str::afterLast($this->string, $target);
 		return $this;
 	}
 
 	public function append(Stringable|string $addition): FluentString
 	{
-		$this->string = Text::append($this->string, $addition);
+		$this->string = Str::append($this->string, $addition);
 		return $this;
 	}
 
 	public function basename(string $suffix = ''): FluentString
 	{
-		$this->string = Text::basename($this->string, $suffix);
+		$this->string = Str::basename($this->string, $suffix);
 		return $this;
 	}
 
 	public function before(Stringable|string $target): FluentString
 	{
-		$this->string = Text::before($this->string, $target);
+		$this->string = Str::before($this->string, $target);
 		return $this;
 	}
 
 	public function beforeLast(Stringable|string $target): FluentString
 	{
-		$this->string = Text::beforeLast($this->string, $target);
+		$this->string = Str::beforeLast($this->string, $target);
 		return $this;
 	}
 
 	public function between(Stringable|string $start, Stringable|string $end): FluentString
 	{
-		$this->string = Text::between($this->string, $start, $end);
+		$this->string = Str::between($this->string, $start, $end);
 		return $this;
 	}
 
 	public function camel(): FluentString
 	{
-		$this->string = Text::camel($this->string);
+		$this->string = Str::camel($this->string);
 		return $this;
 	}
 
 	public function contains(Stringable|string $needle): bool
 	{
-		return Text::contains($this->string, $needle);
+		return Str::contains($this->string, $needle);
 	}
 
 	public function containsAll(array $needles): bool
 	{
-		return Text::containsAll($this->string, $needles);
+		return Str::containsAll($this->string, $needles);
 	}
 
 	public function containsAny(array $needles): bool
 	{
-		return Text::containsAny($this->string, $needles);
+		return Str::containsAny($this->string, $needles);
 	}
 
 	public function containsNone(array $needles): bool
 	{
-		return Text::containsNone($this->string, $needles);
+		return Str::containsNone($this->string, $needles);
 	}
 
 	public function decrement(string $separator = '-', int $step = 1): string
 	{
-		$this->string = Text::decrement($this->string, $separator, $step);
+		$this->string = Str::decrement($this->string, $separator, $step);
 		return $this;
 	}
 
 	public function dirname(int $levels = 1): FluentString
 	{
-		$this->string = Text::dirname($this->string, $levels);
+		$this->string = Str::dirname($this->string, $levels);
 		return $this;
 	}
 
 	public function endsWith(Stringable|string $needle): bool
 	{
-		return Text::endsWith($this->string, $needle);
+		return Str::endsWith($this->string, $needle);
 	}
 
 	public function endsWithAny(array $needles): bool
 	{
-		return Text::endsWithAny($this->string, $needles);
+		return Str::endsWithAny($this->string, $needles);
 	}
 
 	public function endsWithNone(array $needles): bool
 	{
-		return Text::endsWithNone($this->string, $needles);
+		return Str::endsWithNone($this->string, $needles);
 	}
 
 	public function explode(string $char, int $elements = PHP_INT_MAX): array
 	{
-		return Text::explode($this->string, $char, $elements);
+		return Str::explode($this->string, $char, $elements);
 	}
 
 	public function finish(Stringable|string $value): FluentString
 	{
-		$this->string = Text::finish($this->string, $value);
+		$this->string = Str::finish($this->string, $value);
 		return $this;
 	}
 
 	public function hash(string $algo = 'md5'): FluentString
 	{
-		$this->string = Text::hash($this->string, $algo);
+		$this->string = Str::hash($this->string, $algo);
 		return $this;
 	}
 
 	public function increment(string $separator = '-', int $step = 1): FluentString
 	{
-		$this->string = Text::increment($this->string, $separator, $step);
+		$this->string = Str::increment($this->string, $separator, $step);
 		return $this;
 	}
 
 	public function insert(int $interval, string $character): FluentString
 	{
-		$this->string = Text::insert($this->string, $interval, $character);
+		$this->string = Str::insert($this->string, $interval, $character);
 		return $this;
 	}
 
 	public function isAscii(): bool
 	{
-		return Text::isAscii($this->string);
+		return Str::isAscii($this->string);
 	}
 
 	public function isEmpty(): bool
 	{
-		return Text::isEmpty($this->string);
+		return Str::isEmpty($this->string);
 	}
 
 	public function isHash(string $algo = 'md5'): bool
 	{
-		return Text::isHash($this->string, $algo);
+		return Str::isHash($this->string, $algo);
 	}
 
 	public function isNotEmpty(): bool
 	{
-		return Text::isNotEmpty($this->string);
+		return Str::isNotEmpty($this->string);
 	}
 
 	public function isSlug(): bool
 	{
-		return Text::isSlug($this->string);
+		return Str::isSlug($this->string);
 	}
 
 	public function kebab(): FluentString
 	{
-		$this->string = Text::kebab($this->string);
+		$this->string = Str::kebab($this->string);
 		return $this;
 	}
 
 	public function length(): int
 	{
-		return Text::length($this->string);
+		return Str::length($this->string);
 	}
 
 	public function limit(int $length, string $marker = ''): FluentString
 	{
-		$this->string = Text::limit($this->string, 0, $length, $marker);
+		$this->string = Str::limit($this->string, 0, $length, $marker);
 		return $this;
 	}
 
 	public function lower(): FluentString
 	{
-		$this->string = Text::lower($this->string);
+		$this->string = Str::lower($this->string);
 		return $this;
 	}
 
 	public function mask(string $replacement, int $index, int|null $length = null): FluentString
 	{
-		$this->string = Text::mask($this->string, $replacement, $index, $length);
+		$this->string = Str::mask($this->string, $replacement, $index, $length);
 		return $this;
 	}
 
 	public function maskEmail(string $replacement, int $preserve = 3): FluentString
 	{
-		$this->string = Text::maskEmail($this->string, $replacement, $preserve);
+		$this->string = Str::maskEmail($this->string, $replacement, $preserve);
 		return $this;
 	}
 
 	public function match(string $pattern): FluentString
 	{
-		$pattern = Text::startAndFinish($pattern, '/');
+		$pattern = Str::startAndFinish($pattern, '/');
 		preg_match($pattern, $this->string, $matches);
 		return new FluentString($matches[1] ?? '');
 	}
 
 	public function matchAll(string $pattern): Bucket
 	{
-		$pattern = Text::startAndFinish($pattern, '/');
+		$pattern = Str::startAndFinish($pattern, '/');
 		preg_match($pattern, $this->string, $matches);
 		array_shift($matches);
 		return new Bucket($matches);
@@ -286,13 +286,13 @@ final class FluentString implements Stringable, JsonSerializable
 
 	public function matches(string $pattern): bool
 	{
-		$pattern = Text::startAndFinish($pattern, '/');
+		$pattern = Str::startAndFinish($pattern, '/');
 		return preg_match($pattern, $this->string) === 1;
 	}
 
 	public function merge(Stringable|string|array $values): FluentString
 	{
-		$this->string = Text::merge($this->string, $values);
+		$this->string = Str::merge($this->string, $values);
 		return $this;
 	}
 
@@ -304,146 +304,146 @@ final class FluentString implements Stringable, JsonSerializable
 
 	public function occurrences(mixed $needle): int
 	{
-		return Text::occurrences($this->string, $needle);
+		return Str::occurrences($this->string, $needle);
 	}
 
 	public function padBoth(int $length, string $pad_with = ' '): FluentString
 	{
-		$this->string = Text::padBoth($this->string, $length, $pad_with);
+		$this->string = Str::padBoth($this->string, $length, $pad_with);
 		return $this;
 	}
 
 	public function padLeft(int $length, string $pad_with = ' '): FluentString
 	{
-		$this->string = Text::padLeft($this->string, $length, $pad_with);
+		$this->string = Str::padLeft($this->string, $length, $pad_with);
 		return $this;
 	}
 
 	public function padRight(int $length, string $pad_with = ' '): FluentString
 	{
-		$this->string = Text::padRight($this->string, $length, $pad_with);
+		$this->string = Str::padRight($this->string, $length, $pad_with);
 		return $this;
 	}
 
 	public function pascal(): FluentString
 	{
-		$this->string = Text::pascal($this->string);
+		$this->string = Str::pascal($this->string);
 		return $this;
 	}
 
 	public function plural(mixed $count = 2): FluentString
 	{
-		$this->string = Text::plural($this->string, $count);
+		$this->string = Str::plural($this->string, $count);
 		return $this;
 	}
 
 	public function prepend(Stringable|string $addition): FluentString
 	{
-		$this->string = Text::prepend($this->string, $addition);
+		$this->string = Str::prepend($this->string, $addition);
 		return $this;
 	}
 
 	public function reverse(): FluentString
 	{
-		$this->string = Text::reverse($this->string);
+		$this->string = Str::reverse($this->string);
 		return $this;
 	}
 
 	public function remove(Stringable|string|array $values, bool $ignore_case = false): FluentString
 	{
-		$this->string = Text::remove($this->string, $values, $ignore_case);
+		$this->string = Str::remove($this->string, $values, $ignore_case);
 		return $this;
 	}
 
 	public function replace(Stringable|string|array $targets, Stringable|string|array $values): FluentString
 	{
-		$this->string = Text::replace($this->string, $targets, $values);
+		$this->string = Str::replace($this->string, $targets, $values);
 		return $this;
 	}
 
 	public function replaceSequential(Stringable|string $target, Stringable|string|array $values): FluentString
 	{
-		$this->string = Text::replaceSequential($this->string, $target, $values);
+		$this->string = Str::replaceSequential($this->string, $target, $values);
 		return $this;
 	}
 
 	public function replaceFirst(Stringable|string $target, Stringable|string $value): FluentString
 	{
-		$this->string = Text::replaceFirst($this->string, $target, $value);
+		$this->string = Str::replaceFirst($this->string, $target, $value);
 		return $this;
 	}
 
 	public function replaceLast(Stringable|string $target, Stringable|string $value): FluentString
 	{
-		$this->string = Text::replaceLast($this->string, $target, $value);
+		$this->string = Str::replaceLast($this->string, $target, $value);
 		return $this;
 	}
 
 	public function scan(string $format): Bucket
 	{
-		return new Bucket(Text::scan($this->string, $format));
+		return new Bucket(Str::scan($this->string, $format));
 	}
 
 	public function scramble(): FluentString
 	{
-		$this->string = Text::scramble($this->string);
+		$this->string = Str::scramble($this->string);
 		return $this;
 	}
 
 	public function shuffle(): FluentString
 	{
-		$this->string = Text::shuffle($this->string);
+		$this->string = Str::shuffle($this->string);
 		return $this;
 	}
 
 	public function simplify(): FluentString
 	{
-		$this->string = Text::simplify($this->string);
+		$this->string = Str::simplify($this->string);
 		return $this;
 	}
 
 	public function slug(string $separator = '-'): FluentString
 	{
-		$this->string = Text::slug($this->string, $separator);
+		$this->string = Str::slug($this->string, $separator);
 		return $this;
 	}
 
 	public function snake(string $separator = '_'): FluentString
 	{
-		$this->string = Text::snake($this->string, $separator);
+		$this->string = Str::snake($this->string, $separator);
 		return $this;
 	}
 
 	public function start(Stringable|string $value): FluentString
 	{
-		$this->string = Text::start($this->string, $value);
+		$this->string = Str::start($this->string, $value);
 		return $this;
 	}
 
 	public function startAndFinish(Stringable|string $value): FluentString
 	{
-		$this->string = Text::startAndFinish($this->string, $value);
+		$this->string = Str::startAndFinish($this->string, $value);
 		return $this;
 	}
 
 	public function startsWith(Stringable|string $needle): bool
 	{
-		return Text::startsWith($this->string, $needle);
+		return Str::startsWith($this->string, $needle);
 	}
 
 	public function startsWithAny(array $needles): bool
 	{
-		return Text::startsWithAny($this->string, $needles);
+		return Str::startsWithAny($this->string, $needles);
 	}
 
 	public function startsWithNone(array $needles): bool
 	{
-		return Text::startsWithNone($this->string, $needles);
+		return Str::startsWithNone($this->string, $needles);
 	}
 
 	public function swap(array $map): FluentString
 	{
-		$this->string = Text::swap($this->string, $map);
+		$this->string = Str::swap($this->string, $map);
 		return $this;
 	}
 
@@ -455,31 +455,31 @@ final class FluentString implements Stringable, JsonSerializable
 
 	public function title(): FluentString
 	{
-		$this->string = Text::title($this->string);
+		$this->string = Str::title($this->string);
 		return $this;
 	}
 
 	public function trim(string|null $characters = null): FluentString
 	{
-		$this->string = Text::trim($this->string, $characters);
+		$this->string = Str::trim($this->string, $characters);
 		return $this;
 	}
 
 	public function trimLeft(string|null $characters = null): FluentString
 	{
-		$this->string = Text::trimLeft($this->string, $characters);
+		$this->string = Str::trimLeft($this->string, $characters);
 		return $this;
 	}
 
 	public function trimRight(string|null $characters = null): FluentString
 	{
-		$this->string = Text::trimRight($this->string, $characters);
+		$this->string = Str::trimRight($this->string, $characters);
 		return $this;
 	}
 
 	public function upper(): FluentString
 	{
-		$this->string = Text::upper($this->string);
+		$this->string = Str::upper($this->string);
 		return $this;
 	}
 
@@ -495,18 +495,18 @@ final class FluentString implements Stringable, JsonSerializable
 
 	public function whenMatches(string $pattern, callable $callback, callable|null $alternative = null): FluentString
 	{
-		$pattern = Text::startAndFinish($pattern, '/');
+		$pattern = Str::startAndFinish($pattern, '/');
 		return $this->when(preg_match($pattern, $this->string) === 1, $callback, $alternative);
 	}
 
 	public function wordCount(): int
 	{
-		return Text::wordCount($this->string);
+		return Str::wordCount($this->string);
 	}
 
 	public function wrap(string $value, string|null $end = null): FluentString
 	{
-		$this->string = Text::wrap($this->string, $value, $end);
+		$this->string = Str::wrap($this->string, $value, $end);
 		return $this;
 	}
 

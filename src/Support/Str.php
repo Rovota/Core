@@ -12,7 +12,7 @@ use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Localization\LocalizationManager;
 use Throwable;
 
-final class Text
+final class Str
 {
 
 	protected function __construct()
@@ -40,7 +40,7 @@ final class Text
 				if (preg_match_all('#:([a-z\d_]*)#m', $string, $matches) > 0) {
 					foreach ($matches[1] as $name) {
 						if ($args->{$name} !== null) {
-							$string = str_replace(':'.$name, Text::translate($args->{$name}, source: $source), $string);
+							$string = str_replace(':'.$name, Str::translate($args->{$name}, source: $source), $string);
 						}
 					}
 				}
@@ -50,7 +50,7 @@ final class Text
 				}
 				$args = as_bucket($args)->sortBy(fn ($variable, $key) => strlen($key), descending: true);
 				foreach ($args as $name => $value) {
-					$string = str_replace(':'.$name, Text::translate($value, source: $source), $string);
+					$string = str_replace(':'.$name, Str::translate($value, source: $source), $string);
 				}
 			}
 		}
@@ -307,10 +307,10 @@ final class Text
 
 	public static function maskEmail(string $string, string $replacement, int $preserve = 3): string
 	{
-		$maskable = Text::before($string, '@');
+		$maskable = Str::before($string, '@');
 		$rest = str_replace($maskable, '', $string);
 
-		return Text::mask($maskable, $replacement, $preserve, strlen($maskable) - $preserve).$rest;
+		return Str::mask($maskable, $replacement, $preserve, strlen($maskable) - $preserve).$rest;
 	}
 
 	public static function merge(string $string, string|array $values): string

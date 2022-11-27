@@ -13,10 +13,10 @@ use JsonSerializable;
 use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Database\Traits\QueryFunctions;
 use Rovota\Core\Facades\DB;
-use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Kernel\ExceptionHandler;
+use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
@@ -431,7 +431,7 @@ abstract class Model implements JsonSerializable
 	{
 		if ($this->validateAssignment($name, $value) && $this->isAllowedValue($name, $value)) {
 			if ($this->enable_composites) {
-				$accessor = sprintf('set%sAttribute', Text::pascal($name));
+				$accessor = sprintf('set%sAttribute', Str::pascal($name));
 				if (method_exists($this, $accessor)) {
 					$this->{$accessor}($value);
 					return;
@@ -457,7 +457,7 @@ abstract class Model implements JsonSerializable
 		$value = $this->attributes_modified[$name] ?? $this->attributes[$name] ?? null;
 
 		if ($this->enable_composites) {
-			$accessor = sprintf('get%sAttribute', Text::pascal($name));
+			$accessor = sprintf('get%sAttribute', Str::pascal($name));
 			if (method_exists($this, $accessor)) {
 				return $this->{$accessor}();
 			}
@@ -659,9 +659,9 @@ abstract class Model implements JsonSerializable
 
 	protected function guessTableName(): string
 	{
-		$name = Text::snake(Text::afterLast(static::class, '\\'));
-		$last_word = Text::afterLast($name, '_');
-		return str_replace($last_word, Text::plural($last_word), $name);
+		$name = Str::snake(Str::afterLast(static::class, '\\'));
+		$last_word = Str::afterLast($name, '_');
+		return str_replace($last_word, Str::plural($last_word), $name);
 	}
 
 	// -----------------

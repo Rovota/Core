@@ -6,11 +6,10 @@
  * @license     MIT
  */
 
-namespace Rovota\Core\Helpers;
+namespace Rovota\Core\Support;
 
 use Closure;
 use Rovota\Core\Support\Interfaces\Arrayable;
-use Rovota\Core\Support\Text;
 
 final class Arr
 {
@@ -378,8 +377,8 @@ final class Arr
 		}
 		return array_reduce(explode(',', $header),
 			function ($carry, $element) {
-				$type = Text::before($element, ';');
-				$quality = str_contains($element, ';q=') ? Text::afterLast($element, ';q=') : 1.00;
+				$type = Str::before($element, ';');
+				$quality = str_contains($element, ';q=') ? Str::afterLast($element, ';q=') : 1.00;
 				$carry[trim($type)] = (float) $quality;
 				return $carry;
 			},[]

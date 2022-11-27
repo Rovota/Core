@@ -11,7 +11,7 @@ namespace Rovota\Core\Cache\Drivers;
 use Redis;
 use RedisException;
 use Rovota\Core\Cache\CacheStore;
-use Rovota\Core\Helpers\Arr;
+use Rovota\Core\Support\Arr;
 
 class RedisStore extends CacheStore
 {

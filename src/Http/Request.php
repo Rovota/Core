@@ -11,14 +11,14 @@ namespace Rovota\Core\Http;
 use Rovota\Core\Facades\Cookie;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Facades\Route;
-use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Http\Traits\RequestInput;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Routing\Route as RouteObject;
 use Rovota\Core\Routing\UrlBuilder;
+use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Validation\Enums\FilterAction;
@@ -78,10 +78,10 @@ final class Request
 		if ($this->hasHeader('Sec-CH-UA')) {
 			$names = array_reduce(explode(',', trim($this->header('Sec-CH-UA'))),
 				function ($carry, $element) {
-					$brand = Text::remove(Text::beforeLast($element, ';'), '"');
-					$version = str_contains($element, ';v=') ? Text::afterLast($element, ';v=') : '';
-					if (Text::containsNone($brand, ['Brand', 'Chromium'])) {
-						$carry[trim($brand)] = (int) Text::remove($version, '"');
+					$brand = Str::remove(Str::beforeLast($element, ';'), '"');
+					$version = str_contains($element, ';v=') ? Str::afterLast($element, ';v=') : '';
+					if (Str::containsNone($brand, ['Brand', 'Chromium'])) {
+						$carry[trim($brand)] = (int) Str::remove($version, '"');
 					}
 					return $carry;
 				},[]
@@ -147,7 +147,7 @@ final class Request
 		$parts = $useragent->explode(';');
 		foreach ($parts as $part) {
 			$part = trim($part);
-			if (Text::containsAny($part, ['Linux', 'Android', 'Mobile', 'like Mac', 'Win64', 'x64', 'x86', 'Macintosh']) || strlen($part) < 4) {
+			if (Str::containsAny($part, ['Linux', 'Android', 'Mobile', 'like Mac', 'Win64', 'x64', 'x86', 'Macintosh']) || strlen($part) < 4) {
 				continue;
 			}
 			$device->append(', '.$part);
@@ -180,13 +180,13 @@ final class Request
 	public function getPassword(): string|null
 	{
 		$password = Application::$server->get('PHP_AUTH_PW');
-		return Text::length($password) > 0 ? $password : null;
+		return Str::length($password) > 0 ? $password : null;
 	}
 
 	public function getUser(): string|null
 	{
 		$username = Application::$server->get('PHP_AUTH_USER');
-		return Text::length($username) > 0 ? $username : null;
+		return Str::length($username) > 0 ? $username : null;
 	}
 
 	public function hasCredentials(): bool
@@ -276,7 +276,7 @@ final class Request
 	
 	public function path(): string
 	{
-		return Text::before(Application::$server->get('REQUEST_URI'), '?');
+		return Str::before(Application::$server->get('REQUEST_URI'), '?');
 	}
 
 	public function pathMatchesPattern(string $pattern): bool
@@ -416,7 +416,7 @@ final class Request
 	{
 		$header = $this->header('Authorization');
 		if ($header !== null) {
-			$value = Text::after($header, ' ');
+			$value = Str::after($header, ' ');
 			return strlen($value) > 0 ? $value : null;
 		}
 		return null;
@@ -426,7 +426,7 @@ final class Request
 	{
 		$header = $this->header('Authorization');
 		if ($header !== null) {
-			$value = Text::before($header, ' ');
+			$value = Str::before($header, ' ');
 			return strlen($value) > 0 ? $value : null;
 		}
 		return null;
@@ -482,7 +482,7 @@ final class Request
 
 	public function hasHeader(string $name): bool
 	{
-		return isset($this->headers[Text::lower($name)]);
+		return isset($this->headers[Str::lower($name)]);
 	}
 
 	public function hasPrivacyControl(): bool
@@ -494,7 +494,7 @@ final class Request
 
 	public function header(string $name, string|null $default = null): string|null
 	{
-		return $this->headers[Text::lower($name)] ?? $default;
+		return $this->headers[Str::lower($name)] ?? $default;
 	}
 
 	public function headers(): array
@@ -570,7 +570,7 @@ final class Request
 
 	public function prefersSafeContent(): bool
 	{
-		return Text::containsAny($this->header('Prefer', ''), ['Safe', 'safe']);
+		return Str::containsAny($this->header('Prefer', ''), ['Safe', 'safe']);
 	}
 
 	// -----------------

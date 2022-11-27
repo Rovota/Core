@@ -10,11 +10,11 @@ namespace Rovota\Core\Validation;
 
 use Closure;
 use Rovota\Core\Database\DatabaseManager;
-use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Validation\Traits\AdvancedRules;
@@ -135,7 +135,7 @@ class Validator
 				continue;
 			}
 
-			$method = 'rule'.Text::pascal($name);
+			$method = 'rule'.Str::pascal($name);
 			if (method_exists($this, $method)) {
 				$this->{$method}($field, $data, $options);
 			}
@@ -165,7 +165,7 @@ class Validator
 			$data instanceof File => round($data->size / 1024), // Bytes to Kilobytes
 			$data instanceof UploadedFile => round($data->variant('original')->size / 1024), // Bytes to Kilobytes
 			is_int($data), is_float($data) => $data,
-			is_numeric($data), is_string($data) => Text::length($data),
+			is_numeric($data), is_string($data) => Str::length($data),
 			is_array($data) => count($data),
 			default => 0
 		};

@@ -18,7 +18,6 @@ use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Cookie\Cookie;
 use Rovota\Core\Cookie\CookieManager;
-use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Http\ApiError;
 use Rovota\Core\Http\ApiErrorResponse;
 use Rovota\Core\Http\Enums\StatusCode;
@@ -40,10 +39,11 @@ use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Structures\Map;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Structures\Set;
+use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Validation\ValidationManager;
 use Rovota\Core\Views\View;
 use Rovota\Core\Views\ViewManager;
@@ -54,21 +54,21 @@ use Rovota\Core\Views\ViewManager;
 if (!function_exists('string')) {
    function string(string $string): FluentString
    {
-      return Text::make($string);
+      return Str::make($string);
    }
 }
 
 if (!function_exists('__')) {
    function __(string|null $string, array|object $args = [], string|null $source = null): string
    {
-      return Text::translate($string, $args, $source);
+      return Str::translate($string, $args, $source);
    }
 }
 
 if (!function_exists('e')) {
    function e(string|null $string): string|null
    {
-      return Text::escape($string);
+      return Str::escape($string);
    }
 }
 
@@ -278,7 +278,7 @@ if (!function_exists('asset')) {
 		if ($disk === null && StorageManager::isActive('public')) {
 			$disk = 'public';
 		}
-		return url()->external(StorageManager::get($disk)->baseUrl().Text::trimLeft($path, '/'));
+		return url()->external(StorageManager::get($disk)->baseUrl().Str::trimLeft($path, '/'));
 	}
 }
 

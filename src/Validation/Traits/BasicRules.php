@@ -9,9 +9,9 @@
 namespace Rovota\Core\Validation\Traits;
 
 use BackedEnum;
-use Rovota\Core\Helpers\Arr;
+use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 trait BasicRules
 {
@@ -195,13 +195,13 @@ trait BasicRules
 			return true;
 		}
 		$matches = match($case) {
-			'camel' => Text::camel($data) === $data,
-			'kebab' => Text::kebab($data) === $data,
-			'lower' => Text::lower($data) === $data,
-			'pascal' => Text::pascal($data) === $data,
-			'snake' => Text::snake($data) === $data,
-			'title' => Text::title($data) === $data,
-			'upper' => Text::upper($data) === $data,
+			'camel' => Str::camel($data) === $data,
+			'kebab' => Str::kebab($data) === $data,
+			'lower' => Str::lower($data) === $data,
+			'pascal' => Str::pascal($data) === $data,
+			'snake' => Str::snake($data) === $data,
+			'title' => Str::title($data) === $data,
+			'upper' => Str::upper($data) === $data,
 			default => true
 		};
 		if ($matches === false) {
@@ -237,7 +237,7 @@ trait BasicRules
 
 	protected function ruleContains(string $field, mixed $data, string $needle): bool
 	{
-		if (is_string($data) && !Text::contains($data, $needle)) {
+		if (is_string($data) && !Str::contains($data, $needle)) {
 			$this->addError($field, 'contains', [$needle]);
 			return false;
 		}
@@ -250,7 +250,7 @@ trait BasicRules
 
 	protected function ruleContainsAny(string $field, mixed $data, array $needles): bool
 	{
-		if (is_string($data) && !Text::containsAny($data, $needles)) {
+		if (is_string($data) && !Str::containsAny($data, $needles)) {
 			$this->addError($field, 'contains_any', $needles);
 			return false;
 		}
@@ -263,7 +263,7 @@ trait BasicRules
 
 	protected function ruleContainsAll(string $field, mixed $data, array $needles): bool
 	{
-		if (is_string($data) && !Text::containsAll($data, $needles)) {
+		if (is_string($data) && !Str::containsAll($data, $needles)) {
 			$this->addError($field, 'contains_all', $needles);
 			return false;
 		}
@@ -276,7 +276,7 @@ trait BasicRules
 
 	protected function ruleContainsNone(string $field, mixed $data, array $needles): bool
 	{
-		if (is_string($data) && Text::containsAny($data, $needles)) {
+		if (is_string($data) && Str::containsAny($data, $needles)) {
 			$this->addError($field, 'contains_none', $needles);
 			return false;
 		}

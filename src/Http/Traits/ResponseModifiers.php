@@ -14,7 +14,7 @@ use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Http\Response;
 use Rovota\Core\Storage\File;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Views\View;
 
 trait ResponseModifiers
@@ -29,7 +29,7 @@ trait ResponseModifiers
 
 	public function header(string $name, string $value): Response
 	{
-		if (Text::length($name) > 0 && Text::length($value) > 0) {
+		if (Str::length($name) > 0 && Str::length($value) > 0) {
 			$this->headers[$name] = $value;
 		}
 		return $this;

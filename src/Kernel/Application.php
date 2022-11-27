@@ -17,7 +17,6 @@ use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Database\CastManager;
 use Rovota\Core\Database\DatabaseManager;
-use Rovota\Core\Helpers\Arr;
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Http\ResponseManager;
@@ -29,7 +28,8 @@ use Rovota\Core\Mail\MailManager;
 use Rovota\Core\Routing\RouteManager;
 use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Storage\StorageManager;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Arr;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Version;
 use Rovota\Core\Validation\ValidationManager;
 use Rovota\Core\Views\ViewManager;
@@ -169,7 +169,7 @@ final class Application
 		$server_address = self::$server->get('server_addr');
 		
 		// Check for development
-		if (Text::startsWithAny($server_name, ['dev.', 'local.', 'sandbox.']) || Text::endsWithAny($server_name, ['.localhost', '.local'])) {
+		if (Str::startsWithAny($server_name, ['dev.', 'local.', 'sandbox.']) || Str::endsWithAny($server_name, ['.localhost', '.local'])) {
 			self::$environment = 'development';
 			return;
 		}
@@ -179,13 +179,13 @@ final class Application
 		}
 
 		// Check for testing
-		if (Text::startsWithAny($server_name, ['test.', 'qa.', 'uat.', 'acceptance.', 'integration.']) || Text::endsWithAny($server_name, ['.test', '.example'])) {
+		if (Str::startsWithAny($server_name, ['test.', 'qa.', 'uat.', 'acceptance.', 'integration.']) || Str::endsWithAny($server_name, ['.test', '.example'])) {
 			self::$environment = 'testing';
 			return;
 		}
 
 		// Check for staging
-		if (Text::startsWithAny($server_name, ['stage.', 'staging.', 'prepod.'])) {
+		if (Str::startsWithAny($server_name, ['stage.', 'staging.', 'prepod.'])) {
 			self::$environment = 'staging';
 			return;
 		}
