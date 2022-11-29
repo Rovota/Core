@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Database;
@@ -23,7 +23,14 @@ final class Connection implements ConnectionInterface
 
 	protected PDO $connection;
 
-	protected array $options = ['pdo' => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => false, PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false]];
+	protected array $options = [
+		'pdo' => [
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+			PDO::ATTR_EMULATE_PREPARES => false,
+			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false
+		]
+	];
 
 	protected array $tables;
 
@@ -49,7 +56,7 @@ final class Connection implements ConnectionInterface
 		try {
 			$this->query("SET time_zone = 'UTC'");
 		} catch (Throwable) {
-			ExceptionHandler::logMessage('notice', 'The timezone {timezone} could not be synchronized. The SQL timezone database may be missing.');
+			ExceptionHandler::logMessage('notice', "The timezone '{timezone}' could not be synchronized. The SQL timezone database may be missing.", ['timezone' => 'UTC']);
 		}
 
 		$this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);

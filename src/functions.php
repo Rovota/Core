@@ -3,9 +3,10 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
+use Dflydev\DotAccessData\Data;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\ApiToken;
 use Rovota\Core\Auth\AuthManager;
@@ -34,12 +35,15 @@ use Rovota\Core\Routing\UrlBuilder;
 use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\StorageManager;
+use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\Map;
+use Rovota\Core\Structures\Sequence;
+use Rovota\Core\Structures\Set;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\FluentString;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Validation\ValidationManager;
 use Rovota\Core\Views\View;
 use Rovota\Core\Views\ViewManager;
@@ -50,21 +54,21 @@ use Rovota\Core\Views\ViewManager;
 if (!function_exists('string')) {
    function string(string $string): FluentString
    {
-      return Text::make($string);
+      return Str::make($string);
    }
 }
 
 if (!function_exists('__')) {
    function __(string|null $string, array|object $args = [], string|null $source = null): string
    {
-      return Text::translate($string, $args, $source);
+      return Str::translate($string, $args, $source);
    }
 }
 
 if (!function_exists('e')) {
    function e(string|null $string): string|null
    {
-      return Text::escape($string);
+      return Str::escape($string);
    }
 }
 
@@ -274,7 +278,7 @@ if (!function_exists('asset')) {
 		if ($disk === null && StorageManager::isActive('public')) {
 			$disk = 'public';
 		}
-		return url()->external(StorageManager::get($disk)->baseUrl().Text::trimLeft($path, '/'));
+		return url()->external(StorageManager::get($disk)->baseUrl().Str::trimLeft($path, '/'));
 	}
 }
 
@@ -304,14 +308,45 @@ if (!function_exists('token')) {
 }
 
 // -----------------
+// Structures
+
+if (!function_exists('as_bucket')) {
+	function as_bucket(mixed $items = []): Bucket
+	{
+		return new Bucket($items);
+	}
+}
+
+if (!function_exists('as_map')) {
+	function as_map(mixed $items = []): Map
+	{
+		return new Map($items);
+	}
+}
+
+if (!function_exists('as_sequence')) {
+	function as_sequence(mixed $items = []): Sequence
+	{
+		return new Sequence($items);
+	}
+}
+
+if (!function_exists('as_set')) {
+	function as_set(mixed $items = []): Set
+	{
+		return new Set($items);
+	}
+}
+
+// -----------------
 // Misc
 
-if (!function_exists('collect')) {
-   function collect(mixed $items = []): Collection
-   {
-      return new Collection($items);
-   }
-}
+// if (!function_exists('collect')) {
+//    function collect(mixed $items = []): Collection
+//    {
+//       return new Collection($items);
+//    }
+// }
 
 if (!function_exists('quit')) {
    function quit(StatusCode $code = StatusCode::InternalServerError): never
@@ -595,16 +630,16 @@ if (!function_exists('value_retriever')) {
 }
 
 if (!function_exists('convert_to_array')) {
-	function convert_to_array(mixed $items): array
+	function convert_to_array(mixed $value): array
 	{
-		if (is_array($items)) {
-			return $items;
-		}
-		if ($items instanceof Arrayable) {
-			return $items->toArray();
-		}
-
-		return [$items];
+		return match(true) {
+			$value === null => [],
+			is_array($value) => $value,
+			$value instanceof Arrayable => $value->toArray(),
+			$value instanceof JsonSerializable => convert_to_array($value->jsonSerialize()),
+			$value instanceof Data => $value->export(),
+			default => [$value],
+		};
 	}
 }
 
@@ -612,7 +647,7 @@ if (!function_exists('data_get')) {
    function data_get(mixed $target, string|array|null $key, mixed $default = null): mixed
    {
       // Inspired by the Laravel data_get() helper.
-      if (is_null($key)) {
+      if ($key === null) {
          return $target;
       }
 
@@ -621,13 +656,13 @@ if (!function_exists('data_get')) {
       foreach ($key as $i => $segment) {
          unset($key[$i]);
 
-         if (is_null($segment)) {
+         if ($segment === null) {
             return $target;
          }
 
          if ($segment === '*') {
-            if ($target instanceof Collection) {
-               $target = $target->all();
+            if ($target instanceof Arrayable) {
+               $target = $target->toArray();
             } elseif (!is_iterable($target)) {
                return $default;
             }
@@ -640,15 +675,17 @@ if (!function_exists('data_get')) {
             return in_array('*', $key) ? Arr::collapse($result) : $result;
          }
 
-         if (Arr::accessible($target) && Arr::exists($target, $segment)) {
-            $target = $target[$segment];
-         } else if (is_object($target) && isset($target->{$segment})) {
-            $target = $target->{$segment};
-         } else if (is_object($target) && method_exists($target, $segment)) {
-			 $target = $target->{$segment}();
-		 } else {
-            return $default;
-         }
+		 $target = match (true) {
+			 $target instanceof ArrayAccess => $target->offsetGet($segment),
+			 is_object($target) && isset($target->{$segment}) => $target->{$segment},
+			 is_object($target) && method_exists($target, $segment) => $target->{$segment}(),
+			 is_array($target) && array_key_exists($segment, $target) => $target[$segment],
+			 default => null,
+		 };
+
+		 if ($target === null) {
+			 return $default;
+		 }
       }
 
       return $target;

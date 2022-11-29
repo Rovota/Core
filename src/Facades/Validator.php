@@ -3,12 +3,11 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Facades;
 
-use Rovota\Core\Support\Bucket;
 use Rovota\Core\Validation\Validator as ValidatorInstance;
 
 final class Validator
@@ -20,12 +19,12 @@ final class Validator
 
 	// -----------------
 
-	public static function create(Bucket|array $data = [], array $rules = [], array $messages = []): ValidatorInstance
+	public static function create(mixed $data = [], array $rules = [], array $messages = []): ValidatorInstance
 	{
 		return new ValidatorInstance($data, $rules, $messages);
 	}
 
-	public static function validate(Bucket|array $data = [], array $rules = [], array $messages = []): bool
+	public static function validate(mixed $data = [], array $rules = [], array $messages = []): bool
 	{
 		return self::create($data, $rules, $messages)->validate();
 	}

@@ -4,7 +4,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Views;
@@ -13,7 +13,7 @@ use Rovota\Core\Addon\AddonManager;
 use Rovota\Core\Facades\Localization;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Localization\Language;
-use Rovota\Core\Support\MessageBucket;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Views\Components\Meta;
 use Rovota\Core\Views\Components\Script;
 use Rovota\Core\Views\Components\Style;
@@ -29,7 +29,7 @@ final class ViewManager
 	 */
 	protected static array $views = [];
 
-	protected static MessageBucket $errors;
+	protected static Bucket $errors;
 
 	/**
 	 * @var array<string, array<string, Style>>
@@ -61,7 +61,7 @@ final class ViewManager
 
 	public static function initialize(): void
 	{
-		self::$errors = new MessageBucket();
+		self::$errors = new Bucket();
 
 		self::addMeta('*', 'application-name', ['name' => 'application-name', 'content' => Registry::string('site_name')]);
 		self::addMeta('*', 'description', ['name' => 'description', 'content' => Registry::string('site_description')]);
@@ -133,7 +133,7 @@ final class ViewManager
 	public static function makeClean(string $name, string|null $source): View
 	{
 		$layout = self::getMatchingLayout($name, $source);
-		return new View($layout, [], new MessageBucket());
+		return new View($layout, [], new Bucket());
 	}
 
 	/**
@@ -142,7 +142,7 @@ final class ViewManager
 	public static function makeMail(string $name, string|null $source, Language $language): View
 	{
 		$layout = self::getMatchingMailLayout($name, $source, $language);
-		return new View($layout, [], new MessageBucket());
+		return new View($layout, [], new Bucket());
 	}
 
 	// -----------------

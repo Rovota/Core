@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Storage;
@@ -11,7 +11,7 @@ namespace Rovota\Core\Storage;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
 use Rovota\Core\Storage\Traits\FileFunctions;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 
 class File
@@ -42,7 +42,7 @@ class File
 				continue;
 			}
 			if ($key === 'name') {
-				$this->extension = Text::afterLast($value, '.');
+				$this->extension = Str::afterLast($value, '.');
 			}
 			$this->{$key} = $value;
 		}
@@ -57,7 +57,7 @@ class File
 
 	public function publicUrl(): string
 	{
-		return Text::finish($this->disk->baseUrl().$this->path, '/').$this->name;
+		return Str::finish($this->disk->baseUrl().$this->path, '/').$this->name;
 	}
 
 	public function properties(): array

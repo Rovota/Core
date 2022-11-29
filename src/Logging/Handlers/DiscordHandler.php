@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Logging\Handlers;
@@ -14,7 +14,7 @@ use Monolog\LogRecord;
 use Rovota\Core\Http\Client\Client;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Throwable;
 
 class DiscordHandler extends AbstractProcessingHandler
@@ -67,7 +67,7 @@ class DiscordHandler extends AbstractProcessingHandler
 			'timestamp' => $record->datetime->format('c'),
 			'color' => hexdec($this->getColorForLevel($record->level)),
 			'footer' => [
-				'text' => Text::pascal(Application::getEnvironment()),
+				'text' => Str::pascal(Application::getEnvironment()),
 			],
 		];
 		

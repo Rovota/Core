@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Cache\Drivers;
@@ -87,18 +87,11 @@ class RedisStore extends CacheStore
 	/**
 	 * @throws RedisException
 	 */
-	public function has(string|int $key): bool
+	public function has(string|int|array $key): bool
 	{
-		return $this->redis->exists($this->prefix.$key) === 1;
-	}
-
-	/**
-	 * @throws RedisException
-	 */
-	public function hasAll(array $keys): bool
-	{
+		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
-			if ($this->has($key) === false) {
+			if ($this->redis->exists($this->prefix.$key) === false) {
 				return false;
 			}
 		}
@@ -108,9 +101,15 @@ class RedisStore extends CacheStore
 	/**
 	 * @throws RedisException
 	 */
-	public function missing(string|int $key): bool
+	public function missing(string|int|array $key): bool
 	{
-		return $this->redis->exists($this->prefix.$key) === 0;
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if ($this->redis->exists($this->prefix.$key) === true) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// -----------------
@@ -137,7 +136,9 @@ class RedisStore extends CacheStore
 			$result[$key] = $this->read($key, $defaults[$key] ?? null);
 		}
 		$this->forgetMany($keys);
-		return Arr::whereNotNull($result);
+		return Arr::filter($result, function ($value) {
+			return $value !== null;
+		});
 	}
 
 	// -----------------
@@ -159,7 +160,9 @@ class RedisStore extends CacheStore
 		foreach ($keys as $key) {
 			$entries[$key] = $this->read($key, $defaults[$key] ?? null);
 		}
-		return Arr::whereNotNull($entries);
+		return Arr::filter($entries, function ($value) {
+			return $value !== null;
+		});
 	}
 
 	// -----------------

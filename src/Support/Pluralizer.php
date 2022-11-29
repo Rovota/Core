@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  *
  * Inspired by the Laravel Illuminate/Support/Pluralizer class.
  */
@@ -36,11 +36,11 @@ final class Pluralizer
 
 		$plural = match (true) {
 			self::isIrregular($value) => self::$irregular[strtolower($value)],
-			Text::endsWithAny($value, ['is']) => substr($value, 0, -2).'es',
-			Text::endsWithAny($value, ['us']) => substr($value, 0, -2).'i',
-			Text::endsWithAny($value, ['s', 'sh', 'ch', 'x', 'z']) => $value.'es',
-			Text::endsWithAny($value, ['f', 'fe']) => Text::endsWithAny($value, ['ief', 'of']) ? $value.'s' : substr($value, 0, -1).'ves',
-			Text::endsWithAny($value, ['py', 'by', 'ty', 'dy', 'ky', 'gy', 'fy', 'vy', 'sy', 'zy', 'my', 'ny', 'hy', 'ly', 'ry', 'wy', 'jy']) => substr($value, 0, -1).'ies',
+			Str::endsWithAny($value, ['is']) => substr($value, 0, -2).'es',
+			Str::endsWithAny($value, ['us']) => substr($value, 0, -2).'i',
+			Str::endsWithAny($value, ['s', 'sh', 'ch', 'x', 'z']) => $value.'es',
+			Str::endsWithAny($value, ['f', 'fe']) => Str::endsWithAny($value, ['ief', 'of']) ? $value.'s' : substr($value, 0, -1).'ves',
+			Str::endsWithAny($value, ['py', 'by', 'ty', 'dy', 'ky', 'gy', 'fy', 'vy', 'sy', 'zy', 'my', 'ny', 'hy', 'ly', 'ry', 'wy', 'jy']) => substr($value, 0, -1).'ies',
 			// Text::endsWithAny($value, ['on']) => substr($value, 0, -2).'a',
 			default => $value.'s'
 		};

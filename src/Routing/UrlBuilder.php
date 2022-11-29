@@ -3,12 +3,13 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Routing;
 
-use Rovota\Core\Support\Text;
+use Rovota\Core\Session\SessionManager;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 
 final class UrlBuilder
@@ -75,6 +76,24 @@ final class UrlBuilder
 
 	// -----------------
 
+	public function previous(array $query = []): string
+	{
+		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer() ?? request()->targetHost();
+		return $this->external($location, $query);
+	}
+
+	public function intended(string $default = '/', array $query = []): string
+	{
+		$location = SessionManager::get()->pull('location.intended') ?? $default;
+		return $this->external($location, $query);
+	}
+
+	public function continue(array $query = []): string
+	{
+		$location = SessionManager::get()->pull('location.continue');
+		return $this->external($location, $query);
+	}
+
 	public function external(string $location, array $query = []): string
 	{
 		$this->query = array_merge($this->query, $query);
@@ -109,7 +128,7 @@ final class UrlBuilder
 		if (empty($params) === false) {
 			if (array_is_list($params)) {
 				$path = preg_replace('/{(.*?)}/', '{parameter}', $path);
-				$path = Text::replaceSequential($path, '{parameter}', $params);
+				$path = Str::replaceSequential($path, '{parameter}', $params);
 			} else {
 				foreach ($params as $key => $value) {
 					$path = str_replace(sprintf('{%s}', $key), $value, $path);
@@ -127,12 +146,12 @@ final class UrlBuilder
 		$items = '';
 		foreach ($fields as $key => $value) {
 			$value = (string)$value;
-			if (Text::length($value) > 0) {
+			if (Str::length($value) > 0) {
 				$value = $encode ? rawurlencode($value) : $value;
-				$items .= sprintf('%s%s=%s', (Text::length($items) > 0) ? '&' : '', $key, $value);
+				$items .= sprintf('%s%s=%s', (Str::length($items) > 0) ? '&' : '', $key, $value);
 			}
 		}
-		return (Text::length($items) > 0) ? '?'.$items : '';
+		return (Str::length($items) > 0) ? '?'.$items : '';
 	}
 
 	// -----------------

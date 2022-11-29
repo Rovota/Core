@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Localization\Middleware;
@@ -13,7 +13,7 @@ use Rovota\Core\Cookie\Cookie;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Http\Request;
 use Rovota\Core\Localization\LocalizationManager;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 class DetermineLanguage
 {
@@ -31,7 +31,7 @@ class DetermineLanguage
 		}
 
 		// Attempt to get a value from a query parameter
-		if ($request->query->has('locale') && Text::contains($request->referrer() ?? '', $request->targetHost())) {
+		if ($request->query->has('locale') && Str::contains($request->referrer() ?? '', $request->targetHost())) {
 			$locale = trim($request->query->get('locale'));
 			if (LocalizationManager::hasLanguage($locale)) {
 				$this->locale = $locale;

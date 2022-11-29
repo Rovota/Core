@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Storage;
@@ -21,10 +21,10 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 use SplFileInfo;
 use Throwable;
@@ -105,7 +105,7 @@ abstract class Disk implements DiskInterface
 
 	public function baseUrl(): string
 	{
-		$root = Text::startAndFinish($this->root(), '/');
+		$root = Str::startAndFinish($this->root(), '/');
 		$scheme = Application::$server->get('REQUEST_SCHEME', 'https');
 
 		return sprintf('%s://%s%s', $scheme, $this->domain(), $root);
@@ -152,16 +152,16 @@ abstract class Disk implements DiskInterface
 
 	// -----------------
 
-	public function contents(string $location = '/'): Collection
+	public function contents(string $location = '/'): Bucket
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
 			$listing[] = $item;
 		}
-		return new Collection($listing);
+		return new Bucket($listing);
 	}
 
-	public function files(string $location = '/'): Collection
+	public function files(string $location = '/'): Bucket
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
@@ -169,10 +169,10 @@ abstract class Disk implements DiskInterface
 				$listing[] = $item;
 			}
 		}
-		return new Collection($listing);
+		return new Bucket($listing);
 	}
 
-	public function directories(string $location = '/'): Collection
+	public function directories(string $location = '/'): Bucket
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
@@ -180,7 +180,7 @@ abstract class Disk implements DiskInterface
 				$listing[] = $item;
 			}
 		}
-		return new Collection($listing);
+		return new Bucket($listing);
 	}
 
 	// -----------------
@@ -250,7 +250,7 @@ abstract class Disk implements DiskInterface
 	{
 		$archive = new ZipArchive();
 		$data = $this->getDataForCompression($source, $target);
-		$random_name = Text::random(60).'.zip';
+		$random_name = Str::random(60).'.zip';
 
 		if ($data['source_type'] === null) {
 			return null;
@@ -493,15 +493,15 @@ abstract class Disk implements DiskInterface
 		$source = trim(getcwd().'/'.$this->root().'/'.$source, '/');
 
 		if ($target === null) {
-			$target_filename = Text::finish(basename($source ?? $this->root()), '.zip');
+			$target_filename = Str::finish(basename($source ?? $this->root()), '.zip');
 			$target_real_path = trim(str_replace(basename($source), '', $source), '/').'/'.$target_filename;
 		} else {
 			$target = trim(getcwd().'/'.$this->root().'/'.$target, '/');
-			$target_filename = Text::finish(basename($target), '.zip');
+			$target_filename = Str::finish(basename($target), '.zip');
 			$target_real_path = trim(str_replace(basename($target), '', $target), '/').'/'.$target_filename;
 		}
 
-		$target_disk_path = trim(Text::afterLast($target_real_path, $this->root()), '/');
+		$target_disk_path = trim(Str::afterLast($target_real_path, $this->root()), '/');
 
 		return [
 			'source' => $source,

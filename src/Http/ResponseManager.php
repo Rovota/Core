@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Http;
@@ -11,7 +11,7 @@ namespace Rovota\Core\Http;
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Enums\Status;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Throwable;
 
 /**
@@ -33,7 +33,7 @@ final class ResponseManager
 	public static function initialize(): void
 	{
 		try {
-			self::$headers = Header::where('status', Status::Enabled)->get()->pluck('value', 'name')->all();
+			self::$headers = Header::where('status', Status::Enabled)->get()->pluck('value', 'name')->toArray();
 		} catch (Throwable $throwable) {
 			ExceptionHandler::addThrowable($throwable, true);
 		}
@@ -75,7 +75,7 @@ final class ResponseManager
 
 	public static function addHeader(string $name, string $value): void
 	{
-		if (Text::length($name) > 0 && Text::length($value) > 0) {
+		if (Str::length($name) > 0 && Str::length($value) > 0) {
 			self::$headers[$name] = $value;
 		}
 	}

@@ -3,14 +3,14 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Kernel;
 
 use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Facades\Format;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use const PHP_INT_MAX;
 
 final class Server
@@ -102,7 +102,7 @@ final class Server
 
 	public function get(string $name, string $default = ''): string
 	{
-		$name = Text::lower($name);
+		$name = Str::lower($name);
 		return $this->variables[$name] ?? $default;
 	}
 

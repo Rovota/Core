@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Database;
@@ -15,9 +15,8 @@ use Rovota\Core\Database\Traits\QueryFunctions;
 use Rovota\Core\Facades\DB;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
@@ -154,19 +153,9 @@ abstract class Model implements JsonSerializable
 
 	// -----------------
 
-	public function collect(): Collection
-	{
-		return new Collection(array_merge($this->attributes, $this->attributes_modified));
-	}
-
 	public function toArray(): array
 	{
-		return $this->collect()->except($this->hidden)->all();
-	}
-
-	public function jsonSerialize(): array
-	{
-		return $this->toArray();
+		return as_bucket(array_merge($this->attributes, $this->attributes_modified))->except($this->hidden)->toArray();
 	}
 
 	public function toJson(): string
@@ -265,13 +254,13 @@ abstract class Model implements JsonSerializable
 			$allowed = $this->restricted[$attribute];
 
 			if (is_string($allowed) || $allowed instanceof BackedEnum) {
-				if (Arr::containsNone($allowed::cases(), [$value])) {
+				if (Arr::contains($allowed::cases(), $value)) {
 					throw new TypeError(
 						sprintf('Value must be of type %s, %s given.', $allowed, is_object($value) ? $value::class : gettype($value))
 					);
 				}
 			} else {
-				if (Arr::containsNone($allowed, [$value])) {
+				if (Arr::contains($allowed, $value) === false) {
 					return false;
 				}
 			}
@@ -442,7 +431,7 @@ abstract class Model implements JsonSerializable
 	{
 		if ($this->validateAssignment($name, $value) && $this->isAllowedValue($name, $value)) {
 			if ($this->enable_composites) {
-				$accessor = sprintf('set%sAttribute', Text::pascal($name));
+				$accessor = sprintf('set%sAttribute', Str::pascal($name));
 				if (method_exists($this, $accessor)) {
 					$this->{$accessor}($value);
 					return;
@@ -468,7 +457,7 @@ abstract class Model implements JsonSerializable
 		$value = $this->attributes_modified[$name] ?? $this->attributes[$name] ?? null;
 
 		if ($this->enable_composites) {
-			$accessor = sprintf('get%sAttribute', Text::pascal($name));
+			$accessor = sprintf('get%sAttribute', Str::pascal($name));
 			if (method_exists($this, $accessor)) {
 				return $this->{$accessor}();
 			}
@@ -655,6 +644,14 @@ abstract class Model implements JsonSerializable
 	/**
 	 * @internal
 	 */
+	public function jsonSerialize(): array
+	{
+		return $this->toArray();
+	}
+
+	/**
+	 * @internal
+	 */
 	public function setRawAttribute(string $name, mixed $value): void
 	{
 		$this->attributes[$name] = $this->castFromRaw($name, $value);
@@ -662,9 +659,9 @@ abstract class Model implements JsonSerializable
 
 	protected function guessTableName(): string
 	{
-		$name = Text::snake(Text::afterLast(static::class, '\\'));
-		$last_word = Text::afterLast($name, '_');
-		return str_replace($last_word, Text::plural($last_word), $name);
+		$name = Str::snake(Str::afterLast(static::class, '\\'));
+		$last_word = Str::afterLast($name, '_');
+		return str_replace($last_word, Str::plural($last_word), $name);
 	}
 
 	// -----------------

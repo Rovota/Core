@@ -3,13 +3,13 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Partials;
 
 use Rovota\Core\Partials\Traits\PartialModifiers;
-use Rovota\Core\Support\Bucket;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Macroable;
 
@@ -66,7 +66,7 @@ class Partial
 
 	public function render(): void
 	{
-		extract($this->variables->all());
+		extract($this->variables->toArray());
 		$this->variables->flush();
 
 		include base_path($this->file);

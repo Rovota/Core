@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Http\Client;
@@ -13,7 +13,7 @@ use GuzzleHttp\RedirectMiddleware;
 use Rovota\Core\Http\Client\Traits\ConfigModifiers;
 use Rovota\Core\Http\Client\Traits\ClientMethods;
 use Rovota\Core\Kernel\Application;
-use Rovota\Core\Support\Bucket;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
 
 class Client
@@ -64,7 +64,7 @@ class Client
 
 	protected function getGuzzle(): Guzzle
 	{
-		return $this->guzzle ?? new Guzzle($this->config->all());
+		return $this->guzzle ?? new Guzzle($this->config->toArray());
 	}
 
 }

@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Support;
@@ -28,12 +28,15 @@ abstract class Meta extends Model
 		'type' => [
 			'array',
 			'bool',
-			'collection',
+			'bucket',
 			'datetime',
 			'float',
 			'fluent_string',
 			'int',
+			'map',
 			'moment',
+			'sequence',
+			'set',
 			'string',
 		],
 	];

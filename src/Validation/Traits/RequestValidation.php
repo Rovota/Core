@@ -3,13 +3,13 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Validation\Traits;
 
 use Rovota\Core\Facades\Validator;
-use Rovota\Core\Support\Bucket;
+use Rovota\Core\Structures\Bucket;
 
 trait RequestValidation
 {
@@ -32,11 +32,11 @@ trait RequestValidation
 
 		if ($validator->fails()) {
 			$this->passErrors($validator->getErrors());
-			$this->fillSafeData($validator->validated());
+			$this->fillSafeData($validator->safe()->toArray());
 			return false;
 		}
 
-		$this->fillSafeData($validator->validated());
+		$this->fillSafeData($validator->safe()->toArray());
 		return true;
 	}
 
@@ -57,7 +57,7 @@ trait RequestValidation
 		if ($this->safe_data === null) {
 			$this->safe_data = new Bucket();
 		}
-		$this->safe_data->mergeIfMissing($data);
+		$this->safe_data->merge($data, true);
 	}
 
 }

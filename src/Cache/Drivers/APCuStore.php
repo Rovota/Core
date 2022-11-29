@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Cache\Drivers;
@@ -48,24 +48,26 @@ class APCuStore extends CacheStore
 
 	// -----------------
 
-	public function has(string|int $key): bool
+	public function has(string|int|array $key): bool
 	{
-		return apcu_exists($this->prefix.$key);
-	}
-
-	public function hasAll(array $keys): bool
-	{
+		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
-			if ($this->has($key) === false) {
+			if (apcu_exists($this->prefix.$key) === false) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public function missing(string|int $key): bool
+	public function missing(string|int|array $key): bool
 	{
-		return apcu_exists($this->prefix.$key) === false;
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if (apcu_exists($this->prefix.$key) === true) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// -----------------
@@ -86,7 +88,9 @@ class APCuStore extends CacheStore
 			$result[$key] = $this->read($key, $defaults[$key] ?? null);
 		}
 		$this->forgetMany($keys);
-		return Arr::whereNotNull($result);
+		return Arr::filter($result, function ($value) {
+			return $value !== null;
+		});
 	}
 
 	// -----------------
@@ -102,7 +106,9 @@ class APCuStore extends CacheStore
 		foreach ($keys as $key) {
 			$entries[$key] = $this->read($key, $defaults[$key] ?? null);
 		}
-		return Arr::whereNotNull($entries);
+		return Arr::filter($entries, function ($value) {
+			return $value !== null;
+		});
 	}
 
 	// -----------------

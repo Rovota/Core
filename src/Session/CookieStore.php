@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Session;
@@ -81,15 +81,10 @@ class CookieStore implements SessionInterface
 		}
 	}
 
-	public function has(string|int $key): bool
+	public function has(string|int|array $key): bool
 	{
 		$this->loadSession();
-		return isset($_SESSION['data'][$key]);
-	}
-
-	public function hasAll(array $keys): bool
-	{
-		$this->loadSession();
+		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
 			if (isset($_SESSION['data'][$key]) === false) {
 				return false;
@@ -98,10 +93,16 @@ class CookieStore implements SessionInterface
 		return true;
 	}
 
-	public function missing(string|int $key): bool
+	public function missing(string|int|array $key): bool
 	{
 		$this->loadSession();
-		return isset($_SESSION['data'][$key]) === false;
+		$keys = is_array($key) ? $key : [$key];
+		foreach ($keys as $key) {
+			if (isset($_SESSION['data'][$key]) === true) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public function pull(string|int $key, mixed $default = null): mixed
@@ -120,7 +121,9 @@ class CookieStore implements SessionInterface
 			$result[$key] = $_SESSION['data'][$key] ?? ($defaults[$key] ?? null);
 			unset($_SESSION['data'][$key]);
 		}
-		return Arr::whereNotNull($result);
+		return Arr::filter($result, function ($value) {
+			return $value !== null;
+		});
 	}
 
 	public function read(string|int $key, mixed $default = null): mixed
@@ -136,7 +139,9 @@ class CookieStore implements SessionInterface
 		foreach ($keys as $key) {
 			$entries[$key] = $_SESSION['data'][$key] ?? ($defaults[$key] ?? null);
 		}
-		return Arr::whereNotNull($entries);
+		return Arr::filter($entries, function ($value) {
+			return $value !== null;
+		});
 	}
 
 	public function remember(string|int $key, callable $callback): mixed

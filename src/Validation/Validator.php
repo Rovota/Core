@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Validation;
@@ -12,9 +12,9 @@ use Closure;
 use Rovota\Core\Database\DatabaseManager;
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Storage\File;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Bucket;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Validation\Traits\AdvancedRules;
@@ -33,9 +33,9 @@ class Validator
 
 	// -----------------
 
-	public function __construct(Bucket|array $data = [], array $rules = [], array $messages = [])
+	public function __construct(mixed $data = [], array $rules = [], array $messages = [])
 	{
-		$this->data = is_array($data) ? new Bucket($data) : $data;
+		$this->data = new Bucket($data);
 		$this->data_validated = new Bucket();
 		$this->rules = $rules;
 
@@ -46,7 +46,7 @@ class Validator
 
 	// -----------------
 
-	public static function create(Bucket|array $data = [], array $rules = [], array $messages = []): static
+	public static function create(mixed $data = [], array $rules = [], array $messages = []): static
 	{
 		return new static($data, $rules, $messages);
 	}
@@ -81,9 +81,9 @@ class Validator
 		return $this->validate() === false;
 	}
 
-	public function populate(Bucket|array $data = [], array $rules = [], array $messages = []): static
+	public function populate(mixed $data = [], array $rules = [], array $messages = []): static
 	{
-		$this->data = is_array($data) ? new Bucket($data) : $data;
+		$this->data = new Bucket($data);
 		$this->rules = $rules;
 
 		if (empty($messages) === false) {
@@ -91,11 +91,6 @@ class Validator
 		}
 
 		return $this;
-	}
-
-	public function validated(): array
-	{
-		return $this->data_validated->all();
 	}
 
 	public function safe(): Bucket
@@ -119,7 +114,7 @@ class Validator
 			return true;
 		}
 
-		if (Arr::hasNone($rules, ['nullable', 'required_if_enabled', 'required_if_disabled']) && $data === null) {
+		if (Arr::missing($rules, ['nullable', 'required_if_enabled', 'required_if_disabled']) && $data === null) {
 			$this->addError($field, 'nullable');
 			return false;
 		}
@@ -140,7 +135,7 @@ class Validator
 				continue;
 			}
 
-			$method = 'rule'.Text::pascal($name);
+			$method = 'rule'.Str::pascal($name);
 			if (method_exists($this, $method)) {
 				$this->{$method}($field, $data, $options);
 			}
@@ -170,7 +165,7 @@ class Validator
 			$data instanceof File => round($data->size / 1024), // Bytes to Kilobytes
 			$data instanceof UploadedFile => round($data->variant('original')->size / 1024), // Bytes to Kilobytes
 			is_int($data), is_float($data) => $data,
-			is_numeric($data), is_string($data) => Text::length($data),
+			is_numeric($data), is_string($data) => Str::length($data),
 			is_array($data) => count($data),
 			default => 0
 		};

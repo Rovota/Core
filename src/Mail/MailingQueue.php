@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Mail;
@@ -14,8 +14,8 @@ use Iterator;
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\User;
 use Rovota\Core\Mail\Interfaces\Mailable;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Macroable;
@@ -60,8 +60,8 @@ class MailingQueue implements ArrayAccess, Iterator, Countable, Arrayable
 			return new static();
 		}
 
-		/** @var Collection $users */
-		/** @var Collection $guests */
+		/** @var Bucket $users */
+		/** @var Bucket $guests */
 		[$users, $guests] = $list->subscribers->partition(function (MailingListSubscriber $subscriber) {
 			return $subscriber->user_id !== null;
 		});
@@ -219,7 +219,7 @@ class MailingQueue implements ArrayAccess, Iterator, Countable, Arrayable
 
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		if (is_null($offset)) {
+		if ($offset === null) {
 			$this->receivers[] = $value;
 			$this->keys[] = array_key_last($this->receivers);
 		} else {

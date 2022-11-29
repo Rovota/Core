@@ -3,14 +3,14 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Support;
 
-use ArrayAccess;
 use Closure;
 $randomizer = new Random\Randomizer();
+use Rovota\Core\Support\Interfaces\Arrayable;
 
 final class Arr
 {
@@ -21,166 +21,119 @@ final class Arr
 
 	// -----------------
 
-	public static function make(string $string): Collection
-	{
-		return new Collection($string);
-	}
-
-	// -----------------
-
 	/**
-	 * Determines whether the given value is an accessible array or implements ArrayAccess.
+	 * Returns the average of a given array. When the array is empty or contains non-numeric values, `0` will be returned.
 	 */
-	public static function accessible(mixed $value): bool
-	{
-		return is_array($value) || $value instanceof ArrayAccess;
-	}
-
-	/**
-	 * Retrieve the average value of the array.
-	 */
-	public static function avg(array $array, bool $round = false): float|int|null
+	public static function average(array $array, bool $round = false, int $precision = 0): float|int
 	{
 		$count = count($array);
-		if ($count === 0) return null;
+
+		if ($count < 2) {
+			return array_pop($array) ?? 0;
+		}
+
 		$average = array_sum($array) / $count;
-		return $round ? round($average) : $average;
+		return $round ? round($average, $precision) : $average;
 	}
 
 	/**
 	 * Collapse an array or collection of arrays into a single, flat array.
 	 */
-	public static function collapse(array|Collection $array): array
+	public static function collapse(array $array): array
 	{
 		$normalized = [];
 
 		foreach ($array as $item) {
-			if ($item instanceof Collection) {
-				$item = $item->all();
+			if ($item instanceof Arrayable) {
+				$item = $item->toArray();
 			} else {
 				if (!is_array($item)) {
 					continue;
 				}
 			}
-
 			$normalized[] = $item;
 		}
 
 		return array_merge([], ...$normalized);
 	}
 
-	public static function combine(mixed $keys, mixed $values): array
+	public static function contains(array $haystack, mixed $needle): bool
 	{
-		return array_combine(convert_to_array($keys), convert_to_array($values));
-	}
+		$needles = is_array($needle) ? $needle : [$needle];
 
-	public static function contains(array $haystack, mixed $value): bool
-	{
-		if ($value instanceof Closure) {
-			$callback = $value;
-			foreach ($haystack as $key => $value) {
-				if ($callback($value, $key)) {
-					return $value;
+		foreach ($needles as $needle) {
+			if ($needle instanceof Closure) {
+				foreach ($haystack as $key => $value) {
+					if ($needle($value, $key) === false) {
+						return false;
+					}
+				}
+			} else {
+				if (in_array($needle, $haystack, true) === false) {
+					return false;
 				}
 			}
-			return false;
 		}
-		return in_array($value, $haystack, true);
-	}
 
-	public static function containsAll(array $haystack, array $values): bool
-	{
-		foreach ($values as $value) {
-			if (!in_array($value, $haystack, true)) {
-				return false;
-			}
-		}
 		return true;
 	}
 
-	public static function containsAny(array $haystack, array $values): bool
+	public static function containsAny(array $haystack, array $needles): bool
 	{
-		foreach ($values as $value) {
-			if (in_array($value, $haystack, true)) {
-				return true;
+		foreach ($needles as $needle) {
+			if ($needle instanceof Closure) {
+				foreach ($haystack as $key => $value) {
+					if ($needle($value, $key)) {
+						return true;
+					}
+				}
+			} else {
+				if (in_array($needle, $haystack, true)) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 
-	public static function containsNone(array $haystack, array $values): bool
-	{
-		foreach ($values as $value) {
-			if (in_array($value, $haystack, true)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static function diff(mixed $first, mixed $second): array
-	{
-		return array_diff(convert_to_array($first), convert_to_array($second));
-	}
-
-	public static function diffAssoc(mixed $first, mixed $second): array
-	{
-		return array_diff_assoc(convert_to_array($first), convert_to_array($second));
-	}
-
-	public static function diffKeys(mixed $first, mixed $second): array
-	{
-		return array_diff_key(convert_to_array($first), convert_to_array($second));
-	}
-
-	public static function exists(mixed $array, string|int $key): bool
-	{
-		if ($array instanceof ArrayAccess) {
-			return $array->offsetExists($key);
-		}
-
-		return array_key_exists($key, $array);
-	}
-
-	public static function except(array $array, string|array $keys): array
-	{
-		if (is_string($keys)) {
-			$keys = [$keys];
-		}
-
-		foreach ($keys as $key) {
-			unset($array[$key]);
-		}
-
-		return $array;
-	}
-
+	/**
+	 * Returns the items from the array that pass a given truth test.
+	 */
 	public static function filter(array $array, callable $callback): array
 	{
 		$new = [];
 		foreach ($array as $key => $value) {
-			if ($callback($value, $key) === true) {
-				$new[$key] = $value;
+			if (is_array($value)) {
+				$new[$key] = Arr::filter($value, $callback);
+				if (empty($new[$key])) {
+					unset($new[$key]);
+				}
+			} else {
+				if ($callback($value, $key) === true) {
+					$new[$key] = $value;
+				}
 			}
 		}
 
 		return $new;
 	}
 
+	/**
+	 * Returns the first item in the array, optionally the first that passes a given truth test.
+	 */
 	public static function first(array $array, callable|null $callback = null, mixed $default = null): mixed
 	{
-		if (is_null($callback)) {
+		if ($callback === null) {
 			if (empty($array)) {
 				return $default;
 			}
-
 			foreach ($array as $item) {
 				return $item;
 			}
 		}
 
 		foreach ($array as $key => $value) {
-			if ($callback($key, $value)) {
+			if ($callback($value, $key)) {
 				return $value;
 			}
 		}
@@ -188,60 +141,11 @@ final class Arr
 		return $default;
 	}
 
-	public static function fromAcceptHeader(string|null $header): array
-	{
-		$header = trim($header ?? '');
-		if (strlen($header) === 0) {
-			return [];
-		}
-		return array_reduce(explode(',', $header),
-			function ($carry, $element) {
-				$type = Text::before($element, ';');
-				$quality = str_contains($element, ';q=') ? Text::afterLast($element, ';q=') : 1.00;
-				$carry[trim($type)] = (float) $quality;
-				return $carry;
-			},[]
-		);
-	}
-
 	public static function has(array $array, mixed $key): bool
 	{
 		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
-			if (!array_key_exists($key, $array)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static function hasAll(array $array, mixed $key): bool
-	{
-		$keys = is_array($key) ? $key : [$key];
-		foreach ($keys as $key) {
-			if (!array_key_exists($key, $array)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static function hasAny(array $array, mixed $key): bool
-	{
-		$keys = is_array($key) ? $key : [$key];
-		foreach ($keys as $key) {
-			if (array_key_exists($key, $array)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static function hasNone(array $array, mixed $key): bool
-	{
-		$keys = is_array($key) ? $key : [$key];
-		foreach ($keys as $key) {
-			if (array_key_exists($key, $array)) {
+			if (array_key_exists($key, $array) === false) {
 				return false;
 			}
 		}
@@ -250,7 +154,7 @@ final class Arr
 
 	public static function last(array $array, callable|null $callback = null, mixed $default = null): mixed
 	{
-		if (is_null($callback)) {
+		if ($callback === null) {
 			return empty($array) ? $default : end($array);
 		}
 
@@ -265,10 +169,13 @@ final class Arr
 		return array_combine($keys, $items);
 	}
 
+	/**
+	 * Returns the highest value present in the array.
+	 */
 	public static function max(array $array, float|int|null $limit = null): float|int
 	{
-		$value = max($array);
-		return ($limit !== null && $value >= $limit) ? $limit : $value;
+		$maximum = max($array);
+		return ($limit !== null && $maximum >= $limit) ? $limit : $maximum;
 	}
 
 	public static function median(array $array): float|int|null
@@ -288,29 +195,27 @@ final class Arr
 			return $values[$middle];
 		}
 
-		return Arr::avg([$values[$middle - 1], $values[$middle]]);
+		return Arr::average([$values[$middle - 1], $values[$middle]]);
 	}
 
-	public static function merge(mixed $first, mixed $second): array
-	{
-		return array_merge(convert_to_array($first), convert_to_array($second));
-	}
-
+	/**
+	 * Returns the lowest value present in the array.
+	 */
 	public static function min(array $array, float|int|null $limit = null): float|int
 	{
-		$value = min($array);
-		return ($limit !== null && $value <= $limit) ? $limit : $value;
+		$minimum = min($array);
+		return ($limit !== null && $minimum <= $limit) ? $limit : $minimum;
 	}
 
-	public static function missing(array $array, string|int|array $key): bool
+	public static function missing(array $array, mixed $key): bool
 	{
 		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
-			if (!array_key_exists($key, $array)) {
-				return true;
+			if (array_key_exists($key, $array) === true) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public static function mode(array $array): array|null
@@ -320,7 +225,6 @@ final class Arr
 		}
 
 		$appearances = [];
-
 		foreach ($array as $item) {
 			if (!isset($appearances[$item])) {
 				$appearances[$item] = 0;
@@ -333,35 +237,24 @@ final class Arr
 		return $modes;
 	}
 
-	public static function only(array $array, array $keys): array
-	{
-		$new = [];
-		foreach ($array as $key => $value) {
-			if (in_array($key, $keys)) {
-				$new[$key] = $value;
-			}
-		}
-		return $new;
-	}
-
-	public static function pluck(array $array, string $value, string|null $key = null): array
+	/**
+	 * Returns a new array with each entry only containing the specified field, optionally keyed by the given key.
+	 */
+	public static function pluck(array $array, string $field, string|null $key = null): array
 	{
 		$results = [];
-		$value = explode('.', $value);
+		$fields = explode('.', $field);
 		$key = is_string($key) ? explode('.', $key) : $key;
 
 		foreach ($array as $item) {
-			$item_value = data_get($item, $value);
-
-			if (is_null($key)) {
+			$item_value = data_get($item, $fields);
+			if ($key === null) {
 				$results[] = $item_value;
 			} else {
 				$item_key = data_get($item, $key);
-
 				if (is_object($item_key) && method_exists($item_key, '__toString')) {
 					$item_key = (string)$item_key;
 				}
-
 				$results[$item_key] = $item_value;
 			}
 		}
@@ -369,10 +262,10 @@ final class Arr
 		return $results;
 	}
 
-	public static function random(array $array, int $items = 1): mixed
+	public static function random(array $array, int $amount = 1): mixed
 	{
 		$count = count($array);
-		$requested = $items === 0 ? 1 : (($items > $count) ? $count : $items);
+		$requested = $amount === 0 ? 1 : (($amount > $count) ? $count : $amount);
 
 		if ($requested === 1) {
 			return $array[$randomizer->pickArrayKeys($array)];
@@ -388,29 +281,28 @@ final class Arr
 		return $result;
 	}
 
+	/**
+	 * Reduces the array to a single value, passing the result of each iteration into the next:
+	 */
 	public static function reduce(array $array, callable $callback, mixed $initial = null): mixed
 	{
 		$result = $initial;
-
 		foreach ($array as $key => $value) {
 			$result = $callback($result, $value, $key);
 		}
-
 		return $result;
 	}
 
-	public static function replace(array $array, mixed $items): array
-	{
-		return array_replace($array, convert_to_array($items));
-	}
-
-	public static function replaceRecursive(array $array, mixed $items): array
-	{
-		return array_replace_recursive($array, convert_to_array($items));
-	}
-
+	/**
+	 * Returns the corresponding key of the searched value when found. Uses strict comparisons by default.
+	 * Optionally, you can pass a closure to search for the first item that matches a truth test.
+	 */
 	public static function search(array $array, mixed $value, bool $strict = true): string|int|bool
 	{
+		if (is_object($value)) {
+			$value = spl_object_hash($value);
+		}
+
 		if ($value instanceof Closure === false) {
 			return array_search($value, $array, $strict);
 		}
@@ -425,46 +317,23 @@ final class Arr
 		return false;
 	}
 
-	public static function shuffle(array $array, int|null $seed = null): array
+	public static function shuffle(array $array): array
 	{
-		if (is_null($seed)) {
-			shuffle($array);
-		} else {
-			mt_srand($seed);
-			shuffle($array);
-			mt_srand();
-		}
-
+		shuffle($array);
 		return $array;
 	}
 
-	public static function sort(array $array, callable|int|null $callback = null, bool $descending = false): array
+	public static function sort(array $array, callable|null $callback = null, bool $descending = false): array
 	{
 		if (is_callable($callback)) {
 			uasort($array, $callback);
 		} else {
-			$descending ? arsort($array, $callback ?? SORT_REGULAR) : asort($array, $callback ?? SORT_REGULAR);
+			$descending ? arsort($array) : asort($array);
 		}
 		return $array;
 	}
 
-	public static function sortDesc(array $array, int $options = SORT_REGULAR): array
-	{
-		return self::sort($array, $options, true);
-	}
-
-	public static function sortKeys(array $array, int $options = null, bool $descending = false): array
-	{
-		$descending ? krsort($array, $options) : ksort($array, $options);
-		return $array;
-	}
-
-	public static function sortKeysDesc(array $array, int $options = SORT_REGULAR): array
-	{
-		return self::sortKeys($array, $options, true);
-	}
-
-	public static function sortBy(array $array, mixed $callback, int $options = SORT_REGULAR, bool $descending = false): array
+	public static function sortBy(array $array, mixed $callback, bool $descending = false): array
 	{
 		$results = [];
 		$callback = value_retriever($callback);
@@ -473,7 +342,7 @@ final class Arr
 			$results[$key] = $callback($value, $key);
 		}
 
-		$descending ? arsort($results, $options) : asort($results, $options);
+		$descending ? arsort($results) : asort($results);
 
 		foreach (array_keys($results) as $key) {
 			$results[$key] = $array[$key];
@@ -482,47 +351,39 @@ final class Arr
 		return $results;
 	}
 
-	public static function sortByDesc(array $array, mixed $callback, int $options = SORT_REGULAR): array
+	public static function sortKeys(array $array, bool $descending = false): array
 	{
-		return self::sortBy($array, $callback, $options, true);
+		$descending ? krsort($array) : ksort($array);
+		return $array;
 	}
 
+	/**
+	 * Returns the sum of all items in the array, the specified key or using a closure:
+	 */
 	public static function sum(array $array, callable|string|null $callback = null): int|float
 	{
-		$callback = is_null($callback) ? self::valueCallable() : value_retriever($callback);
+		$callback = $callback === null ? self::valueCallable() : value_retriever($callback);
 		return self::reduce($array, function ($result, $item) use ($callback) {
 			return $result + $callback($item);
 		}, 0);
 	}
 
-	public static function whereNull(array $array): array
+	// -----------------
+
+	public static function fromAcceptHeader(string|null $header): array
 	{
-		foreach ($array as $key => $value) {
-			if (is_array($value)) {
-				$array[$key] = Arr::whereNull($value);
-			}
-
-			if ($array[$key] !== null) {
-				unset($array[$key]);
-			}
+		$header = trim($header ?? '');
+		if (strlen($header) === 0) {
+			return [];
 		}
-
-		return $array;
-	}
-
-	public static function whereNotNull(array $array): array
-	{
-		foreach ($array as $key => $value) {
-			if (is_array($value)) {
-				$array[$key] = Arr::whereNotNull($value);
-			}
-
-			if ($array[$key] === null) {
-				unset($array[$key]);
-			}
-		}
-
-		return $array;
+		return array_reduce(explode(',', $header),
+			function ($carry, $element) {
+				$type = Str::before($element, ';');
+				$quality = str_contains($element, ';q=') ? Str::afterLast($element, ';q=') : 1.00;
+				$carry[trim($type)] = (float) $quality;
+				return $carry;
+			},[]
+		);
 	}
 
 	// -----------------

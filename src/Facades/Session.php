@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Facades;
@@ -47,17 +47,12 @@ final class Session
 		SessionManager::get()->putAllExcept($values, $except);
 	}
 
-	public static function has(string|int $key): bool
+	public static function has(string|int|array $key): bool
 	{
 		return SessionManager::get()->has($key);
 	}
 
-	public static function hasAll(array $keys): bool
-	{
-		return SessionManager::get()->hasAll($keys);
-	}
-
-	public static function missing(string|int $key): bool
+	public static function missing(string|int|array $key): bool
 	{
 		return SessionManager::get()->missing($key);
 	}

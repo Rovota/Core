@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Facades;
@@ -11,8 +11,7 @@ namespace Rovota\Core\Facades;
 use DateTimeZone;
 use Rovota\Core\Localization\Language;
 use Rovota\Core\Localization\LocalizationManager;
-use Rovota\Core\Support\Bucket;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 
 final class Localization
 {
@@ -50,17 +49,17 @@ final class Localization
 	}
 
 	/**
-	 * @returns Collection<int, Language>
+	 * @returns Bucket<int, Language>
 	 */
-	public static function getLanguages(): Collection
+	public static function getLanguages(): Bucket
 	{
 		return LocalizationManager::getLanguages();
 	}
 
 	/**
-	 * @returns Collection<int, Language>
+	 * @returns Bucket<int, Language>
 	 */
-	public static function getLanguagesWithPrefix(string $prefix): Collection
+	public static function getLanguagesWithPrefix(string $prefix): Bucket
 	{
 		return LocalizationManager::getLanguagesWithPrefix($prefix);
 	}

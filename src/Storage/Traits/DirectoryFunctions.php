@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Storage\Traits;
@@ -17,7 +17,7 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use Rovota\Core\Storage\File;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
 
 trait DirectoryFunctions
@@ -29,7 +29,7 @@ trait DirectoryFunctions
 	/**
 	 * @throws FilesystemException
 	 */
-	public function contents(): Collection
+	public function contents(): Bucket
 	{
 		return $this->disk->contents($this->location());
 	}
@@ -37,7 +37,7 @@ trait DirectoryFunctions
 	/**
 	 * @throws FilesystemException
 	 */
-	public function files(): Collection
+	public function files(): Bucket
 	{
 		return $this->disk->files($this->location());
 	}
@@ -45,7 +45,7 @@ trait DirectoryFunctions
 	/**
 	 * @throws FilesystemException
 	 */
-	public function directories(): Collection
+	public function directories(): Bucket
 	{
 		return $this->disk->directories($this->location());
 	}

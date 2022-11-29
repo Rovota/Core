@@ -4,7 +4,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Kernel;
@@ -29,7 +29,7 @@ use Rovota\Core\Routing\RouteManager;
 use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Version;
 use Rovota\Core\Validation\ValidationManager;
 use Rovota\Core\Views\ViewManager;
@@ -119,7 +119,7 @@ final class Application
 
 	public static function isEnvironment(array|string $name): bool
 	{
-		Return Arr::contains(is_array($name) ? $name : [$name], self::$environment);
+		Return Arr::containsAny([self::$environment], is_array($name) ? $name : [$name]);
 	}
 
 	public static function debugEnabled(): bool
@@ -169,7 +169,7 @@ final class Application
 		$server_address = self::$server->get('server_addr');
 		
 		// Check for development
-		if (Text::startsWithAny($server_name, ['dev.', 'local.', 'sandbox.']) || Text::endsWithAny($server_name, ['.localhost', '.local'])) {
+		if (Str::startsWithAny($server_name, ['dev.', 'local.', 'sandbox.']) || Str::endsWithAny($server_name, ['.localhost', '.local'])) {
 			self::$environment = 'development';
 			return;
 		}
@@ -179,13 +179,13 @@ final class Application
 		}
 
 		// Check for testing
-		if (Text::startsWithAny($server_name, ['test.', 'qa.', 'uat.', 'acceptance.', 'integration.']) || Text::endsWithAny($server_name, ['.test', '.example'])) {
+		if (Str::startsWithAny($server_name, ['test.', 'qa.', 'uat.', 'acceptance.', 'integration.']) || Str::endsWithAny($server_name, ['.test', '.example'])) {
 			self::$environment = 'testing';
 			return;
 		}
 
 		// Check for staging
-		if (Text::startsWithAny($server_name, ['stage.', 'staging.', 'prepod.'])) {
+		if (Str::startsWithAny($server_name, ['stage.', 'staging.', 'prepod.'])) {
 			self::$environment = 'staging';
 			return;
 		}

@@ -3,20 +3,20 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Support\Traits;
 
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Meta;
 
 trait Metadata
 {
 	/**
-	 * @var Collection<string, Meta>
+	 * @var Bucket<string, Meta>
 	 */
-	public Collection $meta;
+	public Bucket $meta;
 
 	// -----------------
 
@@ -48,7 +48,7 @@ trait Metadata
 		$model->value = $value;
 
 		if ($model->save()) {
-			$this->meta->put($name, $model);
+			$this->meta->set($name, $model);
 			return true;
 		}
 
@@ -77,7 +77,7 @@ trait Metadata
 
 	protected function prepareMeta(): void
 	{
-		$this->meta = new Collection();
+		$this->meta = new Bucket();
 	}
 
 }

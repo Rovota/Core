@@ -3,13 +3,13 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Localization;
 
 use JsonSerializable;
-use Rovota\Core\Support\Bucket;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Macroable;
 
 class Formatter implements JsonSerializable

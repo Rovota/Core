@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Logging;
@@ -13,7 +13,7 @@ use Monolog\Logger as MonoLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Rovota\Core\Logging\Interfaces\LogInterface;
 use Rovota\Core\Logging\Traits\SharedFunctions;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Stringable;
 
 abstract class Logger implements LogInterface
@@ -45,7 +45,7 @@ abstract class Logger implements LogInterface
 	 */
 	public static function createUsing(array $options, string|null $name = null): LogInterface
 	{
-		return LoggingManager::build($name ?? Text::random(20), $options);
+		return LoggingManager::build($name ?? Str::random(20), $options);
 	}
 
 	// -----------------

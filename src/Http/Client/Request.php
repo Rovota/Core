@@ -3,14 +3,14 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Http\Client;
 
 use GuzzleHttp\Client as Guzzle;
 use Rovota\Core\Http\Client\Traits\ConfigModifiers;
-use Rovota\Core\Support\Bucket;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
 
 final class Request
@@ -44,7 +44,7 @@ final class Request
 	 */
 	public function execute(): Response
 	{
-		$response = $this->guzzle->request($this->method, $this->location, $this->config->all());
+		$response = $this->guzzle->request($this->method, $this->location, $this->config->toArray());
 		return new Response($response);
 	}
 

@@ -3,29 +3,29 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Database\Casts;
 
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Set;
 
-final class CollectionCast extends Cast
+final class SetCast extends Cast
 {
 
 	public function allowedValue(mixed $value, array $options): bool
 	{
-		return $value instanceof Collection;
+		return $value instanceof Set;
 	}
 
 	public function supportsValue(mixed $value): bool
 	{
-		return $value instanceof Collection;
+		return $value instanceof Set;
 	}
 
 	// -----------------
 
-	public function get(mixed $value, array $options): Collection
+	public function get(mixed $value, array $options): Set
 	{
 		$separator = $options[0] ?? ',';
 		if(str_contains($value, $separator)) {
@@ -33,12 +33,12 @@ final class CollectionCast extends Cast
 		} else {
 			$items = strlen($value) > 0 ? [$value] : [];
 		}
-		return new Collection($items);
+		return new Set($items);
 	}
 
 	public function set(mixed $value, array $options): string
 	{
-		return implode($options[0] ?? ',', $value->all());
+		return implode($options[0] ?? ',', $value->toArray());
 	}
 
 }

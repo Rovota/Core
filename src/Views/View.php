@@ -3,12 +3,12 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Views;
 
-use Rovota\Core\Support\MessageBucket;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
@@ -22,15 +22,15 @@ class View
 
 	// -----------------
 
-	public function __construct(string|null $file, array $data, MessageBucket $errors)
+	public function __construct(string|null $file, array $data, Bucket $errors)
 	{
-		$this->variables = new MessageBucket();
+		$this->variables = new Bucket();
 
 		if ($this->file === null) {
 			$this->file = $file;
 		}
 
-		$this->passErrors($errors->all());
+		$this->passErrors($errors->toArray());
 
 		foreach ($data as $type => $items) {
 			if ($type === 'variables') {
@@ -71,7 +71,7 @@ class View
 		ob_get_clean();
 		ob_start();
 
-		extract($this->variables->all());
+		extract($this->variables->toArray());
 		$errors = $this->errors;
 		$this->variables->flush();
 

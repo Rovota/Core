@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Storage\Traits;
@@ -20,7 +20,7 @@ use Rovota\Core\Storage\Directory;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Media;
 use Rovota\Core\Support\ImageObject;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 
 trait FileFunctions
@@ -156,7 +156,7 @@ trait FileFunctions
 	public function prepend(string $contents, bool $new_line = true): static
 	{
 		$new_line = empty($this->asString()) === false && $new_line === true;
-		$this->contents = Text::finish($contents, $new_line ? "\n" : '').$this->asString();
+		$this->contents = Str::finish($contents, $new_line ? "\n" : '').$this->asString();
 		$this->unsaved_changes = true;
 		return $this;
 	}
@@ -167,7 +167,7 @@ trait FileFunctions
 	public function append(string $contents, bool $new_line = true): static
 	{
 		$new_line = empty($this->asString()) === false && $new_line === true;
-		$this->contents = Text::finish($this->asString(), $new_line ? "\n" : '').$contents;
+		$this->contents = Str::finish($this->asString(), $new_line ? "\n" : '').$contents;
 		$this->unsaved_changes = true;
 		return $this;
 	}

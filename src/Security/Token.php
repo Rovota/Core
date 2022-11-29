@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Security;
@@ -11,7 +11,7 @@ namespace Rovota\Core\Security;
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Database\Model;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use function now;
 
 /**
@@ -52,7 +52,7 @@ class Token extends Model
 			'user_id' => $identity->getId(),
 			'ip' => request()->ip(),
 			'client' => request()->client(),
-			'hash' => Text::random(100),
+			'hash' => Str::random(100),
 			'expiration' => now()->addMinutes(30),
 		], $attributes);
 

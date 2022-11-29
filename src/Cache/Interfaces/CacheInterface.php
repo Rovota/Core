@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Cache\Interfaces;
@@ -29,11 +29,9 @@ interface CacheInterface
 
 	public function forever(string|int $key, mixed $value): void;
 
-	public function has(string|int $key): bool;
+	public function has(string|int|array $key): bool;
 
-	public function hasAll(array $keys): bool;
-
-	public function missing(string|int $key): bool;
+	public function missing(string|int|array $key): bool;
 
 	/**
 	 * Returns the cached value (or the default), and then removes it from cache.

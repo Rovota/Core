@@ -3,14 +3,14 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Facades;
 
 use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Cache\CacheStore;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 final class Cache
 {
@@ -31,7 +31,7 @@ final class Cache
 	 */
 	public static function build(array $options, string|null $name = null): CacheStore
 	{
-		return CacheManager::build($name ?? Text::random(20), $options);
+		return CacheManager::build($name ?? Str::random(20), $options);
 	}
 
 	// -----------------
@@ -56,17 +56,12 @@ final class Cache
 		CacheManager::get()->forever($key, $value);
 	}
 
-	public static function has(string|int $key): bool
+	public static function has(string|int|array $key): bool
 	{
 		return CacheManager::get()->has($key);
 	}
 
-	public static function hasAll(array $keys): bool
-	{
-		return CacheManager::get()->hasAll($keys);
-	}
-
-	public static function missing(string|int $key): bool
+	public static function missing(string|int|array $key): bool
 	{
 		return CacheManager::get()->missing($key);
 	}

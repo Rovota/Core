@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Facades;
@@ -11,7 +11,7 @@ namespace Rovota\Core\Facades;
 use Rovota\Core\Routing\RouteGroup;
 use Rovota\Core\Routing\RouteManager;
 use Rovota\Core\Routing\Route as RouteObject;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 
 final class Route
 {
@@ -46,7 +46,7 @@ final class Route
 		return RouteManager::findRouteByName($name);
 	}
 
-	public static function allWithGroupName(string $name): Collection
+	public static function allWithGroupName(string $name): Bucket
 	{
 		return RouteManager::findRoutesWithGroupName($name);
 	}

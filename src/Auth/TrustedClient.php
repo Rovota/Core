@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Auth;
@@ -11,7 +11,7 @@ namespace Rovota\Core\Auth;
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Database\Model;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 
 /**
  * @property int $id
@@ -47,7 +47,7 @@ class TrustedClient extends Model
 			'name' => request()->device(),
 			'label' => request()->client() ?? 'Unknown',
 			'ip' => request()->ip(),
-			'hash' => Text::random(80),
+			'hash' => Str::random(80),
 		], $attributes);
 
 		return new static($attributes);

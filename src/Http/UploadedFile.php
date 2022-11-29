@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Http;
@@ -12,12 +12,12 @@ use ImagickException;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToWriteFile;
 use Rovota\Core\Facades\Registry;
+use Rovota\Core\Http\Enums\UploadError;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
 use Rovota\Core\Storage\StorageManager;
-use Rovota\Core\Support\Enums\UploadError;
 use Rovota\Core\Support\ImageObject;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use SplFileInfo;
 use const PATHINFO_EXTENSION;
 
@@ -103,7 +103,7 @@ class UploadedFile extends SplFileInfo
 			return false;
 		}
 
-		$this->variants['original']->path = Text::finish(trim($path), '/');
+		$this->variants['original']->path = Str::finish(trim($path), '/');
 		$this->variants['original']->disk = $disk instanceof DiskInterface ? $disk : StorageManager::get($disk);
 
 		if (empty($variants)) {

@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Support\Traits;
@@ -20,7 +20,7 @@ trait EnumHelpers
 
 	public function isNone(array $items): bool
 	{
-		return Arr::containsNone($items, [$this]);
+		return Arr::containsAny($items, [$this]) === false;
 	}
 
 }

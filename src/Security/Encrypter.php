@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  *
  * Inspired by Laravel Illuminate/Encryption/Encrypter class.
  */
@@ -36,7 +36,7 @@ final class Encrypter
 	public function __construct(string $key, string|null $cipher = 'aes-256-gcm')
 	{
 		if (!Encrypter::supports($key, $cipher)) {
-			$ciphers = collect(self::$supported_ciphers)->keys()->join(', ', ' and ');
+			$ciphers = as_bucket(self::$supported_ciphers)->keys()->join(', ', ' and ');
 			throw new IncorrectKeyException("Unsupported cipher or incorrect key length. Supported ciphers are: $ciphers.");
 		}
 

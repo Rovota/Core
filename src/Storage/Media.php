@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Storage;
@@ -14,11 +14,11 @@ use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Enums\MediaType;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Collection;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Metadata;
 use Throwable;
 
@@ -166,7 +166,7 @@ class Media extends Model
 
 	public function hasVariant(array|string $variant): bool
 	{
-		return Arr::containsAny($this->variants, is_string($variant) ? [$variant] : $variant);
+		return Arr::containsAny($this->variants, is_array($variant) ? $variant : [$variant]);
 	}
 
 	public function publicUrl(string|null $variant = null): string
@@ -182,20 +182,20 @@ class Media extends Model
 	// -----------------
 
 	/**
-	 * @return Collection<int, MediaFolder>
+	 * @return Bucket<int, MediaFolder>
 	 */
-	public function folders(): Collection
+	public function folders(): Bucket
 	{
 		if ($this->folder_id !== null) {
-			return collect($this->folder->parents())->put($this->folder_id, $this->folder);
+			return as_bucket($this->folder->parents())->set($this->folder_id, $this->folder);
 		}
 
-		return collect([]);
+		return as_bucket([]);
 	}
 
 	public function foldersAsString(string $separator = ' / '): string
 	{
-		return implode($separator, $this->folders()->pluck('label')->all());
+		return implode($separator, $this->folders()->pluck('label')->toArray());
 	}
 
 	// -----------------
@@ -270,7 +270,7 @@ class Media extends Model
 
 	protected function getDiskLocationForVariant(string $variant): string
 	{
-		$base = Text::finish($this->file_path, '/');
+		$base = Str::finish($this->file_path, '/');
 		if ($variant !== 'original' && in_array($variant, $this->variants)) {
 			return $base.$variant.'/'.$this->file_name;
 		}

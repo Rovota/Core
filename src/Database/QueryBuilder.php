@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Database;
@@ -12,8 +12,9 @@ use Envms\FluentPDO\Queries\Base;
 use Envms\FluentPDO\Queries\Select;
 use Envms\FluentPDO\Query;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
-use Rovota\Core\Support\Collection;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Support\Interfaces\Arrayable;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 use stdClass;
 
@@ -63,7 +64,7 @@ final class QueryBuilder
 			$operator = '=';
 		}
 
-		$column = Text::before($column, ' ');
+		$column = Str::before($column, ' ');
 		$this->addStatement('where', sprintf('%s %s ?', $column, $operator), self::normalized($column, $value));
 
 		return $this;
@@ -83,7 +84,7 @@ final class QueryBuilder
 			$operator = '=';
 		}
 
-		$column = Text::before($column, ' ');
+		$column = Str::before($column, ' ');
 		$this->addStatement('where', sprintf('NOT %s %s ?', $column, $operator), self::normalized($column, $value));
 
 		return $this;
@@ -101,9 +102,9 @@ final class QueryBuilder
 		return $this;
 	}
 
-	public function whereIn(string $column, Collection|array $options): QueryBuilder
+	public function whereIn(string $column, Arrayable|array $options): QueryBuilder
 	{
-		$options = $options instanceof Collection ? $options->all() : $options;
+		$options = $options instanceof Arrayable ? $options->toArray() : $options;
 		foreach ($options as $key => $value) {
 			$options[$key] = self::normalized($column, $value);
 		}
@@ -111,9 +112,9 @@ final class QueryBuilder
 		return $this;
 	}
 
-	public function whereNotIn(string $column, Collection|array $options): QueryBuilder
+	public function whereNotIn(string $column, Arrayable|array $options): QueryBuilder
 	{
-		$options = $options instanceof Collection ? $options->all() : $options;
+		$options = $options instanceof Arrayable ? $options->toArray() : $options;
 		foreach ($options as $key => $value) {
 			$options[$key] = self::normalized($column, $value);
 		}
@@ -189,7 +190,7 @@ final class QueryBuilder
 			$operator = '=';
 		}
 
-		$column = Text::before($column, ' ');
+		$column = Str::before($column, ' ');
 		$this->addStatement('whereOr', sprintf('%s %s ?', $column, $operator), self::normalized($column, $value));
 
 		return $this;
@@ -207,9 +208,9 @@ final class QueryBuilder
 		return $this;
 	}
 
-	public function orWhereIn(string $column, Collection|array $options): QueryBuilder
+	public function orWhereIn(string $column, Arrayable|array $options): QueryBuilder
 	{
-		$options = $options instanceof Collection ? $options->all() : $options;
+		$options = $options instanceof Arrayable ? $options->toArray() : $options;
 		foreach ($options as $key => $value) {
 			$options[$key] = self::normalized($column, $value);
 		}
@@ -217,9 +218,9 @@ final class QueryBuilder
 		return $this;
 	}
 
-	public function orWhereNotIn(string $column, Collection|array $options): QueryBuilder
+	public function orWhereNotIn(string $column, Arrayable|array $options): QueryBuilder
 	{
-		$options = $options instanceof Collection ? $options->all() : $options;
+		$options = $options instanceof Arrayable ? $options->toArray() : $options;
 		foreach ($options as $key => $value) {
 			$options[$key] = self::normalized($column, $value);
 		}
@@ -289,7 +290,7 @@ final class QueryBuilder
 			$operator = '=';
 		}
 
-		$column = Text::before($column, ' ');
+		$column = Str::before($column, ' ');
 		$this->addStatement('having', sprintf('%s %s ?', $column, $operator), $value);
 
 		return $this;
@@ -415,19 +416,19 @@ final class QueryBuilder
 	/**
 	 * @throws \Envms\FluentPDO\Exception
 	 */
-	public function get(): Collection
+	public function get(): Bucket
 	{
 		$this->setQueryMode('select');
-		return new Collection($this->fetchAll());
+		return new Bucket($this->fetchAll());
 	}
 
 	/**
 	 * @throws \Envms\FluentPDO\Exception
 	 */
-	public function getBy(string $column): Collection
+	public function getBy(string $column): Bucket
 	{
 		$this->setQueryMode('select');
-		return new Collection($this->fetchAll($column));
+		return new Bucket($this->fetchAll($column));
 	}
 
 	public function withDeleted(): QueryBuilder

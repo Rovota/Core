@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Database\Traits;
@@ -11,7 +11,8 @@ namespace Rovota\Core\Database\Traits;
 use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Database\Model;
 use Rovota\Core\Database\QueryBuilder;
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Support\Interfaces\Arrayable;
 
 trait QueryFunctions
 {
@@ -43,13 +44,13 @@ trait QueryFunctions
 		return $builder->whereNotBetween($column, $start, $end);
 	}
 
-	public static function whereIn(string $column, Collection|array $options): QueryBuilder
+	public static function whereIn(string $column, Arrayable|array $options): QueryBuilder
 	{
 		$builder = (new static)->newQueryBuilder();
 		return $builder->whereIn($column, $options);
 	}
 
-	public static function whereNotIn(string $column, Collection|array $options): QueryBuilder
+	public static function whereNotIn(string $column, Arrayable|array $options): QueryBuilder
 	{
 		$builder = (new static)->newQueryBuilder();
 		return $builder->whereNotIn($column, $options);
@@ -168,7 +169,7 @@ trait QueryFunctions
 	/**
 	 * @throws \Envms\FluentPDO\Exception
 	 */
-	public static function all(): Collection
+	public static function all(): Bucket
 	{
 		$builder = (new static)->newQueryBuilder();
 		return $builder->get();
@@ -177,7 +178,7 @@ trait QueryFunctions
 	/**
 	 * @throws \Envms\FluentPDO\Exception
 	 */
-	public static function allBy(string $column): Collection
+	public static function allBy(string $column): Bucket
 	{
 		$builder = (new static)->newQueryBuilder();
 		return $builder->getBy($column);

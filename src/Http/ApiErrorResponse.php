@@ -3,14 +3,14 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Http;
 
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Support\Str;
 use Throwable;
 
 class ApiErrorResponse extends Response
@@ -39,7 +39,7 @@ class ApiErrorResponse extends Response
 	protected function getErrorAsArray(Throwable|ApiError $error): array
 	{
 		return [
-			'type' => Text::afterLast($error::class, '\\'),
+			'type' => Str::afterLast($error::class, '\\'),
 			'code' => $error->getCode(),
 			'message' => match (true) {
 				$error instanceof ApiError => __($error->getMessage(), $error->getParameters()),

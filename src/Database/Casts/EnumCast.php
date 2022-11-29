@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Database\Casts;
@@ -16,7 +16,7 @@ final class EnumCast extends Cast
 
 	public function allowedValue(mixed $value, array $options): bool
 	{
-		if (Arr::containsNone($options[0]::cases(), [$value])) {
+		if (Arr::contains($options[0]::cases(), $value) === false) {
 			return false;
 		}
 		return $value instanceof BackedEnum;

@@ -3,12 +3,12 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  */
 
 namespace Rovota\Core\Routing;
 
-use Rovota\Core\Support\Collection;
+use Rovota\Core\Structures\Bucket;
 
 /**
  * @internal
@@ -86,7 +86,7 @@ final class RouteManager
 		return self::$router->findRouteByName($name);
 	}
 
-	public static function findRoutesWithGroupName(string $name): Collection
+	public static function findRoutesWithGroupName(string $name): Bucket
 	{
 		return self::$router->findRoutesWithGroupName($name);
 	}

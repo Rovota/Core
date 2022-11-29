@@ -3,7 +3,7 @@
 /**
  * @author      Software Department <developers@rovota.com>
  * @copyright   Copyright (c), Rovota
- * @license     Rovota License
+ * @license     MIT
  *
  * The parameter extraction logic has been derived from bramus/router:
  * @author      Bram(us) Van Damme <bramus@bram.us>
@@ -19,8 +19,8 @@ use Rovota\Core\Http\Response;
 use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Kernel\MiddlewareManager;
 use Rovota\Core\Kernel\Resolver;
-use Rovota\Core\Support\Collection;
-use Rovota\Core\Support\Text;
+use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Support\Str;
 
 /**
  * @internal
@@ -28,9 +28,9 @@ use Rovota\Core\Support\Text;
 final class Router
 {
 	/**
-	 * @var Collection<int, Route>
+	 * @var Bucket<int, Route>
 	 */
-	protected Collection $routes;
+	protected Bucket $routes;
 	protected Route|null $current = null;
 
 	protected array $attributes = [];
@@ -41,7 +41,7 @@ final class Router
 
 	public function __construct()
 	{
-		$this->routes = new Collection();
+		$this->routes = new Bucket();
 
 		$this->setFallback(StatusCode::NotFound);
 	}
@@ -70,7 +70,7 @@ final class Router
 	public function addRoute(array|string $methods, string $path, mixed $target = null): Route
 	{
 		$route = new Route($methods, $path, $target, $this->attributes);
-		$this->routes->add($route);
+		$this->routes->append($route);
 
 		return $route;
 	}
@@ -92,14 +92,12 @@ final class Router
 
 	public function findRouteByName(string $name): Route|null
 	{
-		$key = $this->routes->search(function (Route $route) use ($name) {
+		return $this->routes->first(function (Route $route) use ($name) {
 			return $route->getName() === $name;
 		});
-
-		return $key !== false ? $this->routes->get($key) : null;
 	}
 
-	public function findRoutesWithGroupName(string $name): Collection
+	public function findRoutesWithGroupName(string $name): Bucket
 	{
 		return $this->routes->filter(function (Route $route) use ($name) {
 			if ($route->getName() === null) {
@@ -200,14 +198,14 @@ final class Router
 	protected function getNameAttribute(string $name): string
 	{
 		if (empty($this->attributes['name']) === false) {
-			return $this->attributes['name'].Text::finish($name, '.');
+			return $this->attributes['name'].Str::finish($name, '.');
 		}
-		return Text::finish($name, '.');
+		return Str::finish($name, '.');
 	}
 
 	protected function getPrefixAttribute(string $prefix): string
 	{
-		$prefix = Text::start(Text::trim($prefix, '/'), '/');
+		$prefix = Str::start(Str::trim($prefix, '/'), '/');
 		if (empty($this->attributes['prefix']) === false) {
 			return $this->attributes['prefix'].$prefix;
 		}
