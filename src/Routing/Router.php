@@ -103,7 +103,7 @@ final class Router
 			if ($route->getName() === null) {
 				return false;
 			}
-			return str_starts_with($route->getName(), $name) && string($route->getName())->remove($name)->startsWith('.');
+			return str_starts_with($route->getName(), $name) && text($route->getName())->remove($name)->startsWith('.');
 		});
 	}
 

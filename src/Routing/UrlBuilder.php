@@ -41,7 +41,7 @@ final class UrlBuilder
 
 	public function domain(string $domain): UrlBuilder
 	{
-		$this->domain = string($domain)->after('://')->before('/');
+		$this->domain = text($domain)->after('://')->before('/');
 		return $this;
 	}
 
@@ -50,7 +50,7 @@ final class UrlBuilder
 		if (strlen($subdomain) === 0 || $subdomain === 'www' || $subdomain === '.') {
 			return $this;
 		}
-		$this->domain = string($this->domain)->prepend(trim($subdomain, '.').'.');
+		$this->domain = text($this->domain)->prepend(trim($subdomain, '.').'.');
 		return $this;
 	}
 

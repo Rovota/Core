@@ -27,7 +27,7 @@ final class TextCast extends Cast
 
 	public function get(mixed $value, array $options): Text
 	{
-		return string($value);
+		return text($value);
 	}
 
 	public function set(mixed $value, array $options): string

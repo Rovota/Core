@@ -130,7 +130,7 @@ final class Request
 		}
 
 		$useragent = $this->header('User-Agent', '');
-		$useragent = string($useragent)->remove(['(KHTML, like Gecko)', 'CPU '])->between('(', ')');
+		$useragent = text($useragent)->remove(['(KHTML, like Gecko)', 'CPU '])->between('(', ')');
 
 		if ($useragent->contains('iPad')) {
 			return 'iPad';
@@ -142,7 +142,7 @@ final class Request
 			return 'Chromebook';
 		}
 
-		$device = string('');
+		$device = text('');
 
 		$parts = $useragent->explode(';');
 		foreach ($parts as $part) {
@@ -217,12 +217,12 @@ final class Request
 
 	public function isBot(): bool
 	{
-		return string($this->header('User-Agent', ''))->lower()->containsAny($this->client_robots);
+		return text($this->header('User-Agent', ''))->lower()->containsAny($this->client_robots);
 	}
 
 	public function isJson(): bool
 	{
-		return string($this->header('Content-Type', ''))->lower()->contains('json');
+		return text($this->header('Content-Type', ''))->lower()->contains('json');
 	}
 
 	public function isMethod(string $verb): bool
