@@ -13,6 +13,7 @@ use DateTime;
 use DateTimeZone;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Moment;
+use Rovota\Core\Support\Text;
 use Throwable;
 
 trait TypeAccessors
@@ -68,6 +69,11 @@ trait TypeAccessors
 	public function string(string $key, string $default = ''): string
 	{
 		return (string)$this->get($key, $default);
+	}
+
+	public function text(string $key, Text|string $default = ''): Text
+	{
+		return new Text($this->get($key, $default));
 	}
 
 }

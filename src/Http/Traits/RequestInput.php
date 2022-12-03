@@ -17,6 +17,7 @@ use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Structures\Map;
 use Rovota\Core\Support\Moment;
+use Rovota\Core\Support\Text;
 
 trait RequestInput
 {
@@ -128,6 +129,11 @@ trait RequestInput
 	public function string(string $key, string $default = ''): string
 	{
 		return $this->getInputData()->string($key, $default);
+	}
+
+	public function text(string $key, Text|string $default = ''): Text
+	{
+		return $this->getInputData()->text($key, $default);
 	}
 
 	// -----------------

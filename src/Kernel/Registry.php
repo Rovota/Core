@@ -85,6 +85,11 @@ final class Registry
 		return $this->get($name)->value ?? $default;
 	}
 
+	public function text(string $name, Text|string $default = ''): Text
+	{
+		return new Text($this->get($name)->value ?? $default);
+	}
+
 	// -----------------
 
 	public function has(string $name): bool
