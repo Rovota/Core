@@ -17,7 +17,7 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use Rovota\Core\Storage\File;
-use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Support\Traits\Conditionable;
 
 trait DirectoryFunctions
@@ -29,7 +29,7 @@ trait DirectoryFunctions
 	/**
 	 * @throws FilesystemException
 	 */
-	public function contents(): Bucket
+	public function contents(): Sequence
 	{
 		return $this->disk->contents($this->location());
 	}
@@ -37,7 +37,7 @@ trait DirectoryFunctions
 	/**
 	 * @throws FilesystemException
 	 */
-	public function files(): Bucket
+	public function files(): Sequence
 	{
 		return $this->disk->files($this->location());
 	}
@@ -45,7 +45,7 @@ trait DirectoryFunctions
 	/**
 	 * @throws FilesystemException
 	 */
-	public function directories(): Bucket
+	public function directories(): Sequence
 	{
 		return $this->disk->directories($this->location());
 	}
