@@ -21,13 +21,6 @@ final class Str
 
 	// -----------------
 
-	public static function make(string $string): FluentString
-	{
-		return new FluentString($string);
-	}
-
-	// -----------------
-
 	public static function translate(string|null $string, array|object $args = [], string|null $source = null): string
 	{
 		if ($string === null) return '';

@@ -40,7 +40,7 @@ use Rovota\Core\Structures\Map;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Structures\Set;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\FluentString;
+use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
@@ -52,7 +52,7 @@ use Rovota\Core\Views\ViewManager;
 // Strings
 
 if (!function_exists('string')) {
-   function string(string $string): FluentString
+   function string(string $string): Text
    {
       return Str::make($string);
    }

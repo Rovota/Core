@@ -18,7 +18,7 @@ use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Enums\MediaType;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Media;
-use Rovota\Core\Support\FluentString;
+use Rovota\Core\Support\Text;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -59,7 +59,7 @@ class Response
 			$this->content instanceof File => $this->getContentFromFile(),
 			$this->content instanceof ImageObject => $this->getContentFromImage(),
 			$this->content instanceof Media => $this->getContentFromMedia(),
-			$this->content instanceof FluentString => $this->getContentFromFluentString(),
+			$this->content instanceof Text => $this->getContentFromText(),
 			$this->content instanceof View => $this->getContentFromView(),
 			$this->content instanceof JsonSerializable || is_array($this->content) => $this->getContentAsJson(),
 			default => $this->getContentAsString(),
@@ -128,7 +128,7 @@ class Response
 		return $this->content->asString();
 	}
 
-	protected function getContentFromFluentString(): string
+	protected function getContentFromText(): string
 	{
 		return (string) $this->content;
 	}

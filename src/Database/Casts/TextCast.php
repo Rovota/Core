@@ -8,24 +8,24 @@
 
 namespace Rovota\Core\Database\Casts;
 
-use Rovota\Core\Support\FluentString;
+use Rovota\Core\Support\Text;
 
-final class FluentStringCast extends Cast
+final class TextCast extends Cast
 {
 
 	public function allowedValue(mixed $value, array $options): bool
 	{
-		return $value instanceof FluentString;
+		return $value instanceof Text;
 	}
 
 	public function supportsValue(mixed $value): bool
 	{
-		return $value instanceof FluentString;
+		return $value instanceof Text;
 	}
 
 	// -----------------
 
-	public function get(mixed $value, array $options): FluentString
+	public function get(mixed $value, array $options): Text
 	{
 		return string($value);
 	}

@@ -10,7 +10,7 @@ namespace Rovota\Core\Kernel;
 
 use BackedEnum;
 use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\FluentString;
+use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Moment;
 use Throwable;
 
@@ -158,7 +158,7 @@ final class Registry
 	{
 		return match(true) {
 			is_bool($value) => $value ? 1 : 0,
-			is_float($value), $value instanceof FluentString => (string)$value,
+			is_float($value), $value instanceof Text => (string)$value,
 			is_array($value) => implode(',', $value),
 			$value instanceof Bucket => $value->join(','),
 			$value instanceof BackedEnum => $value->value,
