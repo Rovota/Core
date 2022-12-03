@@ -60,10 +60,8 @@ final class Application
 	/**
 	 * @throws \Rovota\Core\Session\Exceptions\UnsupportedDriverException
 	 * @throws \Rovota\Core\Convert\Exceptions\MissingLanguageException
-	 * @throws \Rovota\Core\Storage\Exceptions\MissingStorageConfigException
 	 * @throws \Rovota\Core\Cache\Exceptions\MissingCacheConfigException
 	 * @throws \Rovota\Core\Cache\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Storage\Exceptions\UnsupportedDriverException
 	 * @throws \Rovota\Core\Session\Exceptions\MissingSessionConfigException
 	 * @throws \Rovota\Core\Logging\Exceptions\MissingChannelConfigException
 	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException

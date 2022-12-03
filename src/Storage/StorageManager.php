@@ -12,8 +12,10 @@ use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Drivers\Custom;
 use Rovota\Core\Storage\Drivers\Local;
 use Rovota\Core\Storage\Drivers\Sftp;
-use Rovota\Core\Storage\Drivers\AwsS3;
-use Rovota\Core\Storage\Exceptions\MissingStorageConfigException;
+use Rovota\Core\Storage\Drivers\S3;
+use Rovota\Core\Storage\Enums\Driver;
+use Rovota\Core\Storage\Exceptions\DiskMisconfigurationException;
+use Rovota\Core\Storage\Exceptions\MissingDiskConfigException;
 use Rovota\Core\Storage\Exceptions\UnsupportedDriverException;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
 use Throwable;
@@ -25,9 +27,9 @@ final class StorageManager
 	 */
 	protected static array $disks = [];
 
-	protected static string|null $default = null;
+	protected static array $configs = [];
 
-	protected static array $config = [];
+	protected static string|null $default = null;
 
 	// -----------------
 
@@ -39,60 +41,54 @@ final class StorageManager
 
 	/**
 	 * @internal
-	 * @throws \Rovota\Core\Storage\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Storage\Exceptions\MissingStorageConfigException
 	 */
 	public static function initialize(): void
 	{
-		$config = require base_path('config/disks.php');
-		self::$default = $config['default'];
+		$file = require base_path('config/disks.php');
 
-		foreach ($config['disks'] as $name => $options) {
-			self::$config[$name] = $options;
-			if ($options['auto_connect'] === false) {
-				continue;
-			}
-			self::connect($name);
+		foreach ($file['disks'] as $name => $config) {
+			self::define($name, $config);
 		}
+
+		self::setDefault($file['default']);
 	}
 
 	// -----------------
 
-	/**
-	 * @throws \Rovota\Core\Storage\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Storage\Exceptions\MissingStorageConfigException
-	 */
-	public static function define(string $name, array $options, bool $connect = false): void
+	public static function define(string $name, array $config): void
 	{
-		self::$config[$name] = $options;
-		if ($connect) {
+		self::$configs[$name] = $config;
+
+		if ($config['auto_connect']) {
 			self::connect($name);
 		}
 	}
 
-	/**
-	 * @throws \Rovota\Core\Storage\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Storage\Exceptions\MissingStorageConfigException
-	 */
 	public static function connect(string $name): void
 	{
-		if (!isset(self::$config[$name])) {
-			throw new MissingStorageConfigException("There is no config found for a disk named '$name'.");
+		if (isset(self::$configs[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingDiskConfigException("There is no config found for a disk named '$name'."));
 		}
-		self::$disks[$name] = self::build($name, self::$config[$name]);
+		self::$disks[$name] = self::build($name, self::$configs[$name]);
 	}
 
-	/**
-	 * @throws \Rovota\Core\Storage\Exceptions\UnsupportedDriverException
-	 */
-	public static function build(string $name, array $options): DiskInterface
+	public static function build(string $name, array $config): DiskInterface
 	{
-		return match ($options['driver']) {
-			'local' => new Local($name, $options),
-			's3' => new AwsS3($name, $options),
-			'sftp' => new Sftp($name, $options),
-			'custom' => new Custom($name, $options),
-			default => throw new UnsupportedDriverException("The selected driver '{$options['driver']}' is not supported.")
+		$config = new DiskConfig($config);
+
+		if (Driver::isSupported($config->get('driver')) === false) {
+			ExceptionHandler::addThrowable(new UnsupportedDriverException("The selected driver '{$config->get('driver')}' is not supported."));
+		}
+
+		if ($config->isValid() === false) {
+			ExceptionHandler::addThrowable(new DiskMisconfigurationException("The disk '$name' cannot be used due to a configuration issue."));
+		}
+
+		return match ($config->driver) {
+			Driver::Custom => new Custom($name, $config),
+			Driver::Local => new Local($name, $config),
+			Driver::S3 => new S3($name, $config),
+			Driver::Sftp => new Sftp($name, $config),
 		};
 	}
 
@@ -100,17 +96,17 @@ final class StorageManager
 
 	public static function isDefined(string $name): bool
 	{
-		return array_key_exists($name, self::$config);
+		return array_key_exists($name, self::$configs);
 	}
 
-	public static function isActive(string $name): bool
+	public static function isConnected(string $name): bool
 	{
 		return array_key_exists($name, self::$disks);
 	}
 
 	// -----------------
 
-	public static function get(string|null $name = null): DiskInterface
+	public static function get(string|null $name = null): DiskInterface|null
 	{
 		if ($name === null) {
 			$name = self::$default;
@@ -124,11 +120,6 @@ final class StorageManager
 			}
 		}
 		return self::$disks[$name];
-	}
-
-	public static function options(string $name): array
-	{
-		return self::$config[$name] ?? [];
 	}
 
 	/**
@@ -148,8 +139,8 @@ final class StorageManager
 
 	public static function setDefault(string $name): void
 	{
-		if (isset(self::$config[$name]) === false) {
-			ExceptionHandler::logMessage('warning', "Undefined disks cannot be set as default: '{name}'.", ['name' => $name]);
+		if (isset(self::$configs[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingDiskConfigException("Undefined disks cannot be set as default: '$name'."));
 		}
 		self::$default = $name;
 	}

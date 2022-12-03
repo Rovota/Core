@@ -10,13 +10,16 @@ namespace Rovota\Core\Storage\Drivers;
 
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use Rovota\Core\Storage\Disk;
+use Rovota\Core\Storage\DiskConfig;
 
 final class Local extends Disk
 {
 
-	public function __construct(string $name, array $options)
+	public function __construct(string $name, DiskConfig $config)
 	{
-		parent::__construct($name, new LocalFilesystemAdapter($options['root']), options: $options);
+		$adapter = new LocalFilesystemAdapter($config->root);
+
+		parent::__construct($name, $adapter, $config);
 	}
 
 }

@@ -10,7 +10,7 @@ namespace Rovota\Core\Storage\Solutions;
 
 use Rovota\Core\Kernel\Interfaces\Solution;
 
-class UnsupportedDriverSolution implements Solution
+class MissingDiskConfigSolution implements Solution
 {
 
 	public function getTitle(): string
@@ -20,7 +20,7 @@ class UnsupportedDriverSolution implements Solution
 
 	public function getDescription(): string
 	{
-		return 'Ensure you have the latest version of Core installed, all dependencies for this driver are present and that the driver name is spelled correctly.';
+		return 'Ensure that you have a disk configured using the name specified. You may have made a spelling error.';
 	}
 
 	public function getDocumentationLinks(): array

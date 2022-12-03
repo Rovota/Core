@@ -13,7 +13,7 @@ use Rovota\Core\Kernel\Interfaces\ProvidesSolution;
 use Rovota\Core\Kernel\Interfaces\Solution;
 use Rovota\Core\Kernel\Solutions\DefaultSolution;
 
-class MissingStorageConfigException extends Exception implements ProvidesSolution
+class MissingDiskConfigException extends Exception implements ProvidesSolution
 {
 
 	public function getSolution(): Solution
