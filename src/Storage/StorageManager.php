@@ -72,16 +72,18 @@ final class StorageManager
 		self::$disks[$name] = self::build($name, self::$configs[$name]);
 	}
 
-	public static function build(string $name, array $config): DiskInterface
+	public static function build(string $name, array $config): DiskInterface|null
 	{
 		$config = new DiskConfig($config);
 
 		if (Driver::isSupported($config->get('driver')) === false) {
 			ExceptionHandler::addThrowable(new UnsupportedDriverException("The selected driver '{$config->get('driver')}' is not supported."));
+			return null;
 		}
 
 		if ($config->isValid() === false) {
 			ExceptionHandler::addThrowable(new DiskMisconfigurationException("The disk '$name' cannot be used due to a configuration issue."));
+			return null;
 		}
 
 		return match ($config->driver) {

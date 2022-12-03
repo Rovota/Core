@@ -37,12 +37,12 @@ final class Storage
 
 	// -----------------
 
-	public static function disk(string $name): DiskInterface
+	public static function disk(string $name): DiskInterface|null
 	{
 		return StorageManager::get($name);
 	}
 
-	public static function build(array $config, string|null $name = null): DiskInterface
+	public static function build(array $config, string|null $name = null): DiskInterface|null
 	{
 		return StorageManager::build($name ?? Str::random(20), $config);
 	}

@@ -29,12 +29,19 @@ enum Driver: string
 			return false;
 		}
 
-		if ($driver === Driver::S3 && class_exists('Aws\S3\S3Client') === false) {
-			return false;
+		if ($driver === Driver::S3) {
+			if (class_exists('League\Flysystem\AwsS3V3\AwsS3V3Adapter') === false) {
+				return false;
+			}
+			if (class_exists('Aws\S3\S3Client') === false) {
+				return false;
+			}
 		}
 
-		if ($driver === Driver::Sftp && class_exists('League\Flysystem\PhpseclibV3\SftpAdapter') === false) {
-			return false;
+		if ($driver === Driver::Sftp) {
+			if (class_exists('League\Flysystem\PhpseclibV3\SftpAdapter') === false) {
+				return false;
+			}
 		}
 
 		return true;
