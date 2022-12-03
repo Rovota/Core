@@ -42,12 +42,9 @@ final class Storage
 		return StorageManager::get($name);
 	}
 
-	/**
-	 * @throws \Rovota\Core\Storage\Exceptions\UnsupportedDriverException
-	 */
-	public static function build(array $options, string|null $name = null): DiskInterface
+	public static function build(array $config, string|null $name = null): DiskInterface
 	{
-		return StorageManager::build($name ?? Str::random(20), $options);
+		return StorageManager::build($name ?? Str::random(20), $config);
 	}
 
 	// -----------------

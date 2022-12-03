@@ -275,7 +275,7 @@ if (!function_exists('file')) {
 if (!function_exists('asset')) {
 	function asset(string $path, string|null $disk = null): string|null
 	{
-		if ($disk === null && StorageManager::isActive('public')) {
+		if ($disk === null && StorageManager::isConnected('public')) {
 			$disk = 'public';
 		}
 		return url()->external(StorageManager::get($disk)->baseUrl().Str::trimLeft($path, '/'));
