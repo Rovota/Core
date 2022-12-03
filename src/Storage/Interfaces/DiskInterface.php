@@ -22,7 +22,7 @@ use Rovota\Core\Storage\Directory;
 use Rovota\Core\Storage\DiskConfig;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Media;
-use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 
@@ -75,17 +75,17 @@ interface DiskInterface
 	/**
 	 * @throws FilesystemException
 	 */
-	public function contents(string $location = '/'): Bucket;
+	public function contents(string $location = '/'): Sequence;
 
 	/**
 	 * @throws FilesystemException
 	 */
-	public function files(string $location = '/'): Bucket;
+	public function files(string $location = '/'): Sequence;
 
 	/**
 	 * @throws FilesystemException
 	 */
-	public function directories(string $location = '/'): Bucket;
+	public function directories(string $location = '/'): Sequence;
 
 	// -----------------
 

@@ -20,7 +20,7 @@ use RecursiveIteratorIterator;
 use Rovota\Core\Storage\Directory;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Media;
-use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
@@ -57,16 +57,16 @@ trait DiskFunctions
 
 	// -----------------
 
-	public function contents(string $location = '/'): Bucket
+	public function contents(string $location = '/'): Sequence
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
 			$listing[] = $item;
 		}
-		return new Bucket($listing);
+		return new Sequence($listing);
 	}
 
-	public function files(string $location = '/'): Bucket
+	public function files(string $location = '/'): Sequence
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
@@ -74,10 +74,10 @@ trait DiskFunctions
 				$listing[] = $item;
 			}
 		}
-		return new Bucket($listing);
+		return new Sequence($listing);
 	}
 
-	public function directories(string $location = '/'): Bucket
+	public function directories(string $location = '/'): Sequence
 	{
 		$listing = [];
 		foreach ($this->flysystem->listContents($location, false) as $item) {
@@ -85,7 +85,7 @@ trait DiskFunctions
 				$listing[] = $item;
 			}
 		}
-		return new Bucket($listing);
+		return new Sequence($listing);
 	}
 
 	// -----------------

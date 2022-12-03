@@ -23,7 +23,7 @@ use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
 use Rovota\Core\Storage\Media;
 use Rovota\Core\Storage\StorageManager;
-use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
@@ -91,7 +91,7 @@ final class Storage
 	/**
 	 * @throws FilesystemException
 	 */
-	public static function contents(string $location = '/'): Bucket
+	public static function contents(string $location = '/'): Sequence
 	{
 		return StorageManager::get()->contents($location);
 	}
@@ -99,7 +99,7 @@ final class Storage
 	/**
 	 * @throws FilesystemException
 	 */
-	public static function files(string $location = '/'): Bucket
+	public static function files(string $location = '/'): Sequence
 	{
 		return StorageManager::get()->files($location);
 	}
@@ -107,7 +107,7 @@ final class Storage
 	/**
 	 * @throws FilesystemException
 	 */
-	public static function directories(string $location = '/'): Bucket
+	public static function directories(string $location = '/'): Sequence
 	{
 		return StorageManager::get()->directories($location);
 	}
