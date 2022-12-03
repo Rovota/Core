@@ -51,10 +51,17 @@ use Rovota\Core\Views\ViewManager;
 // -----------------
 // Strings
 
+if (!function_exists('text')) {
+	function text(string $string): Text
+	{
+		return new Text($string);
+	}
+}
+
 if (!function_exists('string')) {
    function string(string $string): Text
    {
-      return Str::make($string);
+      return new Text($string);
    }
 }
 
