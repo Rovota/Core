@@ -59,6 +59,9 @@ if (!function_exists('text')) {
 }
 
 if (!function_exists('string')) {
+	/**
+	 * @deprecated
+	 */
    function string(string $string): Text
    {
       return new Text($string);
