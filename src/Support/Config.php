@@ -36,6 +36,11 @@ class Config implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 	{
 		return $this->{Str::camel($name)}();
 	}
+	
+	public function __set(string $name, $value): void
+	{
+		$this->set($name, $value);
+	}
 
 	// -----------------
 
