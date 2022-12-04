@@ -17,7 +17,6 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
-use Rovota\Core\Storage\Directory;
 use Rovota\Core\Storage\FileProperties;
 use Rovota\Core\Support\ImageObject;
 
@@ -77,7 +76,7 @@ interface FileInterface
 	 * @throws UnableToWriteFile
 	 * @throws FilesystemException
 	 */
-	public function extract(string|null $target = null): Directory|null;
+	public function extract(string|null $target = null): DirectoryInterface|null;
 
 	// -----------------
 

@@ -15,6 +15,7 @@ use Rovota\Core\Facades\Registry;
 use Rovota\Core\Http\Enums\UploadError;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Str;
@@ -29,7 +30,7 @@ class UploadedFile extends SplFileInfo
 	public bool $validated = false;
 
 	/**
-	 * @var array<string, File>
+	 * @var array<string, FileInterface>
 	 */
 	public array $variants = [];
 
@@ -54,7 +55,7 @@ class UploadedFile extends SplFileInfo
 
 	// -----------------
 
-	public function variant(string $name): File|null
+	public function variant(string $name): FileInterface|null
 	{
 		return $this->variants[$name];
 	}
@@ -186,7 +187,7 @@ class UploadedFile extends SplFileInfo
 
 	// -----------------
 
-	protected function createFileFromUntrustedData(array $untrusted): File|null
+	protected function createFileFromUntrustedData(array $untrusted): FileInterface|null
 	{
 		$contents = fopen($untrusted['temp_name'], 'r');
 

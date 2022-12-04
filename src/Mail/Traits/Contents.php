@@ -9,7 +9,7 @@
 namespace Rovota\Core\Mail\Traits;
 
 use Rovota\Core\Mail\Enums\Encoding;
-use Rovota\Core\Storage\File;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Validation\ValidationManager;
@@ -77,14 +77,15 @@ trait Contents
 	/**
 	 * @throws \League\Flysystem\FilesystemException
 	 */
-	public function attachment(File|string $file, string|null $name = null, string|null $mime_type = null, Encoding $encoding = Encoding::UTF8): static
+	public function attachment(FileInterface|string $file, string|null $name = null, string|null $mime_type = null, Encoding $encoding = Encoding::UTF8): static
 	{
 		if (is_string($file)) {
 			$file = StorageManager::get()->file($file);
 		}
 
-		if ($file instanceof File) {
-			$this->stringAttachment($file->contents, $name ?? $file->name, $mime_type ?? $file->mime_type, $encoding);
+		if ($file instanceof FileInterface) {
+			$name = $name ?? (sprintf('%s.%s', $file->properties()->name, $file->properties()->extension));
+			$this->stringAttachment($file->contents, $name, $mime_type ?? $file->properties()->mime_type, $encoding);
 		}
 
 		return $this;

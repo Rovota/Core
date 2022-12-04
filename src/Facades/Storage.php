@@ -18,10 +18,9 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
-use Rovota\Core\Storage\Directory;
-use Rovota\Core\Storage\File;
+use Rovota\Core\Storage\Interfaces\DirectoryInterface;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
-use Rovota\Core\Storage\Media;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Support\ImageObject;
@@ -57,15 +56,6 @@ final class Storage
 	public static function asImage(string $location): ImageObject|null
 	{
 		return StorageManager::get()->asImage($location);
-	}
-
-	/**
-	 * @throws UnableToReadFile
-	 * @throws FilesystemException
-	 */
-	public static function asMedia(string $location): Media|null
-	{
-		return StorageManager::get()->asMedia($location);
 	}
 
 	/**
@@ -146,7 +136,7 @@ final class Storage
 	 * @throws UnableToRetrieveMetadata
 	 * @throws FilesystemException
 	 */
-	public static function file(string $location, array $without = [], bool $stream = false): File|null
+	public static function file(string $location, array $without = [], bool $stream = false): FileInterface|null
 	{
 		return StorageManager::get()->file($location, $without, $stream);
 	}
@@ -155,7 +145,7 @@ final class Storage
 	 * @throws UnableToCheckExistence
 	 * @throws FilesystemException
 	 */
-	public static function directory(string $location): Directory|null
+	public static function directory(string $location): DirectoryInterface|null
 	{
 		return StorageManager::get()->directory($location);
 	}
@@ -206,7 +196,7 @@ final class Storage
 	 * @throws UnableToRetrieveMetadata
 	 * @throws FilesystemException
 	 */
-	public static function compress(string $source, string|null $target = null): File|null
+	public static function compress(string $source, string|null $target = null): FileInterface|null
 	{
 		return StorageManager::get()->compress($source, $target);
 	}
@@ -217,7 +207,7 @@ final class Storage
 	 * @throws UnableToWriteFile
 	 * @throws FilesystemException
 	 */
-	public static function extract(string $source, string|null $target = null): Directory|null
+	public static function extract(string $source, string|null $target = null): DirectoryInterface|null
 	{
 		return StorageManager::get()->extract($source, $target);
 	}

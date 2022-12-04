@@ -14,6 +14,7 @@ use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Enums\MediaType;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\ImageObject;
@@ -85,23 +86,23 @@ class Media extends Model
 
 	// -----------------
 
-	public static function createUsing(UploadedFile|File $file, array $attributes = []): static
+	public static function createUsing(UploadedFile|FileInterface $file, array $attributes = []): static
 	{
 		$variants = [];
 		if ($file instanceof UploadedFile) {
 			$variants = array_keys($file->variants);
-			$file->variant('original');
+			$file = $file->variant('original');
 		}
 
 		$attributes = array_merge([
-			'file_name' => $file->name,
-			'file_path' => $file->path,
-			'file_size' => $file->size,
-			'disk_name' => $file->disk->name(),
-			'extension' => $file->extension,
-			'mime_type' => $file->mime_type,
+			'file_name' => $file->properties()->name,
+			'file_path' => $file->properties()->path,
+			'file_size' => $file->properties()->size,
+			'disk_name' => $file->properties()->disk->name(),
+			'extension' => $file->properties()->extension,
+			'mime_type' => $file->properties()->mime_type,
 			'variants' => $variants,
-			'type' => MediaManager::getMediaType($file->mime_type),
+			'type' => MediaManager::getMediaType($file->properties()->mime_type),
 		], $attributes);
 
 		return new static($attributes);
@@ -139,7 +140,7 @@ class Media extends Model
 
 	// -----------------
 
-	public function asFile(string|null $variant = null): File|null
+	public function asFile(string|null $variant = null): FileInterface|null
 	{
 		return $this->getFileForVariant($variant ?? 'original');
 	}
@@ -248,7 +249,7 @@ class Media extends Model
 
 	// -----------------
 
-	protected function getFileForVariant(string $variant): File|null
+	protected function getFileForVariant(string $variant): FileInterface|null
 	{
 		if (isset($this->files[$variant])) {
 			return $this->files[$variant];

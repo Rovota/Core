@@ -33,7 +33,7 @@ use Rovota\Core\Partials\Partial;
 use Rovota\Core\Partials\PartialManager;
 use Rovota\Core\Routing\UrlBuilder;
 use Rovota\Core\Session\SessionManager;
-use Rovota\Core\Storage\File;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Structures\Map;
@@ -276,7 +276,7 @@ if (!function_exists('file')) {
 	/**
 	 * @throws \League\Flysystem\FilesystemException
 	 */
-	function file(string $location, string|null $disk = null): File|null
+	function file(string $location, string|null $disk = null): FileInterface|null
 	{
 		return StorageManager::get($disk)->file($location);
 	}

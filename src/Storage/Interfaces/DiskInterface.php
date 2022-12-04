@@ -18,10 +18,7 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
-use Rovota\Core\Storage\Directory;
 use Rovota\Core\Storage\DiskConfig;
-use Rovota\Core\Storage\File;
-use Rovota\Core\Storage\Media;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
@@ -51,12 +48,6 @@ interface DiskInterface
 	 * @throws FilesystemException
 	 */
 	public function asImage(string $location): ImageObject|null;
-
-	/**
-	 * @throws UnableToReadFile
-	 * @throws FilesystemException
-	 */
-	public function asMedia(string $location): Media|null;
 
 	/**
 	 * @throws UnableToReadFile
@@ -112,13 +103,13 @@ interface DiskInterface
 	 * @throws UnableToRetrieveMetadata
 	 * @throws FilesystemException
 	 */
-	public function file(string $location, array $without = [], bool $stream = false): File|null;
+	public function file(string $location, array $without = [], bool $stream = false): FileInterface|null;
 
 	/**
 	 * @throws UnableToCheckExistence
 	 * @throws FilesystemException
 	 */
-	public function directory(string $location): Directory|null;
+	public function directory(string $location): DirectoryInterface|null;
 
 	/**
 	 * @throws UnableToReadFile
@@ -157,7 +148,7 @@ interface DiskInterface
 	 * @throws UnableToRetrieveMetadata
 	 * @throws FilesystemException
 	 */
-	public function compress(string $source, string|null $target = null): File|null;
+	public function compress(string $source, string|null $target = null): FileInterface|null;
 
 	/**
 	 * This functionality is currently only available for disks using the 'local' driver. When the target isn't specified, the archive will be extracted to the same folder as the archive.
@@ -165,7 +156,7 @@ interface DiskInterface
 	 * @throws UnableToWriteFile
 	 * @throws FilesystemException
 	 */
-	public function extract(string $source, string|null $target = null): Directory|null;
+	public function extract(string $source, string|null $target = null): DirectoryInterface|null;
 
 	// -----------------
 

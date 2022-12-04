@@ -9,7 +9,7 @@
 namespace Rovota\Core\Validation\Traits;
 
 use Rovota\Core\Http\UploadedFile;
-use Rovota\Core\Storage\File;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Validation\ValidationManager;
 
 trait FileRules
@@ -21,7 +21,7 @@ trait FileRules
 			$data = $data->variant('original');
 		}
 
-		if ($data instanceof File === false) {
+		if ($data instanceof FileInterface === false) {
 			$this->addError($field, 'file');
 			return false;
 		}
@@ -34,7 +34,7 @@ trait FileRules
 			$data = $data->variant('original');
 		}
 
-		if ($data instanceof File) {
+		if ($data instanceof FileInterface) {
 			if ($data->isAnyExtension($allowed) === false) {
 				$this->addError($field, 'extensions', $allowed);
 				return false;
@@ -50,7 +50,7 @@ trait FileRules
 			$data = $data->variant('original');
 		}
 
-		if ($data instanceof File) {
+		if ($data instanceof FileInterface) {
 			if ($data->isAnyMimeType($allowed) === false) {
 				$this->addError($field, 'mime_types', $allowed);
 				return false;
@@ -66,7 +66,7 @@ trait FileRules
 			$data = $data->variant('original');
 		}
 
-		if (!$data instanceof File) {
+		if (!$data instanceof FileInterface) {
 			return true;
 		}
 

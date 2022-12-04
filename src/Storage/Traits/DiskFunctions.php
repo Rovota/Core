@@ -19,30 +19,22 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Rovota\Core\Storage\Directory;
 use Rovota\Core\Storage\File;
-use Rovota\Core\Storage\Media;
+use Rovota\Core\Storage\Interfaces\DirectoryInterface;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
-use Rovota\Core\Support\Traits\Conditionable;
 use SplFileInfo;
 use Throwable;
 use ZipArchive;
 
 trait DiskFunctions
 {
-	use Conditionable;
-
-	// -----------------
 
 	public function asImage(string $location): ImageObject|null
 	{
 		return $this->retrieveFileWithFields($location, [])?->asImage();
-	}
-
-	public function asMedia(string $location): Media|null
-	{
-		return $this->retrieveFileWithFields($location, [])?->asMedia();
 	}
 
 	public function asHash(string $location, string $algo = 'sha256', bool $binary = false): string|null
@@ -109,7 +101,7 @@ trait DiskFunctions
 
 	// -----------------
 
-	public function file(string $location, array $without = [], bool $stream = false): File|null
+	public function file(string $location, array $without = [], bool $stream = false): FileInterface|null
 	{
 		$fields = ['size', 'mime_type', 'last_modified'];
 
@@ -122,7 +114,7 @@ trait DiskFunctions
 		return $this->retrieveFileWithFields($location, $fields, $stream);
 	}
 
-	public function directory(string $location): Directory|null
+	public function directory(string $location): DirectoryInterface|null
 	{
 		return $this->retrieveDirectoryWithFields($location);
 	}
@@ -151,7 +143,7 @@ trait DiskFunctions
 
 	// -----------------
 
-	public function compress(string $source, string|null $target = null): File|null
+	public function compress(string $source, string|null $target = null): FileInterface|null
 	{
 		$archive = new ZipArchive();
 		$data = $this->getDataForCompression($source, $target);
@@ -195,7 +187,7 @@ trait DiskFunctions
 		return $this->file($data['target_disk_path']);
 	}
 
-	public function extract(string $source, string|null $target = null): Directory|null
+	public function extract(string $source, string|null $target = null): DirectoryInterface|null
 	{
 		$archive = new ZipArchive();
 		$source = getcwd().'/'.$this->config->root.'/'.$source;
@@ -275,17 +267,17 @@ trait DiskFunctions
 
 	public function lastModified(string $location): Moment|null
 	{
-		return $this->retrieveFileWithFields($location, ['last_modified'])?->last_modified;
+		return $this->retrieveFileWithFields($location, ['last_modified'])?->properties()->last_modified;
 	}
 
 	public function size(string $location): int
 	{
-		return $this->retrieveFileWithFields($location, ['size'])?->size;
+		return $this->retrieveFileWithFields($location, ['size'])?->properties()->size;
 	}
 
 	public function mimeType(string $location): string|null
 	{
-		return $this->retrieveFileWithFields($location, ['size'])?->mime_type;
+		return $this->retrieveFileWithFields($location, ['mime_type'])?->properties()->mime_type;
 	}
 
 	// -----------------
@@ -339,7 +331,7 @@ trait DiskFunctions
 	 * @throws UnableToRetrieveMetadata
 	 * @throws FilesystemException
 	 */
-	protected function retrieveFileWithFields(string $location, array $fields, bool $stream = false): File|null
+	protected function retrieveFileWithFields(string $location, array $fields, bool $stream = false): FileInterface|null
 	{
 		$contents = $stream ? $this->flysystem->readStream($location) : $this->flysystem->read($location);
 		$extension = pathinfo($location, PATHINFO_EXTENSION);
@@ -366,7 +358,7 @@ trait DiskFunctions
 	 * @throws UnableToCheckExistence
 	 * @throws FilesystemException
 	 */
-	protected function retrieveDirectoryWithFields(string $location): Directory|null
+	protected function retrieveDirectoryWithFields(string $location): DirectoryInterface|null
 	{
 		if ($this->flysystem->directoryExists($location) === false) {
 			return null;
