@@ -343,9 +343,10 @@ final class Request
 		return Application::$server->get('REQUEST_SCHEME', 'https');
 	}
 
-	public function targetHost(): string
+	public function targetHost(bool $with_scheme = false): string
 	{
-		return Application::$server->get('HTTP_HOST');
+		$host = Application::$server->get('HTTP_HOST');
+		return $with_scheme ? sprintf('%s://%s', $this->scheme(), $host) : $host;
 	}
 
 	public function time(): Moment|null
