@@ -26,10 +26,10 @@ class File implements FileInterface
 
 	// -----------------
 
-	public function __construct(mixed $contents, array $properties)
+	public function __construct(mixed $contents, array $properties, bool $unsaved_changes = false)
 	{
 		$this->contents = $contents;
-
+		$this->unsaved_changes = $unsaved_changes;
 		$this->properties = new FileProperties();
 
 		foreach ($properties as $key => $value) {
@@ -53,9 +53,9 @@ class File implements FileInterface
 
 	// -----------------
 
-	public static function make(mixed $contents, array $properties): FileInterface
+	public static function make(mixed $contents, array $properties, bool $unsaved_changes = false): FileInterface
 	{
-		return new static($contents, $properties);
+		return new static($contents, $properties, $unsaved_changes);
 	}
 
 	// -----------------
