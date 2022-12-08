@@ -220,7 +220,7 @@ final class Str
 
 	public static function insert(string $string, int $interval, string $character): string
 	{
-		return implode($character, str_split($string, $interval));
+		return implode($character, mb_str_split($string, $interval));
 	}
 
 	public static function isAscii(string $string): bool
