@@ -9,16 +9,16 @@
 namespace Rovota\Core\Cache\Exceptions;
 
 use Exception;
-use Rovota\Core\Cache\Solutions\MissingCacheConfigSolution;
+use Rovota\Core\Cache\Solutions\CacheMisconfigurationSolution;
 use Rovota\Core\Kernel\Interfaces\ProvidesSolution;
 use Rovota\Core\Kernel\Interfaces\Solution;
 
-class MissingCacheConfigException extends Exception implements ProvidesSolution
+class CacheMisconfigurationException extends Exception implements ProvidesSolution
 {
 
 	public function getSolution(): Solution
 	{
-		return new MissingCacheConfigSolution();
+		return new CacheMisconfigurationSolution();
 	}
 
 }
