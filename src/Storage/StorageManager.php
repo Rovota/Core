@@ -91,6 +91,7 @@ final class StorageManager
 			Driver::Local => new Local($name, $config),
 			Driver::S3 => new S3($name, $config),
 			Driver::Sftp => new Sftp($name, $config),
+			default => null,
 		};
 	}
 
