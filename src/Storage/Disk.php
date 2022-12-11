@@ -100,4 +100,11 @@ abstract class Disk implements DiskInterface
 		return Str::trim($base, '/');
 	}
 
+	// -----------------
+
+	public function flysystem(): Filesystem
+	{
+		return $this->flysystem;
+	}
+
 }

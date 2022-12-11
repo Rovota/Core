@@ -10,7 +10,6 @@ namespace Rovota\Core\Storage\Traits;
 
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
-use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToCheckExistence;
 use League\Flysystem\UnableToReadFile;
@@ -315,13 +314,6 @@ trait DiskFunctions
 			return false;
 		}
 		return hash_equals($first, $second);
-	}
-
-	// -----------------
-
-	public function flysystem(): Filesystem
-	{
-		return $this->flysystem;
 	}
 
 	// -----------------
