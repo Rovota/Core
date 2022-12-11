@@ -163,16 +163,12 @@ if (!function_exists('sanitize_mime_type')) {
 // Components
 
 if (!function_exists('cache')) {
-	function cache(array|string|null $key = null, int|null $retention = null): mixed
+	function cache(string|int|array|null $key = null): mixed
 	{
 		if ($key === null) {
 			return CacheManager::get();
 		}
-		if (is_string($key)) {
-			return CacheManager::get()->read($key);
-		}
-		CacheManager::get()->putMany($key, $retention);
-		return true;
+		return CacheManager::get()->get($key);
 	}
 }
 
