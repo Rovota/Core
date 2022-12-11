@@ -60,13 +60,11 @@ final class Application
 	/**
 	 * @throws \Rovota\Core\Session\Exceptions\UnsupportedDriverException
 	 * @throws \Rovota\Core\Convert\Exceptions\MissingLanguageException
-	 * @throws \Rovota\Core\Cache\Exceptions\MissingCacheConfigException
-	 * @throws \Rovota\Core\Cache\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Session\Exceptions\MissingSessionConfigException
 	 * @throws \Rovota\Core\Logging\Exceptions\MissingChannelConfigException
 	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
 	 * @throws \Rovota\Core\Database\Exceptions\MissingDatabaseConfigException
 	 * @throws \Rovota\Core\Kernel\Exceptions\SystemRequirementException
+	 * @throws \Rovota\Core\Session\Exceptions\MissingSessionConfigException
 	 */
 	public static function start(): void
 	{
