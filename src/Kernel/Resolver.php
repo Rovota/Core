@@ -68,4 +68,16 @@ final class Resolver
 		};
 	}
 
+	// -----------------
+
+	public static function serialize($value): string
+	{
+		return is_numeric($value) && ! in_array($value, [INF, -INF]) && ! is_nan($value) ? $value : serialize($value);
+	}
+
+	public static function deserialize($value): mixed
+	{
+		return is_numeric($value) ? $value : unserialize($value);
+	}
+
 }
