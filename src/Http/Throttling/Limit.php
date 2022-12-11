@@ -169,13 +169,13 @@ final class Limit
 		if ($cache->has($key)) {
 			$cache->increment($key);
 		} else {
-			$cache->put($key, 1, $this->getSecondsFromPeriod($this->period));
+			$cache->set($key, 1, $this->getSecondsFromPeriod($this->period));
 		}
 	}
 
 	public function attempts(): int
 	{
-		return CacheManager::get($this->cache)->read($this->getKeyName(), 0);
+		return CacheManager::get($this->cache)->get($this->getKeyName(), 0);
 	}
 
 	public function tooManyAttempts(): bool
@@ -185,7 +185,7 @@ final class Limit
 
 	public function reset(): void
 	{
-		CacheManager::get($this->cache)->forget($this->getKeyName());
+		CacheManager::get($this->cache)->remove($this->getKeyName());
 	}
 
 	public function remaining(): int

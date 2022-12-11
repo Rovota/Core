@@ -189,14 +189,14 @@ class User extends Model implements Identity
 		if (CacheManager::get()->has($key) === false) {
 			$this->last_active = now();
 			$this->save();
-			CacheManager::get()->put($key, now()->toDateTimeString(), 300);
+			CacheManager::get()->set($key, now()->toDateTimeString(), 300);
 		}
 	}
 
 	public function getLastActive(): Moment
 	{
 		$key = 'last_active_hit:'.$this->getId();
-		return CacheManager::get()->read($key, $this->created);
+		return CacheManager::get()->get($key, $this->created);
 	}
 
 	public function isOnline(int $minutes = 5): bool

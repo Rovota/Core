@@ -9,7 +9,7 @@
 namespace Rovota\Core\Security;
 
 use OTPHP\TOTP;
-use Rovota\Core\Facades\Cache;
+use Rovota\Core\Cache\CacheManager;
 
 class TimeBasedOTP
 {
@@ -50,10 +50,10 @@ class TimeBasedOTP
 
 		if ($accepted === true) {
 			$key = hash('sha256', $this->getSecret()).'-'.$otp;
-			if (Cache::has($key)) {
+			if (CacheManager::get()->has($key)) {
 				return false;
 			}
-			Cache::put($key, 1, $this->getPeriod());
+			CacheManager::get()->set($key, 1, $this->getPeriod());
 		}
 
 		return $accepted;
