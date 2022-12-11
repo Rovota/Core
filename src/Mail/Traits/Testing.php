@@ -30,12 +30,12 @@ trait Testing
 
 	public function hasSubject(): bool
 	{
-		return strlen($this->subject) > 0;
+		return mb_strlen($this->subject) > 0;
 	}
 
 	public function hasSummary(): bool
 	{
-		return strlen($this->variables['mail_summary'] ?? '') > 0;
+		return mb_strlen($this->variables['mail_summary'] ?? '') > 0;
 	}
 
 	public function hasView(): bool

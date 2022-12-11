@@ -164,7 +164,7 @@ trait DiskFunctions
 				foreach ($files as $file) {
 					if ($file->isDir() === false) {
 						$file_path = $file->getRealPath();
-						$relative_path = substr($file_path, strlen($data['source']) + 1);
+						$relative_path = substr($file_path, mb_strlen($data['source']) + 1);
 						$archive->addFile($file_path, $relative_path);
 					}
 				}

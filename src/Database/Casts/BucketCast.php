@@ -31,7 +31,7 @@ final class BucketCast extends Cast
 		if(str_contains($value, $separator)) {
 			$items = explode($separator, $value);
 		} else {
-			$items = strlen($value) > 0 ? [$value] : [];
+			$items = mb_strlen($value) > 0 ? [$value] : [];
 		}
 		return new Bucket($items);
 	}

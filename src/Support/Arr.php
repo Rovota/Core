@@ -372,7 +372,7 @@ final class Arr
 	public static function fromAcceptHeader(string|null $header): array
 	{
 		$header = trim($header ?? '');
-		if (strlen($header) === 0) {
+		if (mb_strlen($header) === 0) {
 			return [];
 		}
 		return array_reduce(explode(',', $header),

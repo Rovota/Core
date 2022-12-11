@@ -135,7 +135,7 @@ final class Encrypter
 		$iv = base64_decode($payload['iv']);
 		$tag = empty($payload['tag']) ? null : base64_decode($payload['tag']);
 
-		if (self::$supported_ciphers[$cipher]['aead'] && strlen($tag) === 32) {
+		if (self::$supported_ciphers[$cipher]['aead'] && mb_strlen($tag) === 32) {
 			throw new PayloadException('The given payload could not be decrypted.');
 		}
 

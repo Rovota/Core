@@ -97,7 +97,7 @@ class SessionProvider extends Provider implements SessionAuthentication
 
 		$cookie = Cookie::findReceived(Registry::string('rovota.auth_session_name', 'account'));
 		if ($cookie !== null) {
-			if (strlen($cookie->value) !== 80) {
+			if (mb_strlen($cookie->value) !== 80) {
 				return !$cookie->expire();
 			}
 			try {
@@ -200,7 +200,7 @@ class SessionProvider extends Provider implements SessionAuthentication
 	{
 		$cookie = CookieManager::findReceived('trusted_client');
 		if ($cookie !== null) {
-			if (strlen($cookie->value) !== 80) {
+			if (mb_strlen($cookie->value) !== 80) {
 				$cookie->expire();
 			} else {
 				try {

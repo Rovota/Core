@@ -41,7 +41,7 @@ final class Str
 				if (array_is_list($args)) {
 					return sprintf($string, ...$args);
 				}
-				$args = as_bucket($args)->sortBy(fn ($variable, $key) => strlen($key), descending: true);
+				$args = as_bucket($args)->sortBy(fn ($variable, $key) => mb_strlen($key), descending: true);
 				foreach ($args as $name => $value) {
 					$string = str_replace(':'.$name, Str::translate($value, source: $source), $string);
 				}
@@ -303,7 +303,7 @@ final class Str
 		$maskable = Str::before($string, '@');
 		$rest = str_replace($maskable, '', $string);
 
-		return Str::mask($maskable, $replacement, $preserve, strlen($maskable) - $preserve).$rest;
+		return Str::mask($maskable, $replacement, $preserve, mb_strlen($maskable) - $preserve).$rest;
 	}
 
 	public static function merge(string $string, string|array $values): string
@@ -385,7 +385,7 @@ final class Str
 	{
 		$position = strpos($string, $target);
 		if ($position !== false) {
-			return substr_replace($string, $value, $position, strlen($target));
+			return substr_replace($string, $value, $position, mb_strlen($target));
 		}
 		return $string;
 	}
@@ -394,7 +394,7 @@ final class Str
 	{
 		$position = strrpos($string, $target);
 		if ($position !== false) {
-			return substr_replace($string, $value, $position, strlen($target));
+			return substr_replace($string, $value, $position, mb_strlen($target));
 		}
 		return $string;
 	}
@@ -410,10 +410,10 @@ final class Str
 		$string = '';
 
 		foreach ($words as $word) {
-			if (strlen($word) < 4) {
+			if (mb_strlen($word) < 4) {
 				$string .= $word.' ';
 			} else {
-				$string .= sprintf('%s%s%s ', $word[0], str_shuffle(substr($word, 1, -1)), $word[strlen($word) - 1]);
+				$string .= sprintf('%s%s%s ', $word[0], str_shuffle(substr($word, 1, -1)), $word[mb_strlen($word) - 1]);
 			}
 		}
 

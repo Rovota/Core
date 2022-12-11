@@ -22,7 +22,7 @@ trait TypeAccessors
 	public function array(string $key, array $default = []): array
 	{
 		$value = $this->get($key);
-		return is_array($value) ? $value : (strlen($value) > 0 ? explode(',', $value ?? '') : $default);
+		return is_array($value) ? $value : (mb_strlen($value ?? '') > 0 ? explode(',', $value ?? '') : $default);
 	}
 
 	public function bool(string $key, bool $default = false): bool

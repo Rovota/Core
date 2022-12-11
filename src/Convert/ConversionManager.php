@@ -171,7 +171,7 @@ final class ConversionManager
 
 	public static function textToBytes(string $size): int
 	{
-		if (strlen($size) === 0) {
+		if (mb_strlen($size) === 0) {
 			return 0;
 		}
 

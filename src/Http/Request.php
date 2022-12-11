@@ -147,7 +147,7 @@ final class Request
 		$parts = $useragent->explode(';');
 		foreach ($parts as $part) {
 			$part = trim($part);
-			if (Str::containsAny($part, ['Linux', 'Android', 'Mobile', 'like Mac', 'Win64', 'x64', 'x86', 'Macintosh']) || strlen($part) < 4) {
+			if (Str::containsAny($part, ['Linux', 'Android', 'Mobile', 'like Mac', 'Win64', 'x64', 'x86', 'Macintosh']) || mb_strlen($part) < 4) {
 				continue;
 			}
 			$device->append(', '.$part);
@@ -418,7 +418,7 @@ final class Request
 		$header = $this->header('Authorization');
 		if ($header !== null) {
 			$value = Str::after($header, ' ');
-			return strlen($value) > 0 ? $value : null;
+			return mb_strlen($value) > 0 ? $value : null;
 		}
 		return null;
 	}
@@ -428,7 +428,7 @@ final class Request
 		$header = $this->header('Authorization');
 		if ($header !== null) {
 			$value = Str::before($header, ' ');
-			return strlen($value) > 0 ? $value : null;
+			return mb_strlen($value) > 0 ? $value : null;
 		}
 		return null;
 	}
@@ -589,7 +589,7 @@ final class Request
 
 		$normalized = [];
 		foreach ($locales as $locale => $quality) {
-			$locale = strlen($locale) === 2 ? $locale.'_'.strtoupper($locale) : $locale;
+			$locale = mb_strlen($locale) === 2 ? $locale.'_'.strtoupper($locale) : $locale;
 			$locale = str_replace('-', '_', $locale);
 			if (!isset($locales[$locale])) {
 				$normalized[$locale] = $quality;

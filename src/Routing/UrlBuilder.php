@@ -47,7 +47,7 @@ final class UrlBuilder
 
 	public function subdomain(string $subdomain): UrlBuilder
 	{
-		if (strlen($subdomain) === 0 || $subdomain === 'www' || $subdomain === '.') {
+		if (mb_strlen($subdomain) === 0 || $subdomain === 'www' || $subdomain === '.') {
 			return $this;
 		}
 		$this->domain = text($this->domain)->prepend(trim($subdomain, '.').'.');
