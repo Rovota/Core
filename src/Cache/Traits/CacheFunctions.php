@@ -27,7 +27,7 @@ trait CacheFunctions
 			return;
 		}
 		foreach (is_array($key) ? $key : [$key => $value] as $key => $value) {
-			$this->adapter->set($this->getFullKey($key), $value, $retention);
+			$this->adapter->set($this->getFullKey($key), $value, $this->getRetentionPeriod($retention));
 		}
 	}
 
@@ -145,7 +145,12 @@ trait CacheFunctions
 		if (Application::isEnvironment($this->config->disabled_for)) {
 			return true;
 		}
-		return $this->config->get('retention') === 0;
+		return $this->config->retention === 0;
+	}
+
+	protected function getRetentionPeriod(int|null $retention): int
+	{
+		return $retention ?? $this->config->retention;
 	}
 
 	protected function getFullKey(string|int $key): string
