@@ -152,7 +152,7 @@ final class Connection implements ConnectionInterface
 
 	public function hasTimezoneData(): bool
 	{
-		$result = $this->query("SELECT CONVERT_TZ('2022-01-01 1:00:00','UTC','Europe/Amsterdam') AS time")->fetch();
+		$result = $this->query("SELECT CONVERT_TZ('2023-01-01 1:00:00','UTC','Europe/Amsterdam') AS time")->fetch();
 		return (bool)$result->time;
 	}
 
