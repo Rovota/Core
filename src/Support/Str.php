@@ -502,14 +502,14 @@ final class Str
 		return $characters !== null ? trim($string, $characters) : trim($string);
 	}
 
-	public static function trimLeft(string $string, string|null $characters = null): string
-	{
-		return $characters !== null ? ltrim($string, $characters) : ltrim($string);
-	}
-
-	public static function trimRight(string $string, string|null $characters = null): string
+	public static function trimEnd(string $string, string|null $characters = null): string
 	{
 		return $characters !== null ? rtrim($string, $characters) : rtrim($string);
+	}
+
+	public static function trimStart(string $string, string|null $characters = null): string
+	{
+		return $characters !== null ? ltrim($string, $characters) : ltrim($string);
 	}
 
 	public static function upper(string $string): string

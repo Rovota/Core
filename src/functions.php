@@ -284,7 +284,7 @@ if (!function_exists('asset')) {
 		if ($disk === null && StorageManager::isConnected('public')) {
 			$disk = 'public';
 		}
-		return url()->external(StorageManager::get($disk)->baseUrl().Str::trimLeft($path, '/'));
+		return url()->external(StorageManager::get($disk)->baseUrl().Str::trimStart($path, '/'));
 	}
 }
 

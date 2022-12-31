@@ -465,18 +465,18 @@ final class Text implements Stringable, JsonSerializable
 		return $this;
 	}
 
-	public function trimLeft(string|null $characters = null): Text
+	public function trimEnd(string|null $characters = null): Text
 	{
-		$this->string = Str::trimLeft($this->string, $characters);
+		$this->string = Str::trimEnd($this->string, $characters);
 		return $this;
 	}
 
-	public function trimRight(string|null $characters = null): Text
+
+	public function trimStart(string|null $characters = null): Text
 	{
-		$this->string = Str::trimRight($this->string, $characters);
+		$this->string = Str::trimStart($this->string, $characters);
 		return $this;
 	}
-
 	public function upper(): Text
 	{
 		$this->string = Str::upper($this->string);
