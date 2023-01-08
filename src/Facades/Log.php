@@ -27,17 +27,11 @@ final class Log
 		return LoggingManager::get($name);
 	}
 
-	/**
-	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
-	 */
 	public static function stack(array $channels, string|null $name = null): ChannelInterface
 	{
 		return StackChannel::createUsing($channels, $name);
 	}
 
-	/**
-	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
-	 */
 	public static function build(array $options, string|null $name = null): ChannelInterface
 	{
 		return Channel::createUsing($options, $name);
