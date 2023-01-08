@@ -11,7 +11,6 @@ namespace Rovota\Core\Logging;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Logging\Drivers\Discord;
 use Rovota\Core\Logging\Drivers\Monolog;
-use Rovota\Core\Logging\Drivers\Stack;
 use Rovota\Core\Logging\Drivers\Stream;
 use Rovota\Core\Logging\Enums\Driver;
 use Rovota\Core\Logging\Exceptions\ChannelMisconfigurationException;

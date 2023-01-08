@@ -8,10 +8,6 @@
 
 namespace Rovota\Core\Logging\Enums;
 
-use Rovota\Core\Logging\Drivers\Discord;
-use Rovota\Core\Logging\Drivers\Monolog;
-use Rovota\Core\Logging\Drivers\Stack;
-use Rovota\Core\Logging\Drivers\Stream;
 use Rovota\Core\Support\Traits\EnumHelpers;
 
 enum Driver: string

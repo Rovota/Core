@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Logging;
 
-use Monolog\Level;
 use Rovota\Core\Logging\Enums\Driver;
 use Rovota\Core\Support\Config;
 
