@@ -9,16 +9,11 @@
 namespace Rovota\Core\Logging\Interfaces;
 
 use Monolog\Logger;
+use Rovota\Core\Logging\ChannelConfig;
 use Stringable;
 
-interface LogInterface
+interface ChannelInterface
 {
-
-	public function when(mixed $condition, callable $callback, callable|null $alternative = null): LogInterface;
-
-	public function unless(mixed $condition, callable $callback, callable|null $alternative = null): LogInterface;
-
-	// -----------------
 
 	public function isDefault(): bool;
 
@@ -26,15 +21,11 @@ interface LogInterface
 
 	public function name(): string;
 
-	// -----------------
-
-	public function option(string $name): string|int|array|null;
-
-	public function driver(): string;
+	public function config(): ChannelConfig;
 
 	// -----------------
 
-	public function attach(LogInterface|string|array $channel): LogInterface;
+	public function attach(ChannelInterface|string|array $channel): ChannelInterface;
 
 	// -----------------
 

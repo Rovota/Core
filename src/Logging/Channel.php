@@ -9,41 +9,79 @@
 namespace Rovota\Core\Logging;
 
 use Monolog\Handler\HandlerInterface;
-use Monolog\Logger as MonoLogger;
+use Monolog\Logger;
 use Monolog\Processor\PsrLogMessageProcessor;
-use Rovota\Core\Logging\Interfaces\LogInterface;
-use Rovota\Core\Logging\Traits\SharedFunctions;
+use Rovota\Core\Kernel\ExceptionHandler;
+use Rovota\Core\Logging\Interfaces\ChannelInterface;
 use Rovota\Core\Support\Str;
+use Rovota\Core\Support\Traits\Conditionable;
 use Stringable;
+use Throwable;
 
-abstract class Logger implements LogInterface
+abstract class Channel implements ChannelInterface
 {
-	use SharedFunctions;
+	use Conditionable;
 
 	protected string $name;
 
-	protected array $options;
+	protected ChannelConfig $config;
 
-	protected MonoLogger $monolog;
+	protected HandlerInterface $handler;
+
+	protected Logger $logger;
 
 	// -----------------
 
-	public function __construct(string $name, HandlerInterface $handler, array $options = [])
+	public function __construct(string $name, HandlerInterface $handler, ChannelConfig $config)
 	{
 		$this->name = $name;
-		$this->options = $options;
+		$this->config = $config;
 
-		$this->monolog = new MonoLogger($name);
-		$this->monolog->pushHandler($handler);
-		$this->monolog->pushProcessor(new PsrLogMessageProcessor());
+		$this->handler = $handler;
+		$this->logger = new Logger($name);
+		$this->logger->pushHandler($handler);
+		$this->logger->pushProcessor(new PsrLogMessageProcessor());
 	}
 
 	// -----------------
 
-	/**
-	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
-	 */
-	public static function createUsing(array $options, string|null $name = null): LogInterface
+	public function __toString(): string
+	{
+		return $this->name;
+	}
+
+	public function __get(string $name): mixed
+	{
+		return $this->config->get($name);
+	}
+
+	public function __isset(string $name): bool
+	{
+		return $this->config->has($name);
+	}
+
+	// -----------------
+
+	public function isDefault(): bool
+	{
+		return LoggingManager::getDefault() === $this->name;
+	}
+
+	// -----------------
+
+	public function name(): string
+	{
+		return $this->name;
+	}
+
+	public function config(): ChannelConfig
+	{
+		return $this->config;
+	}
+
+	// -----------------
+
+	public static function createUsing(array $options, string|null $name = null): ChannelInterface
 	{
 		return LoggingManager::build($name ?? Str::random(20), $options);
 	}
@@ -97,9 +135,22 @@ abstract class Logger implements LogInterface
 
 	// -----------------
 
-	public function monolog(): MonoLogger|null
+	public function attach(ChannelInterface|string|array $channel): ChannelInterface
 	{
-		return $this->monolog;
+		try {
+			// Create an on-demand stack using the current and new channel(s).
+			return StackChannel::createUsing([$this])->attach($channel);
+		} catch (Throwable $throwable) {
+			ExceptionHandler::addThrowable($throwable);
+			return $this;
+		}
+	}
+
+	// -----------------
+
+	public function monolog(): Logger|null
+	{
+		return $this->logger;
 	}
 
 }

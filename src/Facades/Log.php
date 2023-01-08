@@ -8,10 +8,10 @@
 
 namespace Rovota\Core\Facades;
 
-use Rovota\Core\Logging\Drivers\Stack;
-use Rovota\Core\Logging\Interfaces\LogInterface;
-use Rovota\Core\Logging\Logger;
+use Rovota\Core\Logging\Interfaces\ChannelInterface;
+use Rovota\Core\Logging\Channel;
 use Rovota\Core\Logging\LoggingManager;
+use Rovota\Core\Logging\StackChannel;
 
 final class Log
 {
@@ -22,7 +22,7 @@ final class Log
 
 	// -----------------
 
-	public static function channel(string $name): LogInterface
+	public static function channel(string $name): ChannelInterface
 	{
 		return LoggingManager::get($name);
 	}
@@ -30,17 +30,17 @@ final class Log
 	/**
 	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
 	 */
-	public static function stack(array $channels): LogInterface
+	public static function stack(array $channels, string|null $name = null): ChannelInterface
 	{
-		return Stack::createUsing($channels);
+		return StackChannel::createUsing($channels, $name);
 	}
 
 	/**
 	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
 	 */
-	public static function build(array $options, string|null $name = null): LogInterface
+	public static function build(array $options, string|null $name = null): ChannelInterface
 	{
-		return Logger::createUsing($options, $name);
+		return Channel::createUsing($options, $name);
 	}
 
 	// -----------------

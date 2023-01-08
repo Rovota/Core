@@ -13,21 +13,23 @@ use Rovota\Core\Logging\Drivers\Discord;
 use Rovota\Core\Logging\Drivers\Monolog;
 use Rovota\Core\Logging\Drivers\Stack;
 use Rovota\Core\Logging\Drivers\Stream;
+use Rovota\Core\Logging\Enums\Driver;
+use Rovota\Core\Logging\Exceptions\ChannelMisconfigurationException;
 use Rovota\Core\Logging\Exceptions\MissingChannelConfigException;
 use Rovota\Core\Logging\Exceptions\UnsupportedDriverException;
-use Rovota\Core\Logging\Interfaces\LogInterface;
+use Rovota\Core\Logging\Interfaces\ChannelInterface;
 use Throwable;
 
 final class LoggingManager
 {
 	/**
-	 * @var array<string, LogInterface>
+	 * @var array<string, ChannelInterface>
 	 */
 	protected static array $channels = [];
 
-	protected static string|null $default = null;
+	protected static array $configs = [];
 
-	protected static array $config = [];
+	protected static string|null $default = null;
 
 	// -----------------
 
@@ -44,52 +46,54 @@ final class LoggingManager
 	 */
 	public static function initialize(): void
 	{
-		$config = require base_path('config/logging.php');
-		self::$default = $config['default'];
+		$file = require base_path('config/logging.php');
 
-		foreach ($config['channels'] as $name => $options) {
-			self::$config[$name] = $options;
-			self::connect($name);
+		foreach ($file['channels'] as $name => $config) {
+			self::define($name, $config);
 		}
+
+		self::setDefault($file['default']);
 	}
 
 	// -----------------
-
-	/**
-	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Logging\Exceptions\MissingChannelConfigException
-	 */
-	public static function define(string $name, array $options, bool $connect = false): void
+	
+	public static function define(string $name, array $config): void
 	{
-		self::$config[$name] = $options;
-		if ($connect) {
-			self::connect($name);
-		}
-	}
+		self::$configs[$name] = $config;
 
-	/**
-	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Logging\Exceptions\MissingChannelConfigException
-	 */
+		// if ($config['auto_connect']) {
+			self::connect($name);
+		// }
+	}
+	
 	public static function connect(string $name): void
 	{
-		if (!isset(self::$config[$name])) {
-			throw new MissingChannelConfigException("There is no config found for a channel named '$name'.");
+		if (isset(self::$configs[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingChannelConfigException("There is no config found for a channel named '$name'."));
 		}
-		self::$channels[$name] = self::build($name, self::$config[$name]);
+		self::$channels[$name] = self::build($name, self::$configs[$name]);
 	}
 
-	/**
-	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
-	 */
-	public static function build(string $name, array $options): LogInterface
+	public static function build(string $name, array $config): ChannelInterface|null
 	{
-		return match ($options['driver']) {
-			'stack' => new Stack($name, $options),
-			'stream' => new Stream($name, $options),
-			'discord' => new Discord($name, $options),
-			'monolog' => new Monolog($name, $options),
-			default => throw new UnsupportedDriverException("The selected driver '{$options['driver']}' is not supported.")
+		$config = new ChannelConfig($config);
+
+		if (Driver::isSupported($config->get('driver')) === false) {
+			ExceptionHandler::addThrowable(new UnsupportedDriverException("The selected driver '{$config->get('driver')}' is not supported."));
+			return null;
+		}
+
+		if ($config->isValid() === false) {
+			ExceptionHandler::addThrowable(new ChannelMisconfigurationException("The channel '$name' cannot be used due to a configuration issue."));
+			return null;
+		}
+
+		return match($config->driver) {
+			Driver::Discord => new Discord($name, $config),
+			Driver::Monolog => new Monolog($name, $config),
+			Driver::Stack => new StackChannel($name, $config),
+			Driver::Stream => new Stream($name, $config),
+			default => null,
 		};
 	}
 
@@ -97,17 +101,17 @@ final class LoggingManager
 
 	public static function isDefined(string $name): bool
 	{
-		return array_key_exists($name, self::$config);
+		return array_key_exists($name, self::$configs);
 	}
 
-	public static function isActive(string $name): bool
+	public static function isConnected(string $name): bool
 	{
 		return array_key_exists($name, self::$channels);
 	}
 
 	// -----------------
 
-	public static function get(string|null $name = null): LogInterface
+	public static function get(string|null $name = null): ChannelInterface
 	{
 		if ($name === null) {
 			$name = self::$default;
@@ -123,13 +127,8 @@ final class LoggingManager
 		return self::$channels[$name];
 	}
 
-	public static function options(string $name): array
-	{
-		return self::$config[$name] ?? [];
-	}
-
 	/**
-	 * @returns array<string, LogInterface>
+	 * @returns array<string, ChannelInterface>
 	 */
 	public static function all(): array
 	{
@@ -145,8 +144,8 @@ final class LoggingManager
 
 	public static function setDefault(string $name): void
 	{
-		if (isset(self::$config[$name]) === false) {
-			ExceptionHandler::logMessage('warning', "Undefined channels cannot be set as default: '{name}'.", ['name' => $name]);
+		if (isset(self::$configs[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingChannelConfigException("Undefined channels cannot be set as default: '$name'."));
 		}
 		self::$default = $name;
 	}

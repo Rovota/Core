@@ -8,16 +8,18 @@
 
 namespace Rovota\Core\Logging\Drivers;
 
+use Rovota\Core\Logging\ChannelConfig;
 use Rovota\Core\Logging\Handlers\DiscordHandler;
-use Rovota\Core\Logging\Logger;
+use Rovota\Core\Logging\Channel;
 
-final class Discord extends Logger
+final class Discord extends Channel
 {
 
-	public function __construct(string $name, array $options = [])
+	public function __construct(string $name, ChannelConfig $config)
 	{
-		$handler = new DiscordHandler($options['token'], $options['channel'], $options['level']);
-		parent::__construct($name, $handler, $options);
+		$handler = new DiscordHandler(...$config->parameters);
+
+		parent::__construct($name, $handler, $config);
 	}
 
 }
