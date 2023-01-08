@@ -85,10 +85,10 @@ trait CacheFunctions
 			$items = $key;
 			$result = [];
 			foreach ($items as $key) {
-				$result[$key] = $this->get($key) ?? ($default[$key] ?? null);
+				$result[$key] = $this->adapter->get($key) ?? ($default[$key] ?? null);
 			}
 		} else {
-			$result = $this->get($key) ?? $default;
+			$result = $this->adapter->get($key) ?? $default;
 		}
 
 		return $result;
