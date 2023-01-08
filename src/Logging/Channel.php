@@ -90,47 +90,47 @@ abstract class Channel implements ChannelInterface
 
 	public function log(mixed $level, string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->log($level, $message, $context);
+		$this->logger->log($level, $message, $context);
 	}
 
 	public function debug(string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->debug($message, $context);
+		$this->logger->debug($message, $context);
 	}
 
 	public function info(string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->info($message, $context);
+		$this->logger->info($message, $context);
 	}
 
 	public function notice(string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->notice($message, $context);
+		$this->logger->notice($message, $context);
 	}
 
 	public function warning(string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->warning($message, $context);
+		$this->logger->warning($message, $context);
 	}
 
 	public function error(string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->error($message, $context);
+		$this->logger->error($message, $context);
 	}
 
 	public function critical(string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->critical($message, $context);
+		$this->logger->critical($message, $context);
 	}
 
 	public function alert(string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->alert($message, $context);
+		$this->logger->alert($message, $context);
 	}
 
 	public function emergency(string|Stringable $message, array $context = []): void
 	{
-		$this->monolog->emergency($message, $context);
+		$this->logger->emergency($message, $context);
 	}
 
 	// -----------------
