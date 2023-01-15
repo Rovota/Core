@@ -11,67 +11,56 @@ namespace Rovota\Core\Database;
 use Envms\FluentPDO\Query;
 use PDO;
 use PDOStatement;
+use Rovota\Core\Database\Enums\Driver;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
-use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Support\Version;
-use Throwable;
+use Rovota\Core\Support\Traits\Conditionable;
 
-final class Connection implements ConnectionInterface
+abstract class Connection implements ConnectionInterface
 {
+	use Conditionable;
 
 	protected string $name;
 
+	protected ConnectionConfig $config;
+
 	protected PDO $connection;
-
-	protected array $options = [
-		'pdo' => [
-			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-			PDO::ATTR_EMULATE_PREPARES => false,
-			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false
-		]
-	];
-
-	protected array $tables;
 
 	// -----------------
 
-	public function __construct(string $name, array $options)
+	protected array $tables;
+
+	// protected array $schema;
+
+	// -----------------
+
+	public function __construct(string $name, PDO $connection, ConnectionConfig $config)
 	{
 		$this->name = $name;
+		$this->config = $config;
 
-		foreach ($options as $key => $value) {
-			if ($key === 'options') {
-				foreach ($value as $option => $param) {
-					$this->options['pdo'][$option] = $param;
-				}
-			} else {
-				$this->options[$key] = $value;
-			}
-		}
+		$this->connection = $connection;
+		$this->tables = $this->getTables();
 
-		$this->connection = new PDO($this->buildDsn(), $this->user(), $this->options['password'], $this->options['pdo']);
-		$this->tables = $this->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
-
-		try {
-			$this->query("SET time_zone = 'UTC'");
-		} catch (Throwable) {
-			ExceptionHandler::logMessage('notice', "The timezone '{timezone}' could not be synchronized. The SQL timezone database may be missing.", ['timezone' => 'UTC']);
-		}
-
-		$this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+		$this->setTimezone('UTC');
+		$this->setDefaultAttributes();
+		$this->setCustomAttributes();
 	}
 
 	// -----------------
 
+	public function __toString(): string
+	{
+		return $this->name;
+	}
+
 	public function __get(string $name): mixed
 	{
-		return $this->options[$name] ?? null;
+		return $this->config->get($name);
 	}
 
 	public function __isset(string $name): bool
 	{
-		return isset($this->options[$name]);
+		return $this->config->has($name);
 	}
 
 	// -----------------
@@ -88,52 +77,9 @@ final class Connection implements ConnectionInterface
 		return $this->name;
 	}
 
-	// -----------------
-
-	public function option(string $name): string|int|array
+	public function config(): ConnectionConfig
 	{
-		return $this->options[$name];
-	}
-
-	public function driver(): string
-	{
-		return $this->option('driver');
-	}
-
-	public function label(): string
-	{
-		return $this->option('label');
-	}
-
-	public function host(): string
-	{
-		return $this->option('host');
-	}
-
-	public function database(): string
-	{
-		return $this->option('database');
-	}
-
-	public function port(): int
-	{
-		return $this->option('port');
-	}
-
-	public function user(): string
-	{
-		return $this->option('user');
-	}
-
-	// -----------------
-
-	/**
-	 * @throws \PHLAK\SemVer\Exceptions\InvalidVersionException
-	 */
-	public function version(): Version
-	{
-		$result = $this->query("SELECT VERSION() as version")->fetch();
-		return new Version($result->version);
+		return $this->config;
 	}
 
 	// -----------------
@@ -143,17 +89,9 @@ final class Connection implements ConnectionInterface
 		return new QueryBuilder($name, $this->name);
 	}
 
-	// -----------------
-
 	public function hasTable(string $name): bool
 	{
 		return in_array($name, $this->tables, true);
-	}
-
-	public function hasTimezoneData(): bool
-	{
-		$result = $this->query("SELECT CONVERT_TZ('2000-01-01 1:00:00','UTC','Europe/Amsterdam') AS time")->fetch();
-		return (bool)$result->time;
 	}
 
 	// -----------------
@@ -242,31 +180,48 @@ final class Connection implements ConnectionInterface
 
 	// -----------------
 
-	public function getBufferState(): bool
+	public function setAttribute(int $name, mixed $value): bool
 	{
-		if ($this->driver() === 'mysql') {
-			return $this->raw()->getAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY);
-		} else {
-			return false;
-		}
+		return $this->connection->setAttribute($name, $value);
 	}
 
-	public function setBufferState(bool $state): void
+	public function getAttribute(int $name): mixed
 	{
-		if ($this->driver() === 'mysql') {
-			$this->raw()->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $state);
+		return $this->connection->getAttribute($name);
+	}
+
+	// -----------------
+
+	protected function setDefaultAttributes(): void
+	{
+		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+		$this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+	}
+
+	protected function setCustomAttributes(): void
+	{
+		foreach ($this->config->parameters->get('attributes') as $name => $value) {
+			$this->setAttribute($name, $value);
 		}
 	}
 
 	// -----------------
 
-	protected function buildDsn(): string
+	protected function buildDsn(Driver $driver, array $parameters): string
 	{
-		$dsn = sprintf('%s:host=%s;dbname=%s;charset=%s', $this->driver(), $this->host(), $this->database(), $this->options['charset']);
-		if ($this->port() > 0) {
-			$dsn .= ';port='.$this->port();
+		$host = $parameters['host'];
+		$database = $parameters['database'];
+		$port = $parameters['port'];
+		$charset = $parameters['charset'];
+
+		$template = '%s:host=%s;dbname=%s;charset=%s';
+		if ($port > 0) {
+			$template .= ';port='.$port;
 		}
-		return $dsn;
+
+		return sprintf($template, $driver->value, $host, $database, $charset);
 	}
 
 }

@@ -11,10 +11,10 @@ namespace Rovota\Core\Facades;
 use Envms\FluentPDO\Query;
 use PDO;
 use PDOStatement;
-use Rovota\Core\Database\Connection;
 use Rovota\Core\Database\DatabaseManager;
+use Rovota\Core\Database\Interfaces\ConnectionInterface;
 use Rovota\Core\Database\QueryBuilder;
-use Rovota\Core\Support\Version;
+use Rovota\Core\Support\Str;
 
 final class DB
 {
@@ -25,16 +25,14 @@ final class DB
 
 	// -----------------
 
-	public static function connection(string|null $name = null): Connection
+	public static function connection(string|null $name = null): ConnectionInterface
 	{
 		return DatabaseManager::get($name);
 	}
 
-	// -----------------
-
-	public static function version(): Version
+	public static function build(array $config, string|null $name = null): ConnectionInterface|null
 	{
-		return DatabaseManager::get()->version();
+		return DatabaseManager::build($name ?? Str::random(20), $config);
 	}
 
 	// -----------------
@@ -44,16 +42,9 @@ final class DB
 		return DatabaseManager::get()->table($name);
 	}
 
-	// -----------------
-
 	public static function hasTable(string $name): bool
 	{
 		return DatabaseManager::get()->hasTable($name);
-	}
-
-	public static function hasTimezoneData(): bool
-	{
-		return DatabaseManager::get()->hasTimezoneData();
 	}
 
 	// -----------------
