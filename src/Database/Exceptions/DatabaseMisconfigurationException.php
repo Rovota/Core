@@ -13,7 +13,7 @@ use Rovota\Core\Database\Solutions\DatabaseMisconfigurationSolution;
 use Rovota\Core\Kernel\Interfaces\ProvidesSolution;
 use Rovota\Core\Kernel\Interfaces\Solution;
 
-class MissingDatabaseConfigException extends Exception implements ProvidesSolution
+class DatabaseMisconfigurationException extends Exception implements ProvidesSolution
 {
 
 	public function getSolution(): Solution

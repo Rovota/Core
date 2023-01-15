@@ -10,7 +10,7 @@ namespace Rovota\Core\Database\Solutions;
 
 use Rovota\Core\Kernel\Interfaces\Solution;
 
-class UnsupportedDriverSolution implements Solution
+class DatabaseMisconfigurationSolution implements Solution
 {
 
 	public function getTitle(): string
@@ -20,7 +20,7 @@ class UnsupportedDriverSolution implements Solution
 
 	public function getDescription(): string
 	{
-		return 'Ensure you have the latest version of Core installed, all dependencies for this driver are present and that the driver name is spelled correctly.';
+		return 'Ensure that all required parameters are set. For example, you might need to specify which SSL certificate to use.';
 	}
 
 	public function getDocumentationLinks(): array
