@@ -9,12 +9,12 @@
 namespace Rovota\Core\Database\Interfaces;
 
 use DateTimeZone;
-use Envms\FluentPDO\Query;
+use Envms\FluentPDO\Query as FluentQuery;
 use PDO;
 use PDOStatement;
 use PHLAK\SemVer\Exceptions\InvalidVersionException;
+use Rovota\Core\Database\Builder\Query;
 use Rovota\Core\Database\ConnectionConfig;
-use Rovota\Core\Database\QueryBuilder;
 use Rovota\Core\Support\Version;
 
 interface ConnectionInterface
@@ -37,7 +37,7 @@ interface ConnectionInterface
 
 	// -----------------
 
-	public function table(string $name): QueryBuilder;
+	public function table(string $name): Query;
 
 	public function getTables(): array;
 
@@ -79,7 +79,7 @@ interface ConnectionInterface
 
 	public function raw(): PDO;
 
-	public function fluent(): Query;
+	public function fluent(): FluentQuery;
 
 	public function lastId(): string|int;
 

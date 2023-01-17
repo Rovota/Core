@@ -8,9 +8,10 @@
 
 namespace Rovota\Core\Database;
 
-use Envms\FluentPDO\Query;
+use Envms\FluentPDO\Query as FluentQuery;
 use PDO;
 use PDOStatement;
+use Rovota\Core\Database\Builder\Query;
 use Rovota\Core\Database\Enums\Driver;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -84,9 +85,10 @@ abstract class Connection implements ConnectionInterface
 
 	// -----------------
 
-	public function table(string $name): QueryBuilder
+	public function table(string $name): Query
 	{
-		return new QueryBuilder($name, $this->name);
+		$query = new Query($this);
+		return $query->setTable($name);
 	}
 
 	public function hasTable(string $name): bool
@@ -167,9 +169,9 @@ abstract class Connection implements ConnectionInterface
 		return $this->connection;
 	}
 
-	public function fluent(): Query
+	public function fluent(): FluentQuery
 	{
-		return new Query($this->raw());
+		return new FluentQuery($this->raw());
 	}
 
 	public function lastId(): string|int

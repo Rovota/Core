@@ -11,7 +11,7 @@ namespace Rovota\Core\Database;
 use BackedEnum;
 use JsonSerializable;
 use Rovota\Core\Cache\CacheManager;
-use Rovota\Core\Database\Traits\QueryFunctions;
+use Rovota\Core\Database\Traits\ModelQueryFunctions;
 use Rovota\Core\Facades\DB;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Arr;
@@ -30,7 +30,7 @@ use TypeError;
  */
 abstract class Model implements JsonSerializable
 {
-	use ModelValidation, Errors, Macroable, QueryFunctions, Conditionable;
+	use ModelValidation, Errors, Macroable, ModelQueryFunctions, Conditionable;
 
 	protected string|null $table = null;
 	protected string|null $connection = null;

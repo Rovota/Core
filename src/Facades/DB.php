@@ -8,12 +8,12 @@
 
 namespace Rovota\Core\Facades;
 
-use Envms\FluentPDO\Query;
+use Envms\FluentPDO\Query as FluentQuery;
 use PDO;
 use PDOStatement;
+use Rovota\Core\Database\Builder\Query;
 use Rovota\Core\Database\DatabaseManager;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
-use Rovota\Core\Database\QueryBuilder;
 use Rovota\Core\Support\Str;
 
 final class DB
@@ -37,7 +37,7 @@ final class DB
 
 	// -----------------
 
-	public static function table(string $name): QueryBuilder
+	public static function table(string $name): Query
 	{
 		return DatabaseManager::get()->table($name);
 	}
@@ -113,7 +113,7 @@ final class DB
 		return DatabaseManager::get()->raw();
 	}
 
-	public static function fluent(): Query
+	public static function fluent(): FluentQuery
 	{
 		return DatabaseManager::get()->fluent();
 	}
