@@ -8,9 +8,9 @@
 
 namespace Rovota\Core\Support;
 
+use Random\Randomizer;
 use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Localization\LocalizationManager;
-use Rovota\Core\Security\Randomizer;
 use Throwable;
 
 final class Str
@@ -414,7 +414,7 @@ final class Str
 			if (mb_strlen($word) < 4) {
 				$string .= $word.' ';
 			} else {
-				$string .= sprintf('%s%s%s ', $word[0], Randomizer::shuffleBytes(substr($word, 1, -1)), $word[mb_strlen($word) - 1]);
+				$string .= sprintf('%s%s%s ', $word[0], (new Randomizer)->shuffleBytes(substr($word, 1, -1)), $word[mb_strlen($word) - 1]);
 			}
 		}
 
@@ -423,7 +423,7 @@ final class Str
 
 	public static function shuffle(string $string): string
 	{
-		return Randomizer::shuffleBytes($string);
+		return (new Randomizer)->shuffleBytes($string);
 	}
 
 	public static function simplify(string $string): string
