@@ -13,6 +13,7 @@ use DateTime;
 use DateTimeZone;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Moment;
+use Rovota\Core\Support\Text;
 use Throwable;
 
 trait TypeAccessors
@@ -21,7 +22,7 @@ trait TypeAccessors
 	public function array(string $key, array $default = []): array
 	{
 		$value = $this->get($key);
-		return is_array($value) ? $value : (strlen($value) > 0 ? explode(',', $value ?? '') : $default);
+		return is_array($value) ? $value : (mb_strlen($value ?? '') > 0 ? explode(',', $value ?? '') : $default);
 	}
 
 	public function bool(string $key, bool $default = false): bool
@@ -68,6 +69,11 @@ trait TypeAccessors
 	public function string(string $key, string $default = ''): string
 	{
 		return (string)$this->get($key, $default);
+	}
+
+	public function text(string $key, Text|string $default = ''): Text
+	{
+		return new Text($this->get($key, $default));
 	}
 
 }

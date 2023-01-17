@@ -34,17 +34,17 @@
       "envms/fluentpdo": "^2.2",
       "guzzlehttp/guzzle": "^7.5",
       "league/commonmark": "^2.3",
-      "league/flysystem": "^3.10",
+      "league/flysystem": "^3.12",
       "league/flysystem-read-only": "^3.10",
       "monolog/monolog": "^3.2",
-      "phlak/semver": "^4.0",
-      "phpmailer/phpmailer": "^6.6",
+      "phlak/semver": "^4.1",
+      "phpmailer/phpmailer": "^6.7",
       "phpseclib/phpseclib": "^3.0",
-      "spomky-labs/otphp": "^11.0"
+      "spomky-labs/otphp": "^11.1"
    },
    "require-dev": {
-      "league/flysystem-aws-s3-v3": "^3.10",
-      "league/flysystem-sftp-v3": "^3.6"
+      "league/flysystem-aws-s3-v3": "^3.11",
+      "league/flysystem-sftp-v3": "^3.10"
    },
    "suggest": {
       "league/flysystem-aws-s3-v3": "Allows usage of S3 compatible services as file storage.",

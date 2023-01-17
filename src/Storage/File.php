@@ -8,43 +8,41 @@
 
 namespace Rovota\Core\Storage;
 
-use Rovota\Core\Storage\Interfaces\DiskInterface;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\Traits\FileFunctions;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 
-class File
+class File implements FileInterface
 {
 	use FileFunctions, Conditionable;
 
-	public mixed $contents = null;
+	protected mixed $contents = null;
 
-	public string|null $name = null;
-	public string|null $path = null;
-	public DiskInterface|null $disk = null;
-	public int $size = 0;
-	public string|null $extension = null;
-	public string|null $mime_type = 'text/html';
-	public Moment|null $last_modified = null;
+	protected FileProperties $properties;
 
 	protected bool $unsaved_changes = false;
 
 	// -----------------
 
-	public function __construct(mixed $contents, array $properties)
+	public function __construct(mixed $contents, array $properties, bool $unsaved_changes = false)
 	{
 		$this->contents = $contents;
+		$this->unsaved_changes = $unsaved_changes;
+		$this->properties = new FileProperties();
 
 		foreach ($properties as $key => $value) {
 			if ($key === 'last_modified') {
-				$this->last_modified = $value instanceof Moment ? $value : moment($value);
+				$this->properties->set($key, $value instanceof Moment ? $value : moment($value));
 				continue;
 			}
 			if ($key === 'name') {
-				$this->extension = Str::afterLast($value, '.');
+				$this->properties->set('name', Str::beforeLast($value, '.'));
+				$this->properties->set('extension', Str::afterLast($value, '.'));
+				continue;
 			}
-			$this->{$key} = $value;
+			$this->properties->set($key, $value);
 		}
 	}
 
@@ -55,29 +53,29 @@ class File
 
 	// -----------------
 
-	public function publicUrl(): string
+	public static function make(mixed $contents, array $properties, bool $unsaved_changes = false): FileInterface
 	{
-		return Str::finish($this->disk->baseUrl().$this->path, '/').$this->name;
-	}
-
-	public function properties(): array
-	{
-		return [
-			'name' => $name ?? $this->name,
-			'path' => $this->path,
-			'disk' => $this->disk,
-			'size' => $this->size,
-			'extension' => $this->extension,
-			'mime_type' => $this->mime_type,
-			'last_modified' => $this->last_modified,
-		];
+		return new static($contents, $properties, $unsaved_changes);
 	}
 
 	// -----------------
 
-	public static function make(mixed $contents, array $properties): File
+	public function contents(): mixed
 	{
-		return new File($contents, $properties);
+		return $this->contents;
+	}
+
+	public function properties(): FileProperties
+	{
+		return $this->properties;
+	}
+
+	public function publicUrl(): string
+	{
+		$base_path = $this->properties->disk->baseUrl().$this->properties->path;
+		$file_name = sprintf('%s.%s', $this->properties->name, $this->properties->extension);
+
+		return Str::finish($base_path, '/').$file_name;
 	}
 
 }

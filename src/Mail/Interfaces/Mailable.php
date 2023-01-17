@@ -12,7 +12,7 @@ use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Localization\Language;
 use Rovota\Core\Mail\Enums\Encoding;
 use Rovota\Core\Mail\Enums\Priority;
-use Rovota\Core\Storage\File;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Views\View;
 
 interface Mailable
@@ -62,7 +62,7 @@ interface Mailable
 
 	// -----------------
 
-	public function attachment(File|string $file, string|null $name = null, string|null $mime_type = null, Encoding $encoding = Encoding::UTF8): static;
+	public function attachment(FileInterface|string $file, string|null $name = null, string|null $mime_type = null, Encoding $encoding = Encoding::UTF8): static;
 
 	public function stringAttachment(string $content, string $name, string $mime_type, Encoding $encoding = Encoding::UTF8): static;
 

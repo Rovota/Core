@@ -15,12 +15,12 @@ class UnsupportedDriverSolution implements Solution
 
 	public function getTitle(): string
 	{
-		return 'Supported Drivers';
+		return 'Try the following:';
 	}
 
 	public function getDescription(): string
 	{
-		return 'Make sure you have the latest version installed, and that the driver name is spelled correctly.';
+		return 'Ensure you have the latest version of Core installed, all dependencies for this driver are present and that the driver name is spelled correctly.';
 	}
 
 	public function getDocumentationLinks(): array

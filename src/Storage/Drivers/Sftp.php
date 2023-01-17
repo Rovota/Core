@@ -12,81 +12,89 @@ use League\Flysystem\PhpseclibV3\SftpAdapter;
 use League\Flysystem\PhpseclibV3\SftpConnectionProvider;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use Rovota\Core\Storage\Disk;
+use Rovota\Core\Storage\DiskConfig;
 
 final class Sftp extends Disk
 {
 
-	public function __construct(string $name, array $options = [])
+	public function __construct(string $name, DiskConfig $config)
 	{
-		$config = [
-			'host' => $options['host'],
-			'username' => $options['username'],
-			'password' => $options['password'] ?? null,
-			'private_key' => $options['private_key'] ?? null,
-			'passphrase' => $options['passphrase'] ?? null,
-			'port' => $options['port'] ?? 22,
-			'agent' => $options['agent'] ?? false,
-			'timeout' => $options['timeout'] ?? 10,
-			'retries' => $options['retries'] ?? 4,
-			'fingerprint' => $options['fingerprint'] ?? null,
+		$parameters = [
+			'host' => $config->parameters->get('host'),
+			'username' => $config->parameters->get('username'),
+			'password' => $config->parameters->get('password'),
+
+			'private_key' => $config->parameters->get('private_key'),
+			'passphrase' => $config->parameters->get('passphrase'),
+
+			'port' => $config->parameters->int('port', 22),
+			'agent' => $config->parameters->get('agent', false),
+			'timeout' => $config->parameters->int('timeout', 10),
+			'retries' => $config->parameters->int('retries', 4),
+			'fingerprint' => $config->parameters->get('fingerprint'),
 		];
 
-		$visibility = PortableVisibilityConverter::fromArray($options['visibility'] ?? ['file' => ['public' => 0640, 'private' => 0604], 'dir' => ['public' => 0740, 'private' => 7604]]);
+		$visibility = PortableVisibilityConverter::fromArray($config->parameters->array('visibility', [
+			'file' => ['public' => 0640, 'private' => 0604],
+			'dir' => ['public' => 0740, 'private' => 7604],
+		]));
 
-		$adapter = new SftpAdapter(new SftpConnectionProvider(...array_values($config)), $options['root'], $visibility);
-		parent::__construct($name, $adapter, $options);
+		$provider = new SftpConnectionProvider(...array_values($parameters));
+		$adapter = new SftpAdapter($provider, $config->root, $visibility);
+
+		parent::__construct($name, $adapter, $config);
 	}
 
 	// -----------------
 
 	public function host(): string
 	{
-		return $this->option('host');
+		return $this->config->parameters->get('host');
 	}
 
 	public function username(): string
 	{
-		return $this->option('username');
+		return $this->config->parameters->get('username');
 	}
 
 	public function password(): string|null
 	{
-		return $this->option('password');
+		return $this->config->parameters->get('password');
 	}
 
 	public function privateKey(): string|null
 	{
-		return $this->option('private_key');
+		return $this->config->parameters->get('private_key');
 	}
 
 	public function passphrase(): string|null
 	{
-		return $this->option('passphrase');
+		return $this->config->parameters->get('passphrase');
 	}
 
 	public function port(): int
 	{
-		return $this->option('port') ?? 22;
+		return $this->config->parameters->get('port', 22);
 	}
 
 	public function agent(): bool
 	{
-		return $this->option('agent') ?? false;
+		return $this->config->parameters->get('agent', false);
 	}
 
 	public function timeout(): int
 	{
-		return $this->option('timeout') ?? 10;
+		return $this->config->parameters->get('timeout', 10);
 	}
 
 	public function retries(): int
 	{
-		return $this->option('retries') ?? 4;
+		return $this->config->parameters->get('retries', 4);
 	}
 
 	public function fingerprint(): string|null
 	{
-		return $this->option('fingerprint');
+		return $this->config->parameters->get('fingerprint');
 	}
 
 }

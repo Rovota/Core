@@ -31,7 +31,7 @@ abstract class Meta extends Model
 			'bucket',
 			'datetime',
 			'float',
-			'fluent_string',
+			'text',
 			'int',
 			'map',
 			'moment',

@@ -18,12 +18,11 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
-use Rovota\Core\Storage\Directory;
-use Rovota\Core\Storage\File;
+use Rovota\Core\Storage\Interfaces\DirectoryInterface;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
-use Rovota\Core\Storage\Media;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
-use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
@@ -37,17 +36,14 @@ final class Storage
 
 	// -----------------
 
-	public static function disk(string $name): DiskInterface
+	public static function disk(string $name): DiskInterface|null
 	{
 		return StorageManager::get($name);
 	}
 
-	/**
-	 * @throws \Rovota\Core\Storage\Exceptions\UnsupportedDriverException
-	 */
-	public static function build(array $options, string|null $name = null): DiskInterface
+	public static function build(array $config, string|null $name = null): DiskInterface|null
 	{
-		return StorageManager::build($name ?? Str::random(20), $options);
+		return StorageManager::build($name ?? Str::random(20), $config);
 	}
 
 	// -----------------
@@ -60,15 +56,6 @@ final class Storage
 	public static function asImage(string $location): ImageObject|null
 	{
 		return StorageManager::get()->asImage($location);
-	}
-
-	/**
-	 * @throws UnableToReadFile
-	 * @throws FilesystemException
-	 */
-	public static function asMedia(string $location): Media|null
-	{
-		return StorageManager::get()->asMedia($location);
 	}
 
 	/**
@@ -94,7 +81,7 @@ final class Storage
 	/**
 	 * @throws FilesystemException
 	 */
-	public static function contents(string $location = '/'): Bucket
+	public static function contents(string $location = '/'): Sequence
 	{
 		return StorageManager::get()->contents($location);
 	}
@@ -102,7 +89,7 @@ final class Storage
 	/**
 	 * @throws FilesystemException
 	 */
-	public static function files(string $location = '/'): Bucket
+	public static function files(string $location = '/'): Sequence
 	{
 		return StorageManager::get()->files($location);
 	}
@@ -110,7 +97,7 @@ final class Storage
 	/**
 	 * @throws FilesystemException
 	 */
-	public static function directories(string $location = '/'): Bucket
+	public static function directories(string $location = '/'): Sequence
 	{
 		return StorageManager::get()->directories($location);
 	}
@@ -149,7 +136,7 @@ final class Storage
 	 * @throws UnableToRetrieveMetadata
 	 * @throws FilesystemException
 	 */
-	public static function file(string $location, array $without = [], bool $stream = false): File|null
+	public static function file(string $location, array $without = [], bool $stream = false): FileInterface|null
 	{
 		return StorageManager::get()->file($location, $without, $stream);
 	}
@@ -158,7 +145,7 @@ final class Storage
 	 * @throws UnableToCheckExistence
 	 * @throws FilesystemException
 	 */
-	public static function directory(string $location): Directory|null
+	public static function directory(string $location): DirectoryInterface|null
 	{
 		return StorageManager::get()->directory($location);
 	}
@@ -209,7 +196,7 @@ final class Storage
 	 * @throws UnableToRetrieveMetadata
 	 * @throws FilesystemException
 	 */
-	public static function compress(string $source, string|null $target = null): File|null
+	public static function compress(string $source, string|null $target = null): FileInterface|null
 	{
 		return StorageManager::get()->compress($source, $target);
 	}
@@ -220,7 +207,7 @@ final class Storage
 	 * @throws UnableToWriteFile
 	 * @throws FilesystemException
 	 */
-	public static function extract(string $source, string|null $target = null): Directory|null
+	public static function extract(string $source, string|null $target = null): DirectoryInterface|null
 	{
 		return StorageManager::get()->extract($source, $target);
 	}

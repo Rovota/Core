@@ -9,26 +9,49 @@
 namespace Rovota\Core\Cache;
 
 use Rovota\Core\Cache\Interfaces\CacheInterface;
-use Rovota\Core\Kernel\Application;
+use Rovota\Core\Cache\Interfaces\CacheAdapter;
+use Rovota\Core\Cache\Traits\CacheFunctions;
+use Rovota\Core\Support\Traits\Conditionable;
 
 abstract class CacheStore implements CacheInterface
 {
+	use CacheFunctions, Conditionable;
 
 	protected string $name;
-	protected array $options;
-	protected string $prefix;
 
-	protected array $actions = [];
-	protected string|null $last_modified_key = null;
+	protected CacheConfig $config;
+
+	protected CacheAdapter $adapter;
+
+	// protected string|null $last_modified_key = null;
 
 	// -----------------
 
-	public function __construct(string $name, array $options)
+	public function __construct(string $name, CacheAdapter $adapter, CacheConfig $config)
 	{
 		$this->name = $name;
-		$this->options = $options;
+		$this->config = $config;
 
-		$this->setPrefix($name);
+		$this->adapter = $adapter;
+
+		// $this->setPrefix($name);
+	}
+
+	// -----------------
+
+	public function __toString(): string
+	{
+		return $this->name;
+	}
+
+	public function __get(string $name): mixed
+	{
+		return $this->config->get($name);
+	}
+
+	public function __isset(string $name): bool
+	{
+		return $this->config->has($name);
 	}
 
 	// -----------------
@@ -45,106 +68,42 @@ abstract class CacheStore implements CacheInterface
 		return $this->name;
 	}
 
-	// -----------------
-
-	public function label(): string
+	public function config(): CacheConfig
 	{
-		return $this->options['label'];
-	}
-
-	public function driver(): string
-	{
-		return $this->options['driver'];
-	}
-
-	public function option(string $key): mixed
-	{
-		return $this->options[$key];
+		return $this->config;
 	}
 
 	// -----------------
 
-	public function getPrefix(): string
+	public function adapter(): CacheAdapter
 	{
-		return $this->prefix;
-	}
-
-	public function setPrefix(string $prefix): void
-	{
-		$this->prefix = !empty($prefix) ? $prefix.':' : '';
+		return $this->adapter;
 	}
 
 	// -----------------
 
-	public function lastModifiedKey(): string|null
-	{
-		return $this->last_modified_key;
-	}
+	// public function getPrefix(): string
+	// {
+	// 	return $this->prefix;
+	// }
+
+	// public function setPrefix(string $prefix): void
+	// {
+	// 	$this->prefix = !empty($prefix) ? $prefix.':' : '';
+	// }
 
 	// -----------------
 
-	public function actions(): array
-	{
-		return $this->actions;
-	}
+	// public function lastModifiedKey(): string|null
+	// {
+	// 	return $this->last_modified_key;
+	// }
 
 	// -----------------
 
-	protected function actionPut(string|int $key, int|null $retention = null): void
-	{
-		$this->actions[] = [
-			'type' => 'put',
-			'key' => $key,
-			'retention' => $retention,
-		];
-		$this->setLastModifiedKey($key);
-	}
-
-	protected function actionUpdate(string|int $key, int|null $retention = null): void
-	{
-		$this->actions[] = [
-			'type' => 'update',
-			'key' => $key,
-			'retention' => $retention,
-		];
-		$this->setLastModifiedKey($key);
-	}
-
-	protected function actionForget(string|int $key): void
-	{
-		$this->actions[] = [
-			'type' => 'forget',
-			'key' => $key,
-		];
-		$this->setLastModifiedKey($key);
-	}
-
-	// -----------------
-
-	protected function serialize($value): string
-	{
-		return is_numeric($value) && ! in_array($value, [INF, -INF]) && ! is_nan($value) ? $value : serialize($value);
-	}
-
-	protected function deserialize($value): mixed
-	{
-		return is_numeric($value) ? $value : unserialize($value);
-	}
-
-	// -----------------
-
-	protected function getRetention(int|null $retention = null): int
-	{
-		if (Application::isEnvironment($this->options['disable_for'] ?? [])) {
-			return 0;
-		}
-		return $retention ?? $this->options['retention'] ?? 0;
-	}
-
-	protected function setLastModifiedKey(string|int $key): void
-	{
-		$this->last_modified_key = $key;
-	}
-
+	// protected function setLastModifiedKey(string|int $key): void
+	// {
+	// 	$this->last_modified_key = $key;
+	// }
 
 }

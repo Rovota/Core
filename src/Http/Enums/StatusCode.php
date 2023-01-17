@@ -24,6 +24,7 @@ enum StatusCode: int
 	case Ok = 200;
 	case Created = 201;
 	case Accepted = 202;
+	case NonAuthoritativeInformation = 203;
 	case NoContent = 204;
 	case ResetContent = 205;
 	case PartialContent = 206;
@@ -78,8 +79,11 @@ enum StatusCode: int
 	case ServiceUnavailable = 503;
 	case GatewayTimeout = 504;
 	case HttpVersionNotSupported = 505;
+	case VariantAlsoNegotiates = 506;
 	case InsufficientStorage = 507;
 	case LoopDetected = 508;
+	case NotExtended = 510;
+	case NetworkAuthenticationRequired = 511;
 
 	// -----------------
 
@@ -118,6 +122,7 @@ enum StatusCode: int
 			StatusCode::Ok => ['label' => 'Ok', 'message' => null],
 			StatusCode::Created => ['label' => 'Created', 'message' => null],
 			StatusCode::Accepted => ['label' => 'Accepted', 'message' => null],
+			StatusCode::NonAuthoritativeInformation => ['label' => 'Non-Authoritative Information', 'message' => null],
 			StatusCode::NoContent => ['label' => 'No Content', 'message' => null],
 			StatusCode::ResetContent => ['label' => 'Reset Content', 'message' => null],
 			StatusCode::PartialContent => ['label' => 'Partial Content', 'message' => null],
@@ -172,8 +177,11 @@ enum StatusCode: int
 			StatusCode::ServiceUnavailable => ['label' => 'Service Unavailable', 'message' => "The request can't be handled right now. Try again later."],
 			StatusCode::GatewayTimeout => ['label' => 'Gateway Timeout', 'message' => "It took too long for the upstream server to return the $target."],
 			StatusCode::HttpVersionNotSupported => ['label' => 'HTTP Version Not Supported', 'message' => "The HTTP version used is not supported. Try upgrading to a newer version."],
+			StatusCode::VariantAlsoNegotiates => ['label' => 'Variant Also Negotiates', 'message' => "The chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process."],
 			StatusCode::InsufficientStorage => ['label' => 'Insufficient Storage', 'message' => "There is not enough storage available to fulfill the request."],
 			StatusCode::LoopDetected => ['label' => 'Loop Detected', 'message' => "A loop has been detected while processing the request."],
+			StatusCode::NotExtended => ['label' => 'Not Extended', 'message' => "Further extensions to the request are required for the server to fulfill it."],
+			StatusCode::NetworkAuthenticationRequired => ['label' => 'Network Authentication Required', 'message' => "Authentication is required in order to gain network access."],
 		};
 	}
 

@@ -9,7 +9,7 @@
 namespace Rovota\Core\Facades;
 
 use Rovota\Core\Cache\CacheManager;
-use Rovota\Core\Cache\CacheStore;
+use Rovota\Core\Cache\Interfaces\CacheInterface;
 use Rovota\Core\Support\Str;
 
 final class Cache
@@ -21,37 +21,24 @@ final class Cache
 
 	// -----------------
 
-	public static function store(string|null $name = null): CacheStore
+	public static function store(string|null $name = null): CacheInterface
 	{
 		return CacheManager::get($name);
 	}
 
-	/**
-	 * @throws \Rovota\Core\Cache\Exceptions\UnsupportedDriverException
-	 */
-	public static function build(array $options, string|null $name = null): CacheStore
+	public static function build(array $options, string|null $name = null): CacheInterface
 	{
 		return CacheManager::build($name ?? Str::random(20), $options);
 	}
 
 	// -----------------
 
-	public static function put(string|int $key, mixed $value, int|null $retention = null): void
+	public static function set(string|int|array $key, mixed $value = null, int|null $retention = null): void
 	{
-		CacheManager::get()->put($key, $value, $retention);
+		CacheManager::get()->set($key, $value, $retention);
 	}
 
-	public static function putMany(array $values, int|null $retention = null): void
-	{
-		CacheManager::get()->putMany($values, $retention);
-	}
-
-	public static function putAllExcept(array $values, string|array $except, int|null $retention = null): void
-	{
-		CacheManager::get()->putAllExcept($values, $except, $retention);
-	}
-
-	public static function forever(string|int $key, mixed $value): void
+	public static function forever(string|int|array $key, mixed $value = null): void
 	{
 		CacheManager::get()->forever($key, $value);
 	}
@@ -69,27 +56,14 @@ final class Cache
 	/**
 	 * Returns the cached value (or the default), and then removes it from cache.
 	 */
-	public static function pull(string|int $key, mixed $default = null): mixed
+	public static function pull(string|int|array $key, mixed $default = null): mixed
 	{
 		return CacheManager::get()->pull($key, $default);
 	}
 
-	/**
-	 * Returns multiple cached values, and then removes them from cache.
-	 */
-	public static function pullMany(array $keys, array $defaults = []): array
+	public static function get(string|int|array $key, mixed $default = null): mixed
 	{
-		return CacheManager::get()->pullMany($keys, $defaults);
-	}
-
-	public static function read(string|int $key, mixed $default = null): mixed
-	{
-		return CacheManager::get()->read($key, $default);
-	}
-
-	public static function readMany(array $keys, array $defaults = []): array
-	{
-		return CacheManager::get()->readMany($keys, $defaults);
+		return CacheManager::get()->get($key, $default);
 	}
 
 	/**
@@ -118,14 +92,9 @@ final class Cache
 		CacheManager::get()->decrement($key, $step);
 	}
 
-	public static function forget(string|int $key): void
+	public static function remove(string|int $key): void
 	{
-		CacheManager::get()->forget($key);
-	}
-
-	public static function forgetMany(array $keys): void
-	{
-		CacheManager::get()->forgetMany($keys);
+		CacheManager::get()->remove($key);
 	}
 
 	public static function flush(): void

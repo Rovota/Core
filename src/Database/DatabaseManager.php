@@ -8,7 +8,12 @@
 
 namespace Rovota\Core\Database;
 
+use Rovota\Core\Database\Drivers\MySql;
+use Rovota\Core\Database\Drivers\PostgreSql;
+use Rovota\Core\Database\Enums\Driver;
+use Rovota\Core\Database\Exceptions\DatabaseMisconfigurationException;
 use Rovota\Core\Database\Exceptions\MissingDatabaseConfigException;
+use Rovota\Core\Database\Exceptions\UnsupportedDriverException;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Throwable;
@@ -20,9 +25,9 @@ final class DatabaseManager
 	 */
 	protected static array $connections = [];
 
-	protected static string|null $default = null;
+	protected static array $configs = [];
 
-	protected static array $config = [];
+	protected static string|null $default = null;
 
 	// -----------------
 
@@ -38,57 +43,70 @@ final class DatabaseManager
 	 */
 	public static function initialize(): void
 	{
-		$config = require base_path('config/databases.php');
-		self::$default = $config['default'];
+		$file = require base_path('config/databases.php');
 
-		foreach ($config['connections'] as $name => $options) {
-			self::$config[$name] = $options;
-			if ($options['auto_connect'] === false) {
-				continue;
-			}
-			self::connect($name);
+		foreach ($file['connections'] as $name => $config) {
+			self::define($name, $config);
 		}
+
+		self::setDefault($file['default']);
 	}
 
 	// -----------------
 
-	/**
-	 * @throws \Rovota\Core\Database\Exceptions\MissingDatabaseConfigException
-	 */
-	public static function define(string $name, array $options, bool $connect = false): void
+	public static function define(string $name, array $config): void
 	{
-		self::$config[$name] = $options;
-		if ($connect) {
+		self::$configs[$name] = $config;
+
+		if ($config['auto_connect']) {
 			self::connect($name);
 		}
 	}
 
-	/**
-	 * @throws \Rovota\Core\Database\Exceptions\MissingDatabaseConfigException
-	 */
 	public static function connect(string $name): void
 	{
-		if (!isset(self::$config[$name])) {
-			throw new MissingDatabaseConfigException("There is no config found for a database named '$name'.");
+		if (isset(self::$configs[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingDatabaseConfigException("There is no config found for a database named '$name'."));
 		}
-		self::$connections[$name] = new Connection($name, self::$config[$name]);
+		self::$connections[$name] = self::build($name, self::$configs[$name]);
+	}
+
+	public static function build(string $name, array $config): ConnectionInterface|null
+	{
+		$config = new ConnectionConfig($config);
+
+		if (Driver::isSupported($config->get('driver')) === false) {
+			ExceptionHandler::addThrowable(new UnsupportedDriverException("The selected driver '{$config->get('driver')}' is not supported."));
+			return null;
+		}
+
+		if ($config->isValid() === false) {
+			ExceptionHandler::addThrowable(new DatabaseMisconfigurationException("The database '$name' cannot be used due to a configuration issue."));
+			return null;
+		}
+
+		return match ($config->driver) {
+			Driver::MySql => new MySql($name, $config),
+			Driver::PostgreSql => new PostgreSql($name, $config),
+			default => null,
+		};
 	}
 
 	// -----------------
 
 	public static function isDefined(string $name): bool
 	{
-		return array_key_exists($name, self::$config);
+		return array_key_exists($name, self::$configs);
 	}
 
-	public static function isActive(string $name): bool
+	public static function isConnected(string $name): bool
 	{
 		return array_key_exists($name, self::$connections);
 	}
 
 	// -----------------
 
-	public static function get(string|null $name = null): ConnectionInterface
+	public static function get(string|null $name = null): ConnectionInterface|null
 	{
 		if ($name === null) {
 			$name = self::$default;
@@ -102,11 +120,6 @@ final class DatabaseManager
 			}
 		}
 		return self::$connections[$name];
-	}
-
-	public static function options(string $name): array
-	{
-		return self::$config[$name] ?? [];
 	}
 
 	/**
@@ -126,8 +139,8 @@ final class DatabaseManager
 
 	public static function setDefault(string $name): void
 	{
-		if (isset(self::$config[$name]) === false) {
-			ExceptionHandler::logMessage('warning', "Undefined databases cannot be set as default: '{name}'.", ['name' => $name]);
+		if (isset(self::$configs[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingDatabaseConfigException("Undefined databases cannot be set as default: '$name'."));
 		}
 		self::$default = $name;
 	}

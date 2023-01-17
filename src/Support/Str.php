@@ -10,21 +10,14 @@ namespace Rovota\Core\Support;
 
 use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Localization\LocalizationManager;
+use Rovota\Core\Security\Randomizer;
 use Throwable;
-$randomizer = new Random\Randomizer();
 
 final class Str
 {
 
 	protected function __construct()
 	{
-	}
-
-	// -----------------
-
-	public static function make(string $string): FluentString
-	{
-		return new FluentString($string);
 	}
 
 	// -----------------
@@ -49,7 +42,7 @@ final class Str
 				if (array_is_list($args)) {
 					return sprintf($string, ...$args);
 				}
-				$args = as_bucket($args)->sortBy(fn ($variable, $key) => strlen($key), descending: true);
+				$args = as_bucket($args)->sortBy(fn ($variable, $key) => mb_strlen($key), descending: true);
 				foreach ($args as $name => $value) {
 					$string = str_replace(':'.$name, Str::translate($value, source: $source), $string);
 				}
@@ -228,7 +221,7 @@ final class Str
 
 	public static function insert(string $string, int $interval, string $character): string
 	{
-		return implode($character, str_split($string, $interval));
+		return implode($character, mb_str_split($string, $interval));
 	}
 
 	public static function isAscii(string $string): bool
@@ -311,7 +304,7 @@ final class Str
 		$maskable = Str::before($string, '@');
 		$rest = str_replace($maskable, '', $string);
 
-		return Str::mask($maskable, $replacement, $preserve, strlen($maskable) - $preserve).$rest;
+		return Str::mask($maskable, $replacement, $preserve, mb_strlen($maskable) - $preserve).$rest;
 	}
 
 	public static function merge(string $string, string|array $values): string
@@ -393,7 +386,7 @@ final class Str
 	{
 		$position = strpos($string, $target);
 		if ($position !== false) {
-			return substr_replace($string, $value, $position, strlen($target));
+			return substr_replace($string, $value, $position, mb_strlen($target));
 		}
 		return $string;
 	}
@@ -402,7 +395,7 @@ final class Str
 	{
 		$position = strrpos($string, $target);
 		if ($position !== false) {
-			return substr_replace($string, $value, $position, strlen($target));
+			return substr_replace($string, $value, $position, mb_strlen($target));
 		}
 		return $string;
 	}
@@ -418,10 +411,10 @@ final class Str
 		$string = '';
 
 		foreach ($words as $word) {
-			if (strlen($word) < 4) {
+			if (mb_strlen($word) < 4) {
 				$string .= $word.' ';
 			} else {
-				$string .= sprintf('%s%s%s ', $word[0], $randomizer->shuffleBytes(substr($word, 1, -1)), $word[strlen($word) - 1]);
+				$string .= sprintf('%s%s%s ', $word[0], Randomizer::shuffleBytes(substr($word, 1, -1)), $word[mb_strlen($word) - 1]);
 			}
 		}
 
@@ -430,7 +423,7 @@ final class Str
 
 	public static function shuffle(string $string): string
 	{
-		return $randomizer->shuffleBytes($string);
+		return Randomizer::shuffleBytes($string);
 	}
 
 	public static function simplify(string $string): string
@@ -510,14 +503,14 @@ final class Str
 		return $characters !== null ? trim($string, $characters) : trim($string);
 	}
 
-	public static function trimLeft(string $string, string|null $characters = null): string
-	{
-		return $characters !== null ? ltrim($string, $characters) : ltrim($string);
-	}
-
-	public static function trimRight(string $string, string|null $characters = null): string
+	public static function trimEnd(string $string, string|null $characters = null): string
 	{
 		return $characters !== null ? rtrim($string, $characters) : rtrim($string);
+	}
+
+	public static function trimStart(string $string, string|null $characters = null): string
+	{
+		return $characters !== null ? ltrim($string, $characters) : ltrim($string);
 	}
 
 	public static function upper(string $string): string

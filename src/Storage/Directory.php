@@ -8,48 +8,52 @@
 
 namespace Rovota\Core\Storage;
 
-use Rovota\Core\Storage\Interfaces\DiskInterface;
+use Rovota\Core\Storage\Interfaces\DirectoryInterface;
 use Rovota\Core\Storage\Traits\DirectoryFunctions;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
 
-class Directory
+class Directory implements DirectoryInterface
 {
 	use DirectoryFunctions, Conditionable;
 
-	public string|null $name = null;
-	public string|null $path = null;
-	public DiskInterface|null $disk = null;
+	protected DirectoryProperties $properties;
 
 	// -----------------
 
 	public function __construct(array $properties)
 	{
+		$this->properties = new DirectoryProperties();
+
 		foreach ($properties as $key => $value) {
-			$this->{$key} = $value;
+			$this->properties->set($key, $value);
 		}
 	}
 
 	public function __toString(): string
 	{
-		return $this->name;
+		return $this->properties->name;
 	}
 
 	// -----------------
 
-	public function properties(): array
+	public static function make(array $properties): DirectoryInterface
 	{
-		return [
-			'name' => $name ?? $this->name,
-			'path' => $this->path,
-			'disk' => $this->disk,
-		];
+		return new static($properties);
 	}
 
 	// -----------------
 
-	public static function make(array $properties): Directory
+	public function properties(): DirectoryProperties
 	{
-		return new Directory($properties);
+		return $this->properties;
+	}
+
+	public function publicUrl(): string
+	{
+		$base_path = $this->properties->disk->baseUrl().$this->properties->path;
+
+		return Str::finish($base_path, '/').$this->properties->name;
 	}
 
 }

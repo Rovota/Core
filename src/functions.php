@@ -33,14 +33,14 @@ use Rovota\Core\Partials\Partial;
 use Rovota\Core\Partials\PartialManager;
 use Rovota\Core\Routing\UrlBuilder;
 use Rovota\Core\Session\SessionManager;
-use Rovota\Core\Storage\File;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Structures\Map;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Structures\Set;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\FluentString;
+use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
@@ -51,10 +51,20 @@ use Rovota\Core\Views\ViewManager;
 // -----------------
 // Strings
 
+if (!function_exists('text')) {
+	function text(string $string): Text
+	{
+		return new Text($string);
+	}
+}
+
 if (!function_exists('string')) {
-   function string(string $string): FluentString
+	/**
+	 * @deprecated
+	 */
+   function string(string $string): Text
    {
-      return Str::make($string);
+      return new Text($string);
    }
 }
 
@@ -153,16 +163,12 @@ if (!function_exists('sanitize_mime_type')) {
 // Components
 
 if (!function_exists('cache')) {
-	function cache(array|string|null $key = null, int|null $retention = null): mixed
+	function cache(string|int|array|null $key = null): mixed
 	{
 		if ($key === null) {
 			return CacheManager::get();
 		}
-		if (is_string($key)) {
-			return CacheManager::get()->read($key);
-		}
-		CacheManager::get()->putMany($key, $retention);
-		return true;
+		return CacheManager::get()->get($key);
 	}
 }
 
@@ -266,7 +272,7 @@ if (!function_exists('file')) {
 	/**
 	 * @throws \League\Flysystem\FilesystemException
 	 */
-	function file(string $location, string|null $disk = null): File|null
+	function file(string $location, string|null $disk = null): FileInterface|null
 	{
 		return StorageManager::get($disk)->file($location);
 	}
@@ -275,10 +281,10 @@ if (!function_exists('file')) {
 if (!function_exists('asset')) {
 	function asset(string $path, string|null $disk = null): string|null
 	{
-		if ($disk === null && StorageManager::isActive('public')) {
+		if ($disk === null && StorageManager::isConnected('public')) {
 			$disk = 'public';
 		}
-		return url()->external(StorageManager::get($disk)->baseUrl().Str::trimLeft($path, '/'));
+		return url()->external(StorageManager::get($disk)->baseUrl().Str::trimStart($path, '/'));
 	}
 }
 

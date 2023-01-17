@@ -10,8 +10,7 @@ namespace Rovota\Core\Views\Traits;
 
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Partials\PartialManager;
-use Rovota\Core\Storage\File;
-use Rovota\Core\Storage\Media;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 
 /**
  * @method meta(string $string, string[] $array)
@@ -76,11 +75,10 @@ trait WebModifiers
 
 	// -----------------
 
-	public function setImage(Media|File|string $location): static
+	public function setImage(FileInterface|string $location): static
 	{
 		$public_url = match (true) {
-			$location instanceof Media => $location->publicUrl(),
-			$location instanceof File => $location->publicUrl(),
+			$location instanceof FileInterface => $location->publicUrl(),
 			default => $location,
 		};
 

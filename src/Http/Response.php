@@ -15,10 +15,8 @@ use Rovota\Core\Facades\Registry;
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Http\Traits\ResponseModifiers;
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Storage\Enums\MediaType;
-use Rovota\Core\Storage\File;
-use Rovota\Core\Storage\Media;
-use Rovota\Core\Support\FluentString;
+use Rovota\Core\Storage\Interfaces\FileInterface;
+use Rovota\Core\Support\Text;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -56,10 +54,9 @@ class Response
 		$content = match(true) {
 			is_int($this->content) => $this->content,
 			$this->content instanceof BackedEnum => $this->content->value,
-			$this->content instanceof File => $this->getContentFromFile(),
+			$this->content instanceof FileInterface => $this->getContentFromFile(),
 			$this->content instanceof ImageObject => $this->getContentFromImage(),
-			$this->content instanceof Media => $this->getContentFromMedia(),
-			$this->content instanceof FluentString => $this->getContentFromFluentString(),
+			$this->content instanceof Text => $this->getContentFromText(),
 			$this->content instanceof View => $this->getContentFromView(),
 			$this->content instanceof JsonSerializable || is_array($this->content) => $this->getContentAsJson(),
 			default => $this->getContentAsString(),
@@ -98,12 +95,15 @@ class Response
 
 	protected function getContentFromFile(): string
 	{
-		if (str_contains($this->content->mime_type, 'image') && extension_loaded('imagick')) {
-			return $this->getProcessedImage($this->content->asImage());
+		/** @var FileInterface $file */
+		$file = $this->content;
+
+		if (str_contains($file->properties()->mime_type, 'image') && extension_loaded('imagick')) {
+			return $this->getProcessedImage($file->asImage());
 		}
 
-		$this->setContentType($this->content->mime_type);
-		return $this->content->asString();
+		$this->setContentType($file->properties()->mime_type);
+		return $file->asString();
 	}
 
 	protected function getContentFromImage(): string
@@ -116,19 +116,7 @@ class Response
 		return (string)$this->content;
 	}
 
-	protected function getContentFromMedia(): string
-	{
-		if ($this->content->type === MediaType::Image) {
-			$variant = $this->variant;
-			$this->variant = null;
-			return $this->getProcessedImage($this->content->asImage($variant));
-		}
-
-		$this->setContentType($this->content->mime_type);
-		return $this->content->asString();
-	}
-
-	protected function getContentFromFluentString(): string
+	protected function getContentFromText(): string
 	{
 		return (string) $this->content;
 	}

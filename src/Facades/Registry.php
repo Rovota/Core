@@ -12,6 +12,7 @@ use BackedEnum;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\RegistryOption;
 use Rovota\Core\Support\Moment;
+use Rovota\Core\Support\Text;
 
 final class Registry
 {
@@ -55,6 +56,11 @@ final class Registry
 	public static function string(string $name, string $default = ''): string
 	{
 		return Application::$registry->string($name, $default);
+	}
+
+	public static function text(string $name, Text|string $default = ''): Text
+	{
+		return Application::$registry->text($name, $default);
 	}
 
 	// -----------------

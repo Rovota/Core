@@ -122,7 +122,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function decrement(mixed $key, int $step = 1): Bucket
 	{
-		$this->set($key, (int) $this->get($key, 0) - $step);
+		$this->set($key, (int) $this->get($key, 0) - max($step, 0));
 		return $this;
 	}
 	public function diff(mixed $items): Bucket
@@ -294,7 +294,7 @@ class Bucket implements ArrayAccess, IteratorAggregate, Countable, Arrayable, Js
 
 	public function increment(mixed $key, int $step = 1): Bucket
 	{
-		$this->set($key, (int) $this->get($key, 0) + $step);
+		$this->set($key, (int) $this->get($key, 0) + max($step, 0));
 		return $this;
 	}
 

@@ -13,7 +13,7 @@ use Rovota\Core\Cookie\Cookie;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Http\Response;
-use Rovota\Core\Storage\File;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Views\View;
 
@@ -90,7 +90,7 @@ trait ResponseModifiers
 	{
 		if (str_contains($name, '.') === false) {
 			$name = match(true) {
-				$this->content instanceof File => sprintf('%s.%s', $name, $this->content->extension),
+				$this->content instanceof FileInterface => sprintf('%s.%s', $name, $this->content->properties()->extension),
 				$this->content instanceof View => sprintf('%s.%s', $name, 'html'),
 				$this->content instanceof JsonSerializable, is_array($this->content) => sprintf('%s.%s', $name, 'json'),
 				default => sprintf('%s.%s', $name, 'txt'),

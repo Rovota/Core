@@ -17,7 +17,7 @@ use Rovota\Core\Database\Casts\EncryptionCast;
 use Rovota\Core\Database\Casts\EncryptionStringCast;
 use Rovota\Core\Database\Casts\EnumCast;
 use Rovota\Core\Database\Casts\FloatCast;
-use Rovota\Core\Database\Casts\FluentStringCast;
+use Rovota\Core\Database\Casts\TextCast;
 use Rovota\Core\Database\Casts\IntegerCast;
 use Rovota\Core\Database\Casts\JsonCast;
 use Rovota\Core\Database\Casts\MapCast;
@@ -137,7 +137,7 @@ final class CastManager
 		self::register('encrypted_string', new EncryptionStringCast());
 		self::register('enum', new EnumCast());
 		self::register('float', new FloatCast());
-		self::register('fluent_string', new FluentStringCast());
+		self::register('text', new TextCast());
 		self::register('int', new IntegerCast());
 		self::register('json', new JsonCast());
 		self::register('map', new MapCast());

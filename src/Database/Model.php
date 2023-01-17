@@ -405,7 +405,7 @@ abstract class Model implements JsonSerializable
 	public function clearFromCache(): void
 	{
 		if ($this->cache_key !== null) {
-			CacheManager::get()->forget($this->cache_key);
+			CacheManager::get()->remove($this->cache_key);
 		}
 	}
 

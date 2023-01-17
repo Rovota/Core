@@ -8,25 +8,27 @@
 
 namespace Rovota\Core\Cache;
 
-use RedisException;
-use Rovota\Core\Cache\Drivers\APCuStore;
-use Rovota\Core\Cache\Drivers\ArrayStore;
-use Rovota\Core\Cache\Drivers\RedisStore;
+use Rovota\Core\Cache\Drivers\APCu;
+use Rovota\Core\Cache\Drivers\PhpArray;
+use Rovota\Core\Cache\Drivers\Redis;
+use Rovota\Core\Cache\Enums\Driver;
+use Rovota\Core\Cache\Exceptions\CacheMisconfigurationException;
 use Rovota\Core\Cache\Exceptions\MissingCacheConfigException;
 use Rovota\Core\Cache\Exceptions\UnsupportedDriverException;
+use Rovota\Core\Cache\Interfaces\CacheInterface;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Throwable;
 
 final class CacheManager
 {
 	/**
-	 * @var array<string, CacheStore>
+	 * @var array<string, CacheInterface>
 	 */
-	protected static array $stores = [];
+	protected static array $caches = [];
+
+	protected static array $configs = [];
 
 	protected static string|null $default = null;
-
-	protected static array $config = [];
 
 	// -----------------
 
@@ -38,112 +40,100 @@ final class CacheManager
 
 	/**
 	 * @internal
-	 * @throws \Rovota\Core\Cache\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Cache\Exceptions\MissingCacheConfigException
 	 */
 	public static function initialize(): void
 	{
-		$config = require base_path('config/caches.php');
-		self::$default = $config['default'];
+		$file = require base_path('config/caches.php');
 
-		foreach ($config['stores'] as $name => $options) {
-			self::$config[$name] = $options;
-			if ($options['auto_connect'] === false) {
-				continue;
-			}
-			self::connect($name);
+		foreach ($file['caches'] as $name => $config) {
+			self::define($name, $config);
 		}
 
-		self::configureFallback();
-
-		if (self::$default === null) {
-			self::$default = 'fallback';
-		}
+		self::setDefault($file['default']);
 	}
 
 	// -----------------
 
-	/**
-	 * @throws \Rovota\Core\Cache\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Cache\Exceptions\MissingCacheConfigException
-	 */
-	public static function define(string $name, array $options, bool $connect = false): void
+	public static function define(string $name, array $config): void
 	{
-		self::$config[$name] = $options;
-		if ($connect) {
+		self::$configs[$name] = $config;
+
+		if ($config['auto_connect']) {
 			self::connect($name);
 		}
 	}
 
-	/**
-	 * @throws \Rovota\Core\Cache\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Cache\Exceptions\MissingCacheConfigException
-	 */
 	public static function connect(string $name): void
 	{
-		if (!isset(self::$config[$name])) {
-			throw new MissingCacheConfigException("There is no config found for a cache named '$name'.");
+		if (isset(self::$configs[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingCacheConfigException("There is no config found for a cache named '$name'."));
 		}
-		self::$stores[$name] = self::build($name, self::$config[$name]);
+		self::$caches[$name] = self::build($name, self::$configs[$name]);
 	}
 
-	/**
-	 * @throws \Rovota\Core\Cache\Exceptions\UnsupportedDriverException
-	 */
-	public static function build(string $name, array $options): CacheStore|null
+	public static function build(string $name, array $config): CacheInterface|null
 	{
-		return match ($options['driver']) {
-			'array' => self::buildArrayStore($name, $options),
-			'apcu' => self::buildAPCuStore($name, $options),
-			'redis' => self::buildRedisStore($name, $options),
-			default => throw new UnsupportedDriverException("The selected driver '{$options['driver']}' is not supported.")
-		};
+		$config = new CacheConfig($config);
+
+		if (Driver::isSupported($config->get('driver')) === false) {
+			ExceptionHandler::addThrowable(new UnsupportedDriverException("The selected driver '{$config->get('driver')}' is not supported."));
+			return null;
+		}
+
+		if ($config->isValid() === false) {
+			ExceptionHandler::addThrowable(new CacheMisconfigurationException("The cache '$name' cannot be used due to a configuration issue."));
+			return null;
+		}
+
+		try {
+			return match ($config->driver) {
+				Driver::APCu => new APCu($name, $config),
+				Driver::Array => new PhpArray($name, $config),
+				Driver::Redis => new Redis($name, $config),
+				default => null,
+			};
+		} catch (Throwable $throwable) {
+			ExceptionHandler::addThrowable($throwable);
+			return null;
+		}
 	}
 
 	// -----------------
 
 	public static function isDefined(string $name): bool
 	{
-		return array_key_exists($name, self::$config);
+		return array_key_exists($name, self::$configs);
 	}
 
-	public static function isActive(string $name): bool
+	public static function isConnected(string $name): bool
 	{
-		return array_key_exists($name, self::$stores);
+		return array_key_exists($name, self::$caches);
 	}
 
 	// -----------------
 
-	public static function get(string|null $name = null): CacheStore
+	public static function get(string|null $name = null): CacheInterface|null
 	{
 		if ($name === null) {
 			$name = self::$default;
 		}
-		if (!isset(self::$stores[$name])) {
+		if (!isset(self::$caches[$name])) {
 			try {
 				self::connect($name);
 			} catch (Throwable $throwable) {
 				ExceptionHandler::addThrowable($throwable, true);
 				exit;
 			}
-			if (!isset(self::$stores[$name])) {
-				$name = 'fallback';
-			}
 		}
-		return self::$stores[$name];
-	}
-
-	public static function options(string $name): array
-	{
-		return self::$config[$name] ?? [];
+		return self::$caches[$name];
 	}
 
 	/**
-	 * @returns array<string, CacheStore>
+	 * @returns array<string, CacheInterface>
 	 */
 	public static function all(): array
 	{
-		return self::$stores;
+		return self::$caches;
 	}
 
 	// -----------------
@@ -155,62 +145,10 @@ final class CacheManager
 
 	public static function setDefault(string $name): void
 	{
-		if (isset(self::$config[$name]) === false) {
-			ExceptionHandler::logMessage('warning', "Undefined caches cannot be set as default: '{name}'.", ['name' => $name]);
+		if (isset(self::$configs[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingCacheConfigException("Undefined caches cannot be set as default: '$name'."));
 		}
 		self::$default = $name;
-	}
-
-	// -----------------
-
-	protected static function configureFallback(): void
-	{
-		self::$stores['fallback'] = match(true) {
-			function_exists('apcu_enabled') && apcu_enabled() => self::buildAPCuStore('fallback', [
-				'label' => 'APCu Cache',
-				'auto_connect' => true,
-				'retention' => 3600,
-				'driver' => 'apcu',
-			]),
-			default => self::buildArrayStore('fallback', [
-				'label' => 'Array Cache',
-				'auto_connect' => true,
-				'driver' => 'array',
-			]),
-		};
-	}
-
-	// -----------------
-
-	protected static function buildArrayStore(string $name, array $options): ArrayStore
-	{
-		return new ArrayStore($name, $options);
-	}
-
-	protected static function buildAPCuStore(string $name, array $options): APCuStore|null
-	{
-		if (function_exists('apcu_enabled') && apcu_enabled()) {
-			if (self::getDefault() === 'array') {
-				self::setDefault($name);
-			}
-			return new APCuStore($name, $options);
-		}
-		return null;
-	}
-
-	protected static function buildRedisStore(string $name, array $options): RedisStore|null
-	{
-		if (class_exists('\Redis', false)) {
-			if (self::getDefault() === 'array') {
-				self::setDefault($name);
-			}
-			try {
-				return new RedisStore($name, $options);
-			} catch (RedisException $exception) {
-				ExceptionHandler::logThrowable($exception, true);
-			}
-		}
-		return null;
 	}
 
 }

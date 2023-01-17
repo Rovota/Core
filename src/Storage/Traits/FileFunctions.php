@@ -8,44 +8,20 @@
 
 namespace Rovota\Core\Storage\Traits;
 
-use League\Flysystem\FilesystemException;
-use League\Flysystem\UnableToCheckExistence;
-use League\Flysystem\UnableToCopyFile;
-use League\Flysystem\UnableToDeleteFile;
-use League\Flysystem\UnableToMoveFile;
-use League\Flysystem\UnableToReadFile;
-use League\Flysystem\UnableToRetrieveMetadata;
-use League\Flysystem\UnableToWriteFile;
-use Rovota\Core\Storage\Directory;
-use Rovota\Core\Storage\File;
-use Rovota\Core\Storage\Media;
+use Rovota\Core\Storage\Interfaces\DirectoryInterface;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Str;
-use Rovota\Core\Support\Traits\Conditionable;
 
 trait FileFunctions
 {
-	use Conditionable;
 
-	// -----------------
-
-	/**
-	 * This method requires the ImageMagick extension.
-	 */
 	public function asImage(): ImageObject|null
 	{
-		if (extension_loaded('imagick') === false || $this->contents === null) {
+		if (extension_loaded('imagick') === false || $this->properties->contents === null) {
 			return null;
 		}
-		return new ImageObject($this->asString(), $this->extension, $this->mime_type);
-	}
-
-	public function asMedia(): Media|null
-	{
-		if ($this->contents === null) {
-			return null;
-		}
-		return Media::createUsing($this, $this->properties());
+		return new ImageObject($this->asString(), $this->properties->extension, $this->properties->mime_type);
 	}
 
 	public function asHash(string $algo = 'sha256', bool $binary = false): string|null
@@ -66,79 +42,62 @@ trait FileFunctions
 
 	// -----------------
 
-	/**
-	 * @throws UnableToCheckExistence
-	 * @throws UnableToReadFile
-	 * @throws UnableToRetrieveMetadata
-	 * @throws FilesystemException
-	 */
-	public function compress(string|null $target = null): File|null
+	public function write(mixed $content): static
 	{
-		return $this->disk->compress($this->location(), $target);
+		$this->contents = $content;
+		$this->unsaved_changes = true;
+		return $this;
 	}
 
-	/**
-	 * This functionality is currently only available for disks using the 'local' driver. When the target isn't specified, the archive will be extracted to the same folder as the archive.
-	 * @throws UnableToReadFile
-	 * @throws UnableToWriteFile
-	 * @throws FilesystemException
-	 */
-	public function extract(string|null $target = null): Directory|null
+	// -----------------
+
+	public function compress(string|null $target = null): FileInterface|null
 	{
-		return $this->disk->extract($this->location(), $target);
+		return $this->properties->disk->compress($this->location(), $target);
+	}
+
+	public function extract(string|null $target = null): DirectoryInterface|null
+	{
+		return $this->properties->disk->extract($this->location(), $target);
 	}
 
 	// -----------------
 
 	public function checksum(array $config = []): string
 	{
-		return $this->disk->checksum($this->location(), $config);
+		return $this->properties->disk->checksum($this->location(), $config);
 	}
 
 	// -----------------
 
-	/**
-	 * @throws UnableToMoveFile
-	 * @throws FilesystemException
-	 */
 	public function move(string $to): static
 	{
-		$this->disk->move($this->location(), $to);
-		$this->name = basename($to);
-		$this->path = str_replace(basename($to), '', $to);
+		$this->properties->disk->move($this->location(), $to);
+		$this->properties->name = Str::beforeLast(basename($to), '.');
+		$this->properties->extension = Str::afterLast(basename($to), '.');
+		$this->properties->path = str_replace(basename($to), '', $to);
 		return $this;
 	}
 
-	/**
-	 * @throws UnableToMoveFile
-	 * @throws FilesystemException
-	 */
 	public function rename(string $name): static
 	{
-		$this->disk->rename($this->location(), $name);
-		$this->name = $name;
+		$this->properties->disk->rename($this->location(), $name);
+		$this->properties->name = Str::beforeLast($name, '.');
+		$this->properties->extension = Str::afterLast($name, '.');
 		return $this;
 	}
 
-	/**
-	 * @throws UnableToCopyFile
-	 * @throws FilesystemException
-	 */
 	public function copy(string $to): static
 	{
-		$this->disk->copy($this->location(), $to);
-		return $this->disk->file($to);
+		$this->properties->disk->copy($this->location(), $to);
+		return $this->properties->disk->file($to);
 	}
 
 	// -----------------
 
-	/**
-	 * @throws UnableToDeleteFile
-	 * @throws FilesystemException
-	 */
 	public function delete(): void
 	{
-		$this->disk->delete($this->location());
+		$this->properties->disk->delete($this->location());
 	}
 
 	public function clear(): static
@@ -150,24 +109,18 @@ trait FileFunctions
 
 	// -----------------
 
-	/**
-	 * A new line will not be used when the existing content is empty.
-	 */
-	public function prepend(string $contents, bool $new_line = true): static
+	public function prepend(string $content, bool $new_line = true): static
 	{
 		$new_line = empty($this->asString()) === false && $new_line === true;
-		$this->contents = Str::finish($contents, $new_line ? "\n" : '').$this->asString();
+		$this->contents = Str::finish($content, $new_line ? "\n" : '').$this->asString();
 		$this->unsaved_changes = true;
 		return $this;
 	}
 
-	/**
-	 * A new line will not be used when the existing content is empty.
-	 */
-	public function append(string $contents, bool $new_line = true): static
+	public function append(string $content, bool $new_line = true): static
 	{
 		$new_line = empty($this->asString()) === false && $new_line === true;
-		$this->contents = Str::finish($this->asString(), $new_line ? "\n" : '').$contents;
+		$this->contents = Str::finish($this->asString(), $new_line ? "\n" : '').$content;
 		$this->unsaved_changes = true;
 		return $this;
 	}
@@ -183,7 +136,7 @@ trait FileFunctions
 
 	public function isExtension(string $extension): bool
 	{
-		return $this->extension === $extension;
+		return $this->properties->extension === $extension;
 	}
 
 	public function isAnyExtension(array $extensions): bool
@@ -200,7 +153,7 @@ trait FileFunctions
 
 	public function isMimeType(string $mime_type): bool
 	{
-		return $this->mime_type === $mime_type;
+		return $this->properties->mime_type === $mime_type;
 	}
 
 	public function isAnyMimeType(array $mime_types): bool
@@ -215,27 +168,25 @@ trait FileFunctions
 
 	// -----------------
 
-	/**
-	 * @throws UnableToWriteFile
-	 * @throws FilesystemException
-	 */
 	public function save(): static
 	{
 		if ($this->unsaved_changes) {
 			if (is_resource($this->contents)) {
-				$this->disk->writeStream($this->location(), $this->contents);
+				$this->properties->disk->writeStream($this->location(), $this->contents);
 				return $this;
 			}
-			$this->disk->write($this->location(), $this->asString());
+			$this->properties->disk->write($this->location(), $this->asString());
 		}
 		return $this;
 	}
 
 	// -----------------
 
-	protected function location(): string
+	public function location(): string
 	{
-		return ($this->path ?? '').($this->name ?? '');
+		$file_name = sprintf('%s.%s', $this->properties->name, $this->properties->extension);
+
+		return Str::finish($this->properties->path, '/').$file_name;
 	}
 
 }

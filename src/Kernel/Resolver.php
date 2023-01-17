@@ -16,7 +16,7 @@ use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Structures\Map;
 use Rovota\Core\Structures\Sequence;
 use Rovota\Core\Structures\Set;
-use Rovota\Core\Support\FluentString;
+use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Moment;
 
 final class Resolver
@@ -58,7 +58,7 @@ final class Resolver
 			$value instanceof Set => 'set',
 			$value instanceof Moment => 'moment',
 			$value instanceof DateTime => 'datetime',
-			$value instanceof FluentString => 'fluent_string',
+			$value instanceof Text => 'text',
 			is_array($value) => 'array',
 			is_bool($value) => 'bool',
 			is_float($value) => 'float',
@@ -66,6 +66,18 @@ final class Resolver
 			is_string($value) => 'string',
 			default => gettype($value),
 		};
+	}
+
+	// -----------------
+
+	public static function serialize($value): string
+	{
+		return is_numeric($value) && ! in_array($value, [INF, -INF]) && ! is_nan($value) ? $value : serialize($value);
+	}
+
+	public static function deserialize($value): mixed
+	{
+		return is_numeric($value) ? $value : unserialize($value);
 	}
 
 }

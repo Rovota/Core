@@ -8,15 +8,17 @@
 
 namespace Rovota\Core\Logging\Drivers;
 
-use Rovota\Core\Logging\Logger;
+use Rovota\Core\Logging\Channel;
+use Rovota\Core\Logging\ChannelConfig;
 
-final class Monolog extends Logger
+final class Monolog extends Channel
 {
 
-	public function __construct(string $name, array $options = [])
+	public function __construct(string $name, ChannelConfig $config)
 	{
-		$handler = new $options['handler'](...$options['parameters']);
-		parent::__construct($name, $handler, $options);
+		$handler = new $config->handler(...$config->parameters);
+
+		parent::__construct($name, $handler, $config);
 	}
 
 }

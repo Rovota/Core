@@ -37,7 +37,7 @@ final class RequestManager
 		self::$request = new Request($body, $post, $query, $headers);
 
 		$continue = self::$request->query->string('continue');
-		if (strlen($continue) > 0) {
+		if (mb_strlen($continue) > 0) {
 			SessionManager::get()->put('location.continue', $continue);
 		}
 	}
@@ -62,7 +62,7 @@ final class RequestManager
 		$data = $_POST;
 		array_walk_recursive($data, function(&$item) {
 			if (is_string($item)) {
-				$item = strlen(trim($item)) > 0 ? trim($item) : null;
+				$item = mb_strlen(trim($item)) > 0 ? trim($item) : null;
 			}
 		});
 
@@ -90,7 +90,7 @@ final class RequestManager
 			if (is_array($value)) {
 				$parameters[$key] = self::filterParameters($value);
 			} else {
-				if (strlen(trim($value)) > 0) {
+				if (mb_strlen(trim($value)) > 0) {
 					$parameters[$key] = $value;
 				}
 			}

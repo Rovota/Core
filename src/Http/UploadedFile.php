@@ -15,6 +15,7 @@ use Rovota\Core\Facades\Registry;
 use Rovota\Core\Http\Enums\UploadError;
 use Rovota\Core\Storage\File;
 use Rovota\Core\Storage\Interfaces\DiskInterface;
+use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Support\ImageObject;
 use Rovota\Core\Support\Str;
@@ -29,7 +30,7 @@ class UploadedFile extends SplFileInfo
 	public bool $validated = false;
 
 	/**
-	 * @var array<string, File>
+	 * @var array<string, FileInterface>
 	 */
 	public array $variants = [];
 
@@ -54,7 +55,7 @@ class UploadedFile extends SplFileInfo
 
 	// -----------------
 
-	public function variant(string $name): File|null
+	public function variant(string $name): FileInterface|null
 	{
 		return $this->variants[$name];
 	}
@@ -103,9 +104,14 @@ class UploadedFile extends SplFileInfo
 			return false;
 		}
 
-		$this->variants['original']->path = Str::finish(trim($path), '/');
-		$this->variants['original']->disk = $disk instanceof DiskInterface ? $disk : StorageManager::get($disk);
+		// Disk to be used
+		$disk = $disk instanceof DiskInterface ? $disk : StorageManager::get($disk);
 
+		// Override original properties
+		$this->variants['original']->properties()->path = Str::finish(trim($path), '/');
+		$this->variants['original']->properties()->disk = $disk;
+
+		// If no variants are present, save the original and be done.
 		if (empty($variants)) {
 			$this->variants['original']->save();
 			return true;
@@ -117,8 +123,8 @@ class UploadedFile extends SplFileInfo
 		}
 
 		$content = $this->variants['original']->asString();
-		$extension = $this->variants['original']->extension;
-		$mime_type = $this->variants['original']->mime_type;
+		$extension = $this->variants['original']->properties()->extension;
+		$mime_type = $this->variants['original']->properties()->mime_type;
 
 		foreach ($variants as $variant) {
 
@@ -162,7 +168,7 @@ class UploadedFile extends SplFileInfo
 			$image->compress($compression_level > 0 ? $compression_level : 98);
 
 			// Save
-			$this->variants[$variant] = File::make($image->extract(), $properties);
+			$this->variants[$variant] = File::make($image->extract(), $properties->toArray());
 			$this->variants[$variant]->save();
 
 		}
@@ -180,13 +186,14 @@ class UploadedFile extends SplFileInfo
 	 */
 	public function storeAs(string $path, string $name, DiskInterface|string|null $disk = null, array $variants = ['original']): bool
 	{
-		$this->variants['original']->name = $name;
+		$this->variants['original']->properties()->name = Str::beforeLast(basename($name), '.');
+		$this->variants['original']->properties()->extension = Str::afterLast(basename($name), '.');
 		return $this->store($path, $disk, $variants);
 	}
 
 	// -----------------
 
-	protected function createFileFromUntrustedData(array $untrusted): File|null
+	protected function createFileFromUntrustedData(array $untrusted): FileInterface|null
 	{
 		$contents = fopen($untrusted['temp_name'], 'r');
 
@@ -203,7 +210,7 @@ class UploadedFile extends SplFileInfo
 			'extension' => $extension,
 			'mime_type' => $mime_type,
 			'last_modified' => now(),
-		]);
+		], true);
 	}
 
 	// -----------------

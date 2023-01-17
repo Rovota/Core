@@ -8,9 +8,12 @@
 
 namespace Rovota\Core\Database\Interfaces;
 
+use DateTimeZone;
 use Envms\FluentPDO\Query;
 use PDO;
 use PDOStatement;
+use PHLAK\SemVer\Exceptions\InvalidVersionException;
+use Rovota\Core\Database\ConnectionConfig;
 use Rovota\Core\Database\QueryBuilder;
 use Rovota\Core\Support\Version;
 
@@ -23,33 +26,26 @@ interface ConnectionInterface
 
 	public function name(): string;
 
-	// -----------------
-
-	public function option(string $name): string|int|array|null;
-
-	public function driver(): string;
-
-	public function label(): string;
-
-	public function host(): string;
-
-	public function database(): string;
-
-	public function port(): int;
-
-	public function user(): string;
+	public function config(): ConnectionConfig;
 
 	// -----------------
 
-	public function version(): Version;
+	/**
+	 * @throws InvalidVersionException
+	 */
+	public function getVersion(): Version;
 
 	// -----------------
 
 	public function table(string $name): QueryBuilder;
 
-	// -----------------
+	public function getTables(): array;
 
 	public function hasTable(string $name): bool;
+
+	// -----------------
+
+	public function setTimezone(DateTimeZone|string $timezone): bool;
 
 	public function hasTimezoneData(): bool;
 
@@ -89,13 +85,19 @@ interface ConnectionInterface
 
 	// -----------------
 
+	public function setAttribute(int $name, mixed $value): bool;
+
+	public function getAttribute(int $name): mixed;
+
+	// -----------------
+
 	/**
-	 * Only supported with MySQL.
+	 * Only supported in combination with MySQL.
 	 */
 	public function getBufferState(): bool;
 
 	/**
-	 * Only supported with MySQL.
+	 * Only supported in combination with MySQL.
 	 */
 	public function setBufferState(bool $state): void;
 

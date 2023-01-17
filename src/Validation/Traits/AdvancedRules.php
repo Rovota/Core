@@ -77,12 +77,12 @@ trait AdvancedRules
 			if (ValidationManager::hasFilter($filter_name)) {
 				$filter = ValidationManager::getFilter($filter_name);
 
-				if ($filter->action === FilterAction::Block && string($data)->lower()->containsAny($filter->values)) {
+				if ($filter->action === FilterAction::Block && text($data)->lower()->containsAny($filter->values)) {
 					$this->addError($field, 'filter');
 					return false;
 				}
 
-				if ($filter->action === FilterAction::Allow && string($data)->lower()->containsNone($filter->values)) {
+				if ($filter->action === FilterAction::Allow && text($data)->lower()->containsNone($filter->values)) {
 					$this->addError($field, 'filter');
 					return false;
 				}
