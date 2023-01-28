@@ -26,6 +26,11 @@ trait ResponseChecks
 		return $this->status()->value >= 200 && $this->status()->value < 300;
 	}
 
+	public function ok(): bool
+	{
+		return $this->status() === StatusCode::Ok;
+	}
+
 	// -----------------
 	// 3xx
 
