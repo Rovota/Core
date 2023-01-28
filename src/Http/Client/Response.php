@@ -72,4 +72,10 @@ final class Response
 		return StatusCode::tryFrom($this->response->getStatusCode());
 	}
 
+	public function reason(): string|null
+	{
+		$reason = $this->response->getStatusCode();
+		return strlen($reason) > 0 ? $reason : null;
+	}
+
 }
