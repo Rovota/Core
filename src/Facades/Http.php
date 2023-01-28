@@ -9,6 +9,7 @@
 namespace Rovota\Core\Facades;
 
 use Rovota\Core\Http\Client\Client;
+use Rovota\Core\Http\Client\HibpClient;
 use Rovota\Core\Http\Client\Request;
 use Rovota\Core\Structures\Bucket;
 
@@ -24,6 +25,11 @@ final class Http
 	public static function client(Bucket|array $config = []): Client
 	{
 		return new Client($config);
+	}
+
+	public static function haveIBeenPwned(Bucket|array $config = []): HibpClient
+	{
+		return new HibpClient($config);
 	}
 
 	// -----------------
