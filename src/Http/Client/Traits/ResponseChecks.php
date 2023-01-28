@@ -13,7 +13,7 @@ use Rovota\Core\Http\Enums\StatusCode;
 trait ResponseChecks
 {
 
-	public function failed(): bool
+	public function isFailure(): bool
 	{
 		return $this->serverError() || $this->clientError();
 	}
@@ -21,12 +21,12 @@ trait ResponseChecks
 	// -----------------
 	// 2xx
 
-	public function successful(): bool
+	public function isSuccess(): bool
 	{
 		return $this->status()->value >= 200 && $this->status()->value < 300;
 	}
 
-	public function ok(): bool
+	public function isOk(): bool
 	{
 		return $this->status() === StatusCode::Ok;
 	}
@@ -34,7 +34,7 @@ trait ResponseChecks
 	// -----------------
 	// 3xx
 
-	public function redirect(): bool
+	public function isRedirect(): bool
 	{
 		return $this->status()->value >= 300 && $this->status()->value < 400;
 	}
@@ -42,32 +42,32 @@ trait ResponseChecks
 	// -----------------
 	// 4xx
 
-	public function clientError(): bool
+	public function isClientError(): bool
 	{
 		return $this->status()->value >= 400 && $this->status()->value < 500;
 	}
 
-	public function unauthorized(): bool
+	public function isUnauthorized(): bool
 	{
 		return $this->status() === StatusCode::Unauthorized;
 	}
 
-	public function paymentRequired(): bool
+	public function isPaymentRequired(): bool
 	{
 		return $this->status() === StatusCode::PaymentRequired;
 	}
 
-	public function forbidden(): bool
+	public function isForbidden(): bool
 	{
 		return $this->status() === StatusCode::Forbidden;
 	}
 
-	public function notFound(): bool
+	public function isNotFound(): bool
 	{
 		return $this->status() === StatusCode::NotFound;
 	}
 
-	public function tooManyRequests(): bool
+	public function isTooManyRequests(): bool
 	{
 		return $this->status() === StatusCode::TooManyRequests;
 	}
@@ -75,17 +75,17 @@ trait ResponseChecks
 	// -----------------
 	// 5xx
 
-	public function serverError(): bool
+	public function isServerError(): bool
 	{
 		return $this->status()->value >= 500;
 	}
 
-	public function serviceUnavailable(): bool
+	public function isServiceUnavailable(): bool
 	{
 		return $this->status() === StatusCode::ServiceUnavailable;
 	}
 
-	public function notImplemented(): bool
+	public function isNotImplemented(): bool
 	{
 		return $this->status() === StatusCode::NotImplemented;
 	}
