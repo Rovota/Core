@@ -12,6 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Rovota\Core\Http\Client\Traits\ResponseChecks;
 use Rovota\Core\Http\Enums\StatusCode;
+use Rovota\Core\Support\Str;
 
 final class Response
 {
@@ -74,8 +75,35 @@ final class Response
 
 	public function reason(): string|null
 	{
-		$reason = $this->response->getStatusCode();
-		return strlen($reason) > 0 ? $reason : null;
+		$raw = $this->response->getStatusCode();
+		return strlen($raw) > 0 ? $raw : null;
+	}
+
+	// -----------------
+
+	public function headers(): array
+	{
+		$raw = $this->response->getHeaders();
+		$headers = [];
+
+		foreach ($raw as $key => $value) {
+			if (count($value) === 1) {
+				$value = trim($value[0]);
+			}
+			$headers[$key] = $value;
+		}
+
+		return $headers;
+	}
+
+	public function hasHeader(string $name): bool
+	{
+		return isset($this->headers()[Str::lower($name)]);
+	}
+
+	public function header(string $name, array|string|null $default = null): array|string|null
+	{
+		return $this->headers()[Str::lower($name)] ?? $default;
 	}
 
 }
