@@ -10,9 +10,14 @@ namespace Rovota\Core\Http\Client;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Rovota\Core\Http\Client\Traits\ResponseChecks;
+use Rovota\Core\Http\Enums\StatusCode;
 
 final class Response
 {
+	use ResponseChecks;
+
+	// -----------------
 
 	protected ResponseInterface $response;
 
@@ -58,6 +63,13 @@ final class Response
 			return is_array($json) ? $json : [$json];
 		}
 		return [];
+	}
+
+	// -----------------
+
+	public function status(): StatusCode
+	{
+		return StatusCode::tryFrom($this->response->getStatusCode());
 	}
 
 }
