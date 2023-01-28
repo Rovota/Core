@@ -27,7 +27,7 @@ final class Http
 		return new Client($config);
 	}
 
-	public static function haveIBeenPwned(Bucket|array $config = []): HibpClient
+	public static function haveIBeenPwnedClient(Bucket|array $config = []): HibpClient
 	{
 		return new HibpClient($config);
 	}

@@ -8,9 +8,9 @@
 
 namespace Rovota\Core\Http\Client;
 
-use Rovota\Core\Http\Client\Traits\PasswordService;
+use Rovota\Core\Http\Client\Traits\HibpPasswordService;
 
 final class HibpClient extends Client
 {
-	use PasswordService;
+	use HibpPasswordService;
 }

@@ -12,7 +12,7 @@ use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Str;
 use Throwable;
 
-trait PasswordService
+trait HibpPasswordService
 {
 	/**
 	 * Provide the SHA1 hash of the password you wish to check.
