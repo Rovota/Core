@@ -36,13 +36,6 @@ class Client
 
 	// -----------------
 
-	public static function make(Bucket|array $config = []): static
-	{
-		return new static($config);
-	}
-
-	// -----------------
-
 	protected function setClientDefaults(): void
 	{
 		$this->config->merge([
