@@ -12,7 +12,7 @@ use Envms\FluentPDO\Exception;
 use Envms\FluentPDO\Queries\Base;
 use Envms\FluentPDO\Query as FluentQuery;
 use Rovota\Core\Database\CastManager;
-use Rovota\Core\Database\DatabaseManager;
+use Rovota\Core\Database\ConnectionManager;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
 use Rovota\Core\Database\Model;
 use Rovota\Core\Database\Traits\QueryConstraints;
@@ -41,7 +41,7 @@ final class Query
 
 	public function __construct(ConnectionInterface|string $connection, QueryConfig|null $config = null)
 	{
-		$this->connection = is_string($connection) ? DatabaseManager::get($connection) : $connection;
+		$this->connection = is_string($connection) ? ConnectionManager::get($connection) : $connection;
 		$this->config = $config ?? new QueryConfig();
 		$this->fluent = $this->connection->fluent();
 	}

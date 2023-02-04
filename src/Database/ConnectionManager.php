@@ -18,7 +18,7 @@ use Rovota\Core\Database\Interfaces\ConnectionInterface;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Throwable;
 
-final class DatabaseManager
+final class ConnectionManager
 {
 	/**
 	 * @var array<string, ConnectionInterface>

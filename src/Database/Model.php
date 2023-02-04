@@ -71,7 +71,7 @@ abstract class Model implements JsonSerializable
 			$this->table = $this->guessTableName();
 		}
 		if ($this->connection === null) {
-			$this->connection = DatabaseManager::getDefault();
+			$this->connection = ConnectionManager::getDefault();
 		}
 
 		$this->setAttributes($attributes);

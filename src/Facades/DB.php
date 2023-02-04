@@ -12,7 +12,7 @@ use Envms\FluentPDO\Query as FluentQuery;
 use PDO;
 use PDOStatement;
 use Rovota\Core\Database\Builder\Query;
-use Rovota\Core\Database\DatabaseManager;
+use Rovota\Core\Database\ConnectionManager;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
 use Rovota\Core\Support\Str;
 
@@ -27,100 +27,100 @@ final class DB
 
 	public static function connection(string|null $name = null): ConnectionInterface
 	{
-		return DatabaseManager::get($name);
+		return ConnectionManager::get($name);
 	}
 
 	public static function build(array $config, string|null $name = null): ConnectionInterface|null
 	{
-		return DatabaseManager::build($name ?? Str::random(20), $config);
+		return ConnectionManager::build($name ?? Str::random(20), $config);
 	}
 
 	// -----------------
 
 	public static function table(string $name): Query
 	{
-		return DatabaseManager::get()->table($name);
+		return ConnectionManager::get()->table($name);
 	}
 
 	public static function hasTable(string $name): bool
 	{
-		return DatabaseManager::get()->hasTable($name);
+		return ConnectionManager::get()->hasTable($name);
 	}
 
 	// -----------------
 
 	public static function select(string $query, array $params = []): array
 	{
-		return DatabaseManager::get()->select($query, $params);
+		return ConnectionManager::get()->select($query, $params);
 	}
 
 	public static function insert(string $query, array $params = []): int
 	{
-		return DatabaseManager::get()->insert($query, $params);
+		return ConnectionManager::get()->insert($query, $params);
 	}
 
 	public static function update(string $query, array $params = []): int
 	{
-		return DatabaseManager::get()->update($query, $params);
+		return ConnectionManager::get()->update($query, $params);
 	}
 
 	public static function delete(string $query, array $params = []): int
 	{
-		return DatabaseManager::get()->delete($query, $params);
+		return ConnectionManager::get()->delete($query, $params);
 	}
 
 	public static function query(string $query, array $params = []): PDOStatement
 	{
-		return DatabaseManager::get()->query($query, $params);
+		return ConnectionManager::get()->query($query, $params);
 	}
 
 	public static function prepare(string $query): PDOStatement
 	{
-		return DatabaseManager::get()->prepare($query);
+		return ConnectionManager::get()->prepare($query);
 	}
 
 	public static function execute(PDOStatement $statement, array $params): PDOStatement
 	{
-		return DatabaseManager::get()->execute($statement, $params);
+		return ConnectionManager::get()->execute($statement, $params);
 	}
 
 	// -----------------
 
 	public static function beginTransaction(): bool
 	{
-		return DatabaseManager::get()->beginTransaction();
+		return ConnectionManager::get()->beginTransaction();
 	}
 
 	public static function inTransaction(): bool
 	{
-		return DatabaseManager::get()->inTransaction();
+		return ConnectionManager::get()->inTransaction();
 	}
 
 	public static function commit(): bool
 	{
-		return DatabaseManager::get()->commit();
+		return ConnectionManager::get()->commit();
 	}
 
 	public static function rollBack(): bool
 	{
-		return DatabaseManager::get()->rollBack();
+		return ConnectionManager::get()->rollBack();
 	}
 
 	// -----------------
 
 	public static function raw(): PDO
 	{
-		return DatabaseManager::get()->raw();
+		return ConnectionManager::get()->raw();
 	}
 
 	public static function fluent(): FluentQuery
 	{
-		return DatabaseManager::get()->fluent();
+		return ConnectionManager::get()->fluent();
 	}
 
 	public static function lastId(): string|int
 	{
-		return DatabaseManager::get()->lastId();
+		return ConnectionManager::get()->lastId();
 	}
 
 }

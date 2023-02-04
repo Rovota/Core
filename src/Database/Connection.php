@@ -68,7 +68,7 @@ abstract class Connection implements ConnectionInterface
 
 	public function isDefault(): bool
 	{
-		return DatabaseManager::getDefault() === $this->name;
+		return ConnectionManager::getDefault() === $this->name;
 	}
 
 	// -----------------

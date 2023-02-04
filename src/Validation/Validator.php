@@ -9,7 +9,7 @@
 namespace Rovota\Core\Validation;
 
 use Closure;
-use Rovota\Core\Database\DatabaseManager;
+use Rovota\Core\Database\ConnectionManager;
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Structures\Bucket;
@@ -176,7 +176,7 @@ class Validator
 	protected function processDatabaseOptions(string $field, string|array $options): array
 	{
 		$config = [
-			'connection' => DatabaseManager::getDefault(),
+			'connection' => ConnectionManager::getDefault(),
 			'column' => $field,
 			'model' => null,
 		];

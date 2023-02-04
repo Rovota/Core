@@ -16,7 +16,7 @@ use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Database\CastManager;
-use Rovota\Core\Database\DatabaseManager;
+use Rovota\Core\Database\ConnectionManager;
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Http\ResponseManager;
@@ -77,7 +77,7 @@ final class Application
 		LoggingManager::initialize();
 		CastManager::initialize();
 		CacheManager::initialize();
-		DatabaseManager::initialize();
+		ConnectionManager::initialize();
 		StorageManager::initialize();
 
 		self::$registry = new Registry();
