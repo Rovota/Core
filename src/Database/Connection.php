@@ -209,21 +209,4 @@ abstract class Connection implements ConnectionInterface
 		}
 	}
 
-	// -----------------
-
-	protected function buildDsn(Driver $driver, array $parameters): string
-	{
-		$host = $parameters['host'];
-		$database = $parameters['database'];
-		$port = $parameters['port'];
-		$charset = $parameters['charset'];
-
-		$template = '%s:host=%s;dbname=%s;charset=%s';
-		if ($port > 0) {
-			$template .= ';port='.$port;
-		}
-
-		return sprintf($template, $driver->value, $host, $database, $charset);
-	}
-
 }

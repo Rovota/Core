@@ -12,6 +12,7 @@ use DateTimeZone;
 use PDO;
 use Rovota\Core\Database\Connection;
 use Rovota\Core\Database\ConnectionConfig;
+use Rovota\Core\Database\Enums\Driver;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Version;
 use Throwable;
@@ -21,16 +22,7 @@ class MySql extends Connection
 
 	public function __construct(string $name, ConnectionConfig $config)
 	{
-		$parameters = [
-			'host' => $config->parameters->get('host', 'localhost'),
-			'database' => $config->parameters->get('database', 'default'),
-			'port' => $config->parameters->int('port', 3306),
-			'user' => $config->parameters->get('user', 'root'),
-			'password' => $config->parameters->get('password'),
-			'charset' => $config->parameters->get('charset', 'utf8mb4'),
-			'attributes' => $config->parameters->array('attributes'),
-		];
-
+		$parameters = $this->getMappedParameters($config);
 		$dsn = $this->buildDsn($config->driver, $parameters);
 		$connection = new PDO($dsn, $parameters['user'], $parameters['password'], $parameters['attributes']);
 
@@ -84,6 +76,36 @@ class MySql extends Connection
 	public function setBufferState(bool $state): void
 	{
 		$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $state);
+	}
+
+	// -----------------
+
+	protected function buildDsn(Driver $driver, array $parameters): string
+	{
+		$host = $parameters['host'];
+		$database = $parameters['database'];
+		$port = $parameters['port'];
+		$charset = $parameters['charset'];
+
+		$template = '%s:host=%s;dbname=%s;charset=%s';
+		if ($port > 0) {
+			$template .= ';port='.$port;
+		}
+
+		return sprintf($template, $driver->value, $host, $database, $charset);
+	}
+
+	protected function getMappedParameters(ConnectionConfig $config): array
+	{
+		return [
+			'host' => $config->parameters->get('host', 'localhost'),
+			'database' => $config->parameters->get('database', 'default'),
+			'port' => $config->parameters->int('port', 3306),
+			'user' => $config->parameters->get('user', 'root'),
+			'password' => $config->parameters->get('password'),
+			'charset' => $config->parameters->get('charset', 'utf8mb4'),
+			'attributes' => $config->parameters->array('attributes'),
+		];
 	}
 
 }

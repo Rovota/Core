@@ -12,6 +12,7 @@ use DateTimeZone;
 use PDO;
 use Rovota\Core\Database\Connection;
 use Rovota\Core\Database\ConnectionConfig;
+use Rovota\Core\Database\Enums\Driver;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Support\Version;
 use Throwable;
@@ -21,20 +22,12 @@ class PostgreSql extends Connection
 
 	public function __construct(string $name, ConnectionConfig $config)
 	{
-		$parameters = [
-			'host' => $config->parameters->get('host', 'localhost'),
-			'database' => $config->parameters->get('database', 'default'),
-			'port' => $config->parameters->int('port', 5432),
-			'user' => $config->parameters->get('user', 'admin'),
-			'password' => $config->parameters->get('password'),
-			'charset' => $config->parameters->get('charset', 'utf8mb4'), // TODO: Check if Postgres uses this as well.
-			'attributes' => $config->parameters->array('attributes'),
-		];
-
+		$parameters = $this->getMappedParameters($config);
 		$dsn = $this->buildDsn($config->driver, $parameters);
 		$connection = new PDO($dsn, $parameters['user'], $parameters['password'], $parameters['attributes']);
 
 		parent::__construct($name, $connection, $config);
+		$this->setEncoding($parameters['encoding']);
 	}
 
 	// -----------------
@@ -83,6 +76,47 @@ class PostgreSql extends Connection
 
 	public function setBufferState(bool $state): void
 	{
+	}
+
+	// -----------------
+
+	protected function buildDsn(Driver $driver, array $parameters): string
+	{
+		$host = $parameters['host'];
+		$database = $parameters['database'];
+		$port = $parameters['port'];
+
+		$template = '%s:host=%s;dbname=%s';
+		if ($port > 0) {
+			$template .= ';port='.$port;
+		}
+
+		return sprintf($template, $driver->value, $host, $database);
+	}
+
+	protected function getMappedParameters(ConnectionConfig $config): array
+	{
+		return [
+			'host' => $config->parameters->get('host', 'localhost'),
+			'database' => $config->parameters->get('database', 'default'),
+			'port' => $config->parameters->int('port', 5432),
+			'user' => $config->parameters->get('user', 'admin'),
+			'password' => $config->parameters->get('password'),
+			'charset' => $config->parameters->get('charset', 'UTF8'),
+			'attributes' => $config->parameters->array('attributes'),
+		];
+	}
+
+	protected function setEncoding(string $encoding): bool
+	{
+		try {
+			$this->query("SET CLIENT_ENCODING TO '?'", [$encoding]);
+		} catch (Throwable) {
+			ExceptionHandler::logMessage('notice', "The encoding '{encoding}' could not be synchronized. The encoding may not be supported.", ['encoding' => $encoding]);
+			return false;
+		}
+
+		return true;
 	}
 
 }
