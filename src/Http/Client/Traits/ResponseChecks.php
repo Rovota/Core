@@ -15,7 +15,7 @@ trait ResponseChecks
 
 	public function isFailure(): bool
 	{
-		return $this->serverError() || $this->clientError();
+		return $this->isServerError() || $this->isClientError();
 	}
 
 	// -----------------
