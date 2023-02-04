@@ -311,11 +311,11 @@ final class LocalizationManager
 	protected static function loadFormatsByLocale(string $locale): Bucket
 	{
 		$formats = new Bucket();
-		$file = __DIR__.'/formats/'.$locale.'.php';
+		$file = __DIR__.'/data/'.$locale.'.php';
 		if (file_exists($file)) {
 			$formats->import(include $file);
 		} else {
-			$formats->import(include __DIR__.'/formats/base.php');
+			$formats->import(include __DIR__.'/data/base.php');
 		}
 		return $formats;
 	}
