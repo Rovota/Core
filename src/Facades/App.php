@@ -44,6 +44,11 @@ final class App
 		return Application::isEnvironment('development');
 	}
 
+	public static function isTestable(): bool
+	{
+		return Application::isEnvironment('testing');
+	}
+
 	public static function isStaged(): bool
 	{
 		return Application::isEnvironment('staging');
