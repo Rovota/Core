@@ -44,7 +44,7 @@ final class StorageManager
 	 */
 	public static function initialize(): void
 	{
-		$file = require base_path('config/disks.php');
+		$file = require base_path('config/storage.php');
 
 		foreach ($file['disks'] as $name => $config) {
 			self::define($name, $config);
