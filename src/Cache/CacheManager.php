@@ -24,7 +24,7 @@ final class CacheManager
 	/**
 	 * @var array<string, CacheInterface>
 	 */
-	protected static array $caches = [];
+	protected static array $stores = [];
 
 	protected static array $configs = [];
 
@@ -43,9 +43,9 @@ final class CacheManager
 	 */
 	public static function initialize(): void
 	{
-		$file = require base_path('config/caches.php');
+		$file = require base_path('config/caching.php');
 
-		foreach ($file['caches'] as $name => $config) {
+		foreach ($file['stores'] as $name => $config) {
 			self::define($name, $config);
 		}
 
@@ -68,7 +68,7 @@ final class CacheManager
 		if (isset(self::$configs[$name]) === false) {
 			ExceptionHandler::addThrowable(new MissingCacheConfigException("There is no config found for a cache named '$name'."));
 		}
-		self::$caches[$name] = self::build($name, self::$configs[$name]);
+		self::$stores[$name] = self::build($name, self::$configs[$name]);
 	}
 
 	public static function build(string $name, array $config): CacheInterface|null
@@ -107,7 +107,7 @@ final class CacheManager
 
 	public static function isConnected(string $name): bool
 	{
-		return array_key_exists($name, self::$caches);
+		return array_key_exists($name, self::$stores);
 	}
 
 	// -----------------
@@ -117,7 +117,7 @@ final class CacheManager
 		if ($name === null) {
 			$name = self::$default;
 		}
-		if (!isset(self::$caches[$name])) {
+		if (!isset(self::$stores[$name])) {
 			try {
 				self::connect($name);
 			} catch (Throwable $throwable) {
@@ -125,7 +125,7 @@ final class CacheManager
 				exit;
 			}
 		}
-		return self::$caches[$name];
+		return self::$stores[$name];
 	}
 
 	/**
@@ -133,7 +133,7 @@ final class CacheManager
 	 */
 	public static function all(): array
 	{
-		return self::$caches;
+		return self::$stores;
 	}
 
 	// -----------------
