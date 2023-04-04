@@ -57,7 +57,7 @@ class MailingQueue implements ArrayAccess, Iterator, Countable, Arrayable
 		$list = $list instanceof MailingList ? $list : MailingList::where('name', $list)->first();
 
 		if ($list === null) {
-			return new static();
+			return new static;
 		}
 
 		/** @var Bucket $users */

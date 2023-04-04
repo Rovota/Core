@@ -157,7 +157,7 @@ trait ModelQueryFunctions
 	 */
 	public static function find(string|int|null $identifier, string|null $column = null, int $retention = 30): static|null
 	{
-		$model = new static();
+		$model = new static;
 		$column = $column ?? $model->getPrimaryKey();
 		$key = 'model_'.$model::class.':'.$column.':'.$identifier;
 		
@@ -216,7 +216,7 @@ trait ModelQueryFunctions
 	 */
 	public static function destroy(array|string|int $identifiers, string|null $column = null, bool $permanent = false): int
 	{
-		$model = new static();
+		$model = new static;
 		$column = $column ?? $model->getPrimaryKey();
 		$identifiers = is_array($identifiers) ? $identifiers : [$identifiers];
 		$models = $model::whereIn($column, $identifiers)->get();
