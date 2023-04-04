@@ -112,7 +112,7 @@ if (!function_exists('now')) {
 }
 
 if (!function_exists('moment')) {
-	function moment(string|int|null $datetime = 'now', DateTimeZone|string|null $timezone = null): Moment|null
+	function moment(mixed $datetime = 'now', DateTimeZone|string|null $timezone = null): Moment|null
 	{
 		try {
 			return Moment::create($datetime, $timezone);

@@ -58,6 +58,9 @@ final class Moment extends DateTime implements JsonSerializable
 		if (is_string($timezone)) {
 			$timezone = ($timezone === 'local') ? LocalizationManager::getActiveTimezone() : new DateTimeZone($timezone);
 		}
+		if ($datetime instanceof DateTime) {
+			$timezone = $datetime->getTimezone();
+		}
 		parent::__construct($datetime, $timezone);
 	}
 
