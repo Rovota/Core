@@ -491,7 +491,7 @@ if (!function_exists('user_has')) {
 			}
 
 			foreach ($conditions as $value) {
-				if ($value === 'verified_session' || $value === 'verified_email') {
+				if (is_string($value)) {
 					$conditions[$value] = true;
 				}
 			}
@@ -501,6 +501,14 @@ if (!function_exists('user_has')) {
 			}
 
 			if (isset($conditions['verified_email']) && $provider->user()->email_verified !== $conditions['verified_email']) {
+				return false;
+			}
+
+			if (isset($conditions['twofactor_enabled']) && $provider->user()->hasTwoFactorMethods() !== $conditions['twofactor_enabled']) {
+				return false;
+			}
+
+			if (isset($conditions['twofactor_method']) && $provider->user()->hasTwoFactorMethod($conditions['twofactor_method']) === false) {
 				return false;
 			}
 
