@@ -9,6 +9,7 @@
 namespace Rovota\Core\Support;
 
 use Closure;
+use Random\Randomizer;
 use Rovota\Core\Support\Interfaces\Arrayable;
 
 final class Arr
@@ -267,10 +268,10 @@ final class Arr
 		$requested = $amount === 0 ? 1 : (($amount > $count) ? $count : $amount);
 
 		if ($requested === 1) {
-			return $array[array_rand($array)];
+			return $array[array_rand($array)]; // Leaving as array_rand as pickArrayKeys requires int as second argument
 		}
 
-		$keys = array_rand($array, $requested);
+		$keys = (new Randomizer)->pickArrayKeys($array, $requested);
 		$result = [];
 
 		foreach ($keys as $key) {
