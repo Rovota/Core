@@ -72,7 +72,7 @@ final class ExceptionHandler
 		$solution = $throwable instanceof ProvidesSolution ? $throwable->getSolution() : null;
 		$traces = self::getFilteredTrace($throwable);
 
-		include base_path('vendor/rovota/core/src/Web/views/debug.php');
+		include base_path('vendor/rovota/core/src/Web/templates/debug.php');
 		exit;
 	}
 

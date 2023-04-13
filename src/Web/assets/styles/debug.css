@@ -1,26 +1,33 @@
 /* Copyright (c) - Created and designed by Rovota */
 /* ---------------------- */
-:root {
-    --color-base: 240, 240, 240;
-    --color-card: 255, 255, 255;
-    --color-font: 20, 20, 20;
-    --color-font-alt: 255, 255, 255;
-
-    --color-neutral: 27, 127, 184;
-    --color-danger: 229, 70, 70;
-}
-
-@media (prefers-color-scheme: dark) {
-    /*:root {*/
-    /*	--color-base: 10, 10, 10;*/
-    /*	--color-card: 10, 10, 10;*/
-    /*}*/
-}
-
-/* ---------------------- */
 
 html, body, button, a, input, textarea, select, pre::before {
     font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif !important;
+}
+
+::selection {
+    color: rgba(var(--color-light), 1);
+    background-color: rgba(var(--color-accent-alt), 1);
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    transition: all .12s ease;
+    border: 3px solid rgba(var(--color-base), 1);
+    border-radius: var(--radius-standard);
+    background: rgba(var(--color-font), .2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--color-font), .4);
 }
 
 * {
@@ -30,18 +37,15 @@ html, body, button, a, input, textarea, select, pre::before {
 }
 
 a {
-    text-decoration: none;
-}
-
-a:hover {
     text-decoration: underline;
 }
 
 hr {
-    margin: 20px 0;
-    border: none;
     height: 1px;
-    background: rgba(var(--color-font), .1);
+    margin: 1.25rem 0;
+    border: none;
+    border-radius: var(--radius-small);
+    background: rgba(var(--color-font), .07);
 }
 
 body {
@@ -74,10 +78,12 @@ main {
 
 card {
     display: flex;
+    overflow: hidden;
     flex-direction: row;
     background: rgba(var(--color-card), 1);
-    overflow: hidden;
-    border-radius: 10px;
+    border: 1px solid rgba(var(--color-font), .07);
+    border-radius: var(--radius-standard);
+    box-shadow: 0 4px 10px 0 rgba(var(--color-dark), .02);
 }
 
 /* ---------------------- */
@@ -133,7 +139,7 @@ nav > ul > li a {
 
 .throwable > .name > span.unhandled {
     background: rgba(var(--color-danger), 1);
-    color: rgba(var(--color-font-alt), 1);
+    color: rgba(var(--color-light), 1);
 }
 
 .throwable > hr {
@@ -146,8 +152,8 @@ nav > ul > li a {
 }
 
 .throwable > p > span {
-    color: rgba(var(--color-font), 0.65);
-    font-weight: 500;
+    color: rgba(var(--color-font), var(--opacity-subtext));
+    font-weight: 600;
     margin-right: 15px;
 }
 
@@ -167,7 +173,7 @@ nav > ul > li a {
 
 .solution > p > a {
     font-weight: bold;
-    color: rgba(var(--color-neutral), 1);
+    color: rgba(var(--color-accent), 1);
 }
 
 /* ---------------------- */
@@ -175,62 +181,84 @@ nav > ul > li a {
 .stack {
     background: transparent;
     flex-direction: row;
-    column-gap: 10px;
+    column-gap: 30px;
+    box-shadow: none;
+    border: none;
+}
+
+.stack > traces, .stack > preview {
+    background: rgba(var(--color-card), 1);
+    border: 1px solid rgba(var(--color-font), .07);
+    border-radius: var(--radius-standard);
+    box-shadow: 0 4px 10px 0 rgba(var(--color-dark), .02);
+}
+
+.stack heading {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(var(--color-font), 0.07);
+}
+
+.stack heading span {
+    font-weight: 600;
+    line-height: 1.5rem;
+    flex-grow: 1;
 }
 
 .stack > traces {
     overflow: hidden;
-    background: rgba(var(--color-card), 1);
     display: flex;
     flex-direction: column;
     flex: 0 0 350px;
-    border-radius: 10px;
 }
 
-.stack > traces > heading, .stack > preview > heading {
-    background: rgba(50, 50, 50, 1);
-    color: rgba(var(--color-font-alt), 1);
+.stack > traces > content {
+    padding: 0 1.25rem;
+}
+
+.stack > traces > content > trace {
     display: block;
-    line-height: 60px;
-    padding: 0 30px;
-    font-weight: 500;
-}
-
-.stack > traces > trace {
-    display: block; padding: 14px 30px;
+    padding: 14px 0;
     border-bottom: 1px solid rgba(var(--color-font), .1);
 }
 
-.stack > traces > trace > span {
-    display: block; line-height: 1.5;
+.stack > traces > content > trace:last-child {
+    border-bottom: none;
 }
 
-.stack > traces > trace > span small {
-    font-size: 15px;
-    color: rgba(var(--color-font), 0.65);
+.stack > traces > content > trace > span {
+    display: block;
+    line-height: 1.5;
 }
 
-.stack > traces > trace > span badge {
+.stack > traces > content > trace > span small {
+    font-size: var(--font-size-small);
+    color: rgba(var(--color-font), var(--opacity-subtext));
+}
+
+.stack > traces > content > trace > span badge {
     display: inline-block;
-    color: rgba(var(--color-font-alt), 1);
-    border-radius: 3px; font-size: 10px;
+    color: rgba(var(--color-light), 1);
+    border-radius: 3px;
+    font-size: 10px;
     text-transform: uppercase;
-    padding: 2px 4px; margin-right: 4px;
+    padding: 2px 4px;
+    margin-right: 4px;
     transform: translateY(-1px);
 }
 
-.stack > traces > trace > span badge.static {
+.stack > traces > content > trace > span badge.static {
     background: rgba(170, 79, 225, 1);
 }
 
-.stack > traces > trace > span badge.non-static {
+.stack > traces > content > trace > span badge.non-static {
     background: rgba(246, 144, 45, 1);
 }
 
 .stack > preview {
     overflow: hidden;
-    background: rgba(var(--color-card), 1);
-    display: flex; flex-grow: 1;
+    display: flex;
+    flex-grow: 1;
     flex-direction: column;
     border-radius: 10px;
 }
@@ -239,6 +267,10 @@ file {
     width: 100%;
     overflow: auto;
     display: block;
+}
+
+file::-webkit-scrollbar-thumb {
+    border: 3px solid rgba(var(--color-card), 1);
 }
 
 file > table {
@@ -266,17 +298,20 @@ file > table tr td:last-child {
 }
 
 file > table pre {
-    margin: 0; font-size: 15px;
-}
-
-file > table tr.highlight td {
-    background: rgba(var(--color-danger), .2);
-}
-
-file > table tr.comment td:last-child {
-    color: rgba(var(--color-font), .45);
+    margin: 0;
+    font-size: 15px;
 }
 
 file > table tr.highlight td:first-child {
     color: rgba(var(--color-danger), 1);
+}
+
+file > table tr.highlight td:last-child {
+    background: rgba(var(--color-danger), 1);
+    color: rgba(var(--color-light), 1);
+    border-radius: 5px;
+}
+
+file > table tr.comment td:last-child {
+    color: rgba(var(--color-font), .45);
 }
