@@ -298,16 +298,18 @@ final class Arr
 	 */
 	public static function search(array $array, mixed $value, bool $strict = true): string|int|bool
 	{
-		if (is_object($value)) {
-			$value = spl_object_hash($value);
-		}
-
 		if ($value instanceof Closure === false) {
+			if (is_object($value)) {
+				$value = spl_object_hash($value);
+			}
 			return array_search($value, $array, $strict);
 		}
 
 		$callable = $value;
 		foreach ($array as $key => $value) {
+			if (is_object($value)) {
+				$value = spl_object_hash($value);
+			}
 			if ($callable($value, $key)) {
 				return $key;
 			}
