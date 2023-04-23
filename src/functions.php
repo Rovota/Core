@@ -279,12 +279,19 @@ if (!function_exists('file')) {
 }
 
 if (!function_exists('asset')) {
-	function asset(string $path, string|null $disk = null): string|null
+	function asset(string $path, array $query = [], string|null $disk = null): UrlBuilder|null
 	{
 		if ($disk === null && StorageManager::isConnected('public')) {
 			$disk = 'public';
 		}
-		return url()->foreign(StorageManager::get($disk)->baseUrl())->path($path);
+
+		$disk = StorageManager::get($disk);
+		if ($disk !== null) {
+			$path = $disk->root().Str::start($path, '/');
+			return url()->domain($disk->domain())->path($path)->query($query);
+		}
+
+		return null;
 	}
 }
 

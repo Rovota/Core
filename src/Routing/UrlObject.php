@@ -22,6 +22,7 @@ final class UrlObject
 	public string|null $subdomain = null;
 	public string|null $domain = null;
 	public int|null $port = null;
+	public string|null $root = null;
 	public string|null $path = null;
 	public array $query = [];
 
@@ -102,7 +103,7 @@ final class UrlObject
 		$subdomain = is_string($this->subdomain) ? $this->subdomain.'.' : '';
 		$port = $this->port !== 80 && $this->port !== 443 ? (is_int($this->port) ? ':'.$this->port : '') : '';
 
-		$path = is_string($this->path) ? '/'.$this->path : '/';
+		$path = is_string($this->path) ? Str::start(trim($this->path, '/'), '/') : '/';
 		$query = UrlTools::arrayToQuery($this->query);
 
 		$absolute = $scheme.$subdomain.$this->domain.$port;
