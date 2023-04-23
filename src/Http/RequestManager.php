@@ -38,7 +38,7 @@ final class RequestManager
 
 		$continue = self::$request->query->string('continue');
 		if (mb_strlen($continue) > 0) {
-			SessionManager::get()->put('location.continue', $continue);
+			SessionManager::get()->put('location.next', $continue);
 		}
 	}
 
