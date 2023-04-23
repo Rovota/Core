@@ -8,162 +8,160 @@
 
 namespace Rovota\Core\Routing;
 
+use Rovota\Core\Routing\Enums\Scheme;
 use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Support\Traits\Conditionable;
+use Rovota\Core\Support\UrlTools;
 
 final class UrlBuilder
 {
 	use Conditionable;
 
-	protected string $scheme;
-	protected string $domain;
-	protected int $port;
-	protected array $query;
+	protected UrlObject $url;
 
 	// -----------------
 
 	public function __construct()
 	{
-		$this->domain(request()->targetHost());
-		$this->scheme = 'https';
-		$this->query = [];
-		$this->port = request()->port();
+		$this->url = UrlObject::fromArray([
+			'scheme' => Scheme::Https,
+			'port' => request()->port(),
+		]);
+	}
+
+	public function __toString(): string
+	{
+		if ($this->url->domain === null) {
+			$this->domain(request()->targetHost());
+		}
+
+		return $this->url;
 	}
 
 	// -----------------
 
-	public function scheme(string $scheme): UrlBuilder
+	public function scheme(Scheme|string $scheme): UrlBuilder
 	{
-		$this->scheme = $scheme;
+		$this->url->scheme = is_string($scheme) ? (Scheme::tryFrom($scheme) ?? Scheme::Https) : $scheme;
 		return $this;
 	}
 
-	public function domain(string $domain): UrlBuilder
+	public function subdomain(string|null $name): UrlBuilder
 	{
-		$this->domain = text($domain)->after('://')->before('/');
-		return $this;
-	}
+		if ($this->url->domain === null) {
+			$this->domain(request()->targetHost());
+		}
 
-	public function subdomain(string $subdomain): UrlBuilder
-	{
-		if (mb_strlen($subdomain) === 0 || $subdomain === 'www' || $subdomain === '.') {
+		if (mb_strlen($name) === 0 || $name === 'www' || $name === '.') {
+			$this->url->subdomain = null;
 			return $this;
 		}
-		$this->domain = text($this->domain)->prepend(trim($subdomain, '.').'.');
+
+		$this->url->subdomain = $name;
 		return $this;
 	}
 
-	public function port(int $port): UrlBuilder
+	public function domain(string $name): UrlBuilder
 	{
-		if ($port !== 80 && $port !== 443) {
-			$this->port = $port;
+		if (Str::occurrences($name, '.') > 1) {
+			$subdomain = Str::before($name, '.');
+			$this->url->subdomain = $subdomain;
+			$name = Str::remove($name, $subdomain.'.');
 		}
+
+		$this->url->domain = $name;
 		return $this;
 	}
 
-	public function query(array $items): UrlBuilder
+	public function port(int|null $port): UrlBuilder
 	{
-		$this->query = $items;
+		if ($port === 80 || $port === 443) {
+			$this->url->port = null;
+			return $this;
+		}
+
+		$this->url->port = $port;
 		return $this;
 	}
 
-	public function queryItem(string $key, mixed $value): UrlBuilder
+	public function query(string|array $key, mixed $value = null): UrlBuilder
 	{
-		$this->query[$key] = (string)$value;
+		if (is_array($key)) {
+			foreach ($key as $name => $value) {
+				$this->url->query[$name] = $value;
+			}
+		} else {
+			$this->url->query[$key] = $value;
+		}
+
+		return $this;
+	}
+
+	public function path(string $path): UrlBuilder
+	{
+		$path = trim($path, '/');
+		if (mb_strlen($path) === 0 || $path === '/') {
+			$this->url->path = null;
+			return $this;
+		}
+
+		$this->url->path = trim($path);
 		return $this;
 	}
 
 	// -----------------
 
-	public function previous(array $query = []): string
+	public function route(string $name, array $params = [], array $query = []): UrlBuilder
 	{
-		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer() ?? request()->targetHost();
-		return $this->external($location, $query);
-	}
-
-	public function intended(string $default = '/', array $query = []): string
-	{
-		$location = SessionManager::get()->pull('location.intended') ?? $default;
-		return $this->external($location, $query);
-	}
-
-	public function continue(array $query = []): string
-	{
-		$location = SessionManager::get()->pull('location.continue');
-		return $this->external($location, $query);
-	}
-
-	public function external(string $location, array $query = []): string
-	{
-		$this->query = array_merge($this->query, $query);
-		$location = str_contains($location, '://') ? $location : 'https://'.$location;
-		return $this->buildUrl($location, false);
-	}
-
-	public function path(string $path, array $query = []): string
-	{
-		$this->query = array_merge($this->query, $query);
-		return $this->buildUrl($path);
-	}
-
-	public function route(string $name, array $params = [], array $query = []): string
-	{
-		$this->query = array_merge($this->query, $query);
 		$route = RouteManager::findRouteByName($name);
+		$this->domain(request()->targetHost());
 
 		if ($route === null) {
-			$this->query = [];
-			return $this->buildUrl('/');
+			$this->path('/');
+			$this->url->query = [];
+			return $this;
 		}
 
-		$path = UrlBuilder::getPathUsingParams($route->getPath(), $params);
-		return $this->buildUrl($path);
+		$path = UrlTools::getPathUsingParams($route->getPath(), $params);
+		$this->path($path);
+		$this->query($query);
+		return $this;
 	}
 
-	// -----------------
-
-	public static function getPathUsingParams(string $path, array $params): string
+	public function previous(string $default = '/', array $query = []): UrlBuilder
 	{
-		if (empty($params) === false) {
-			if (array_is_list($params)) {
-				$path = preg_replace('/{(.*?)}/', '{parameter}', $path);
-				$path = Str::replaceSequential($path, '{parameter}', $params);
-			} else {
-				foreach ($params as $key => $value) {
-					$path = str_replace(sprintf('{%s}', $key), $value, $path);
-				}
-			}
-		}
-		return $path;
+		$location = SessionManager::get()->pull('location.previous', request()->referrer() ?? $default);
+		return $this->foreign($location, $query);
 	}
 
-	/**
-	 * Returns a formatted query string using the items in the array.
-	 */
-	public static function arrayToQuery(array $fields = [], bool $encode = true): string
+	public function next(string $default = '/', array $query = []): UrlBuilder
 	{
-		$items = '';
-		foreach ($fields as $key => $value) {
-			$value = (string)$value;
-			if (Str::length($value) > 0) {
-				$value = $encode ? rawurlencode($value) : $value;
-				$items .= sprintf('%s%s=%s', (Str::length($items) > 0) ? '&' : '', $key, $value);
-			}
-		}
-		return (Str::length($items) > 0) ? '?'.$items : '';
+		$location = SessionManager::get()->pull('location.next', $default);
+		return $this->foreign($location, $query);
 	}
 
-	// -----------------
-
-	protected function buildUrl(string $path, bool $full = true): string
+	public function intended(string $default = '/', array $query = []): UrlBuilder
 	{
-		$query = UrlBuilder::arrayToQuery($this->query);
-		$port = ($this->port !== 80 && $this->port !== 443) ? ':'.$this->port : '';
-		$address = sprintf('%s://%s%s', $this->scheme, $this->domain, $port);
-		$path = trim($path, '/');
+		$location = SessionManager::get()->pull('location.intended', $default);
+		return $this->foreign($location, $query);
+	}
 
-		return trim($full ? sprintf('%s/%s',  $address, $path) : $path, '/').$query;
+	public function foreign(string $location, array $query = []): UrlBuilder
+	{
+		$data = $this->url->query;
+		$this->url = UrlObject::from($location);
+		$this->url->query = array_merge($data, $query);
+		return $this;
+	}
+
+	public function local(string $location, array $query = []): UrlBuilder
+	{
+		$data = $this->url->query;
+		$this->url = UrlObject::from($location);
+		$this->url->query = array_merge($data, $query);
+		$this->url->domain = request()->targetHost();
+		return $this;
 	}
 
 }

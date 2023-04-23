@@ -121,7 +121,7 @@ final class Route
 	public function getUrl(array $params = [], array $query = []): string|null
 	{
 		$builder = new UrlBuilder();
-		return $builder->route($this->name, $params, $query);
+		return (string) $builder->route($this->name, $params, $query);
 	}
 
 	public function getPattern(): string

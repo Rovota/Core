@@ -284,7 +284,7 @@ if (!function_exists('asset')) {
 		if ($disk === null && StorageManager::isConnected('public')) {
 			$disk = 'public';
 		}
-		return url()->external(StorageManager::get($disk)->baseUrl().Str::trimStart($path, '/'));
+		return url()->foreign(StorageManager::get($disk)->baseUrl())->path($path);
 	}
 }
 
@@ -346,13 +346,6 @@ if (!function_exists('as_set')) {
 
 // -----------------
 // Misc
-
-// if (!function_exists('collect')) {
-//    function collect(mixed $items = []): Collection
-//    {
-//       return new Collection($items);
-//    }
-// }
 
 if (!function_exists('quit')) {
    function quit(StatusCode $code = StatusCode::InternalServerError): never
@@ -580,16 +573,15 @@ if (!function_exists('domain')) {
 }
 
 if (!function_exists('url')) {
-	function url(string|null $path = null, array $query = []): UrlBuilder|string
+	function url(string|null $path = null, array $query = []): UrlBuilder
 	{
 		$builder = new UrlBuilder();
-		if ($path === null) return $builder;
-		return str_contains($path, '://') ? $builder->external($path, $query) : $builder->path($path, $query);
+		return $path === null ? $builder : $builder->foreign($path, $query);
 	}
 }
 
 if (!function_exists('route')) {
-	function route(string $name, array $params = [], array $query = []): string
+	function route(string $name, array $params = [], array $query = []): UrlBuilder
 	{
 		$builder = new UrlBuilder();
 		return $builder->route($name, $params, $query);

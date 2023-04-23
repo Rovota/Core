@@ -39,26 +39,6 @@ final class Response
 		return ResponseManager::redirect($path, $query, $code);
 	}
 
-	public static function away(string $location, array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
-	{
-		return ResponseManager::redirect(null, [], $code)->away($location, $query, $code);
-	}
-
-	public static function intended(string $default = '/', array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
-	{
-		return ResponseManager::redirect(null, [], $code)->intended($default, $query, $code);
-	}
-
-	public static function continue(array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
-	{
-		return ResponseManager::redirect(null, [], $code)->continue($query, $code);
-	}
-
-	public static function route(string $name, array $params = [], array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
-	{
-		return ResponseManager::redirect(null, [], $code)->route($name, $params, $query, $code);
-	}
-
 	// -----------------
 
 	public static function hasHeader(string $name): bool

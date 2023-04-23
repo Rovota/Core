@@ -133,15 +133,15 @@ class TimeBasedOTP
 
 	public function getImageUrl(int $height = 200, int $width = 200): string
 	{
-		$otp_url = url()->query([
+		$otp_url = url()->foreign('otpauth://totp/'.$this->getLabel(), [
 			'secret' => $this->getSecret(),
 			'issuer' => $this->getIssuer() ?? registry('site_name'),
-		])->external('otpauth://totp/'.$this->getLabel());
+		]);
 
 		/** @noinspection SpellCheckingInspection */
-		return url()->domain('chart.googleapis.com')->query([
+		return url()->foreign('chart.googleapis.com/chart', [
 			'chs' => $width.'x'.$height, 'chld' => 'M|0', 'cht' => 'qr', 'chl' => $otp_url,
-		])->path('chart');
+		]);
 	}
 
 }

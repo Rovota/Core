@@ -9,8 +9,8 @@
 namespace Rovota\Core\Http;
 
 use Rovota\Core\Http\Enums\StatusCode;
+use Rovota\Core\Routing\Enums\Scheme;
 use Rovota\Core\Routing\UrlBuilder;
-use Rovota\Core\Session\SessionManager;
 
 class RedirectResponse extends Response
 {
@@ -27,18 +27,30 @@ class RedirectResponse extends Response
 
 		$this->builder = new UrlBuilder();
 		$this->builder->query($query);
-		$this->path = $path;
+		if ($path !== null) {
+			$this->builder->path($path);
+		}
 	}
 
 	public function __toString(): string
 	{
-		if ($this->path !== null) {
-			$this->header('Location', $this->builder->path($this->path));
-		}
+		$this->header('Location', $this->builder);
 		return parent::__toString();
 	}
 
 	// -----------------
+
+	public function scheme(Scheme|string $scheme): RedirectResponse
+	{
+		$this->builder->scheme($scheme);
+		return $this;
+	}
+
+	public function subdomain(string|null $name): RedirectResponse
+	{
+		$this->builder->subdomain($name);
+		return $this;
+	}
 
 	public function domain(string $domain): RedirectResponse
 	{
@@ -46,56 +58,65 @@ class RedirectResponse extends Response
 		return $this;
 	}
 
-	public function subdomain(string $domain): RedirectResponse
+	public function port(int|null $port): RedirectResponse
 	{
-		$this->builder->subdomain($domain);
+		$this->builder->port($port);
+		return $this;
+	}
+
+	public function query(string|array $key, mixed $value = null): RedirectResponse
+	{
+		$this->builder->query($key, $value);
+		return $this;
+	}
+
+	public function path(string $path): RedirectResponse
+	{
+		$this->builder->path($path);
 		return $this;
 	}
 
 	// -----------------
 
-	public function path(string $path, array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
+	public function route(string $name, array $params = [], array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
 	{
 		$this->setHttpCode($code);
-		$this->header('Location', $this->builder->path($path, $query));
+		$this->builder->route($name, $params, $query);
 		return $this;
 	}
 
-	public function away(string $location, array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
+	public function previous(string $default = '/', array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
 	{
 		$this->setHttpCode($code);
-		$this->header('Location', $this->builder->external($location, $query));
+		$this->builder->previous($default, $query);
 		return $this;
 	}
 
-	public function previous(array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
+	public function next(string $default = '/', array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
 	{
 		$this->setHttpCode($code);
-		$location = SessionManager::get()->pull('location.previous') ?? request()->referrer() ?? request()->targetHost();
-		$this->header('Location', $this->builder->external($location, $query));
+		$this->builder->next($default, $query);
 		return $this;
 	}
 
 	public function intended(string $default = '/', array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
 	{
 		$this->setHttpCode($code);
-		$location = SessionManager::get()->pull('location.intended') ?? $default;
-		$this->header('Location', $this->builder->external($location, $query));
+		$this->builder->intended($default, $query);
 		return $this;
 	}
 
-	public function continue(array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
+	public function away(string $location, array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
 	{
 		$this->setHttpCode($code);
-		$location = SessionManager::get()->pull('location.continue');
-		$this->header('Location', $this->builder->external($location, $query));
+		$this->builder->foreign($location, $query);
 		return $this;
 	}
 
-	public function route(string $name, array $params = [], array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
+	public function local(string $location, array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
 	{
 		$this->setHttpCode($code);
-		$this->header('Location', $this->builder->route($name, $params, $query));
+		$this->builder->local($location, $query);
 		return $this;
 	}
 
