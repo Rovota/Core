@@ -91,6 +91,11 @@ abstract class Disk implements DiskInterface
 		return $domain ?? $fallback;
 	}
 
+	public function root(): string
+	{
+		return Str::trim($this->config->root, '/');
+	}
+
 	public function baseUrl(): string
 	{
 		$root = Str::startAndFinish($this->config->root, '/');

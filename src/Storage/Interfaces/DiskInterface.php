@@ -38,6 +38,8 @@ interface DiskInterface
 
 	public function domain(): string;
 
+	public function root(): string;
+
 	public function baseUrl(): string;
 
 	// -----------------
