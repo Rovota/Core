@@ -221,12 +221,12 @@ class CookieStore implements SessionInterface
 
 	// -----------------
 
-	protected function setFlashes(array $keys)
+	protected function setFlashes(array $keys): void
 	{
 		$_SESSION['flashes'] = array_unique(array_merge($_SESSION['flashes'], $keys));
 	}
 
-	protected function removeFlashes(array $keys)
+	protected function removeFlashes(array $keys): void
 	{
 		$_SESSION['flashes_old'] = array_diff($_SESSION['flashes_old'], $keys);
 	}
