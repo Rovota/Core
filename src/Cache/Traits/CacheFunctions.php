@@ -155,7 +155,7 @@ trait CacheFunctions
 
 	protected function getFullKey(string|int $key): string
 	{
-		if ($this->prefix === null || mb_strlen($this->prefix ?? '') === 0) {
+		if ($this->prefix === null || mb_strlen($this->prefix) === 0) {
 			return (string) $key;
 		}
 		return $this->prefix.':'.$key;

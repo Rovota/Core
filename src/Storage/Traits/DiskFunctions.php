@@ -382,7 +382,7 @@ trait DiskFunctions
 		$source = trim(getcwd().'/'.$this->config->root.'/'.$source, '/');
 
 		if ($target === null) {
-			$target_filename = Str::finish(basename($source ?? $this->config->root), '.zip');
+			$target_filename = Str::finish(basename($source), '.zip');
 			$target_real_path = trim(str_replace(basename($source), '', $source), '/').'/'.$target_filename;
 		} else {
 			$target = trim(getcwd().'/'.$this->config->root.'/'.$target, '/');

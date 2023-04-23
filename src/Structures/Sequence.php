@@ -43,7 +43,7 @@ class Sequence extends Collection
 	public function join(string $glue, string|null $final_glue = null): string
 	{
 		if ($final_glue === null) {
-			return implode($glue ?? '', $this->values);
+			return implode($glue, $this->values);
 		}
 
 		if ($this->count() === 0) {

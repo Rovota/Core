@@ -79,7 +79,7 @@ class ApiToken extends Model
 			return true;
 		}
 
-		return Arr::containsAny($this->endpoints ?? [], array_merge($endpoints, ['*']));
+		return Arr::containsAny($this->endpoints, array_merge($endpoints, ['*']));
 	}
 
 	// -----------------
