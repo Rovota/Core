@@ -10,6 +10,7 @@ namespace Rovota\Core\Security;
 
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Database\Model;
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
 use function now;
@@ -50,8 +51,8 @@ class Token extends Model
 	{
 		$attributes = array_merge([
 			'user_id' => $identity->getId(),
-			'ip' => request()->ip(),
-			'client' => request()->client(),
+			'ip' => RequestManager::getRequest()->ip(),
+			'client' => RequestManager::getRequest()->client(),
 			'hash' => Str::random(100),
 			'expiration' => now()->addMinutes(30),
 		], $attributes);

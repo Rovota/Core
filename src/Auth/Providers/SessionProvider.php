@@ -16,6 +16,7 @@ use Rovota\Core\Auth\User;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Facades\Cookie;
 use Rovota\Core\Facades\Registry;
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Throwable;
 
@@ -101,7 +102,7 @@ class SessionProvider extends Provider implements SessionAuthentication
 				return !$cookie->expire();
 			}
 			try {
-				$session = Session::where(['hash' => $cookie->value, 'ip' => request()->ip()])->where('expiration', '>=', now())->first();
+				$session = Session::where(['hash' => $cookie->value, 'ip' => RequestManager::getRequest()->ip()])->where('expiration', '>=', now())->first();
 				if ($session instanceof Session) {
 					$user = User::find($session->user_id, retention: 0);
 					if ($user instanceof User && $user->isSuspended() === false) {
@@ -204,7 +205,7 @@ class SessionProvider extends Provider implements SessionAuthentication
 				$cookie->expire();
 			} else {
 				try {
-					$trusted_client = TrustedClient::where(['hash' => $cookie->value, 'ip' => request()->ip()])->first();
+					$trusted_client = TrustedClient::where(['hash' => $cookie->value, 'ip' => RequestManager::getRequest()->ip()])->first();
 					if ($trusted_client instanceof TrustedClient && ($trusted_client->expiration === null || $trusted_client->expiration->isFuture())) {
 						$this->trusted_client = $trusted_client;
 					} else {

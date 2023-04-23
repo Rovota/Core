@@ -567,8 +567,8 @@ if (!function_exists('is_even')) {
 if (!function_exists('domain')) {
 	function domain(bool $include_scheme = false): string
 	{
-		$host = request()->targetHost();
-		return $include_scheme ? sprintf('%s://%s', request()->scheme(), $host) : $host;
+		$host = RequestManager::getRequest()->targetHost();
+		return $include_scheme ? sprintf('%s://%s', RequestManager::getRequest()->scheme(), $host) : $host;
 	}
 }
 

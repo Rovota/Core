@@ -12,6 +12,7 @@ namespace Rovota\Core\Views;
 use Rovota\Core\Addon\AddonManager;
 use Rovota\Core\Facades\Localization;
 use Rovota\Core\Facades\Registry;
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Localization\Language;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Views\Components\Meta;
@@ -373,7 +374,7 @@ final class ViewManager
 
 		self::addMeta('*', 'og:title', ['property' => 'og:title', 'content' => Registry::string('site_name')]);
 		self::addMeta('*', 'og:description', ['property' => 'og:description', 'content' => Registry::string('site_description')]);
-		self::addMeta('*', 'og:url', ['property' => 'og:url', 'content' => request()->fullUrl()]);
+		self::addMeta('*', 'og:url', ['property' => 'og:url', 'content' => RequestManager::getRequest()->fullUrl()]);
 
 		self::addMeta('*', 'og:image', ['property' => 'og:image', 'content' => Registry::string('site_image')]);
 		self::addMeta('*', 'og:image:secure_url', ['property' => 'og:image:secure_url', 'content' => Registry::string('site_image')]);
@@ -383,7 +384,7 @@ final class ViewManager
 	{
 		self::addMeta('*', 'twitter:title', ['name' => 'twitter:title', 'content' => Registry::string('site_name')]);
 		self::addMeta('*', 'twitter:description', ['name' => 'twitter:description', 'content' => Registry::string('site_description')]);
-		self::addMeta('*', 'twitter:url', ['name' => 'twitter:url', 'content' => request()->fullUrl()]);
+		self::addMeta('*', 'twitter:url', ['name' => 'twitter:url', 'content' => RequestManager::getRequest()->fullUrl()]);
 		self::addMeta('*', 'twitter:image', ['name' => 'twitter:image', 'content' => Registry::string('site_image')]);
 
 		self::addMeta('*', 'twitter:card', ['name' => 'twitter:card', 'content' => 'summary_large_image']);

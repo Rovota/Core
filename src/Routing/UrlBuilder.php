@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Routing;
 
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Routing\Enums\Scheme;
 use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Support\Str;
@@ -26,14 +27,14 @@ final class UrlBuilder
 	{
 		$this->url = UrlObject::fromArray([
 			'scheme' => Scheme::Https,
-			'port' => request()->port(),
+			'port' => RequestManager::getRequest()->port(),
 		]);
 	}
 
 	public function __toString(): string
 	{
 		if ($this->url->domain === null) {
-			$this->domain(request()->targetHost());
+			$this->domain(RequestManager::getRequest()->targetHost());
 		}
 
 		return $this->url;
@@ -50,7 +51,7 @@ final class UrlBuilder
 	public function subdomain(string|null $name): UrlBuilder
 	{
 		if ($this->url->domain === null) {
-			$this->domain(request()->targetHost());
+			$this->domain(RequestManager::getRequest()->targetHost());
 		}
 
 		if (mb_strlen($name) === 0 || $name === 'www' || $name === '.') {
@@ -115,7 +116,7 @@ final class UrlBuilder
 	public function route(string $name, array $params = [], array $query = []): UrlBuilder
 	{
 		$route = RouteManager::findRouteByName($name);
-		$this->domain(request()->targetHost());
+		$this->domain(RequestManager::getRequest()->targetHost());
 
 		if ($route === null) {
 			$this->path('/');
@@ -131,7 +132,7 @@ final class UrlBuilder
 
 	public function previous(string $default = '/', array $query = []): UrlBuilder
 	{
-		$location = SessionManager::get()->pull('location.previous', request()->referrer() ?? $default);
+		$location = SessionManager::get()->pull('location.previous', RequestManager::getRequest()->referrer() ?? $default);
 		return $this->foreign($location, $query);
 	}
 
@@ -160,7 +161,7 @@ final class UrlBuilder
 		$data = $this->url->query;
 		$this->url = UrlObject::from($location);
 		$this->url->query = array_merge($data, $query);
-		$this->url->domain = request()->targetHost();
+		$this->url->domain = RequestManager::getRequest()->targetHost();
 		return $this;
 	}
 

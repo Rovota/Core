@@ -134,7 +134,7 @@ class Response
 		try {
 
 			// Verify WebP support and convert if needed
-			if (request()->acceptsWebP()) {
+			if (RequestManager::getRequest()->acceptsWebP()) {
 				if (Registry::bool('media_convert_to_webp', true) && $image->mime_type !== 'image/webp') {
 					$image->mime_type = 'image/webp';
 					$image->format('webp');

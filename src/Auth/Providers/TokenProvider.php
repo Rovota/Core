@@ -14,6 +14,7 @@ use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\Interfaces\TokenAuthentication;
 use Rovota\Core\Auth\TrustedClient;
 use Rovota\Core\Auth\User;
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Throwable;
 
@@ -65,7 +66,7 @@ class TokenProvider extends Provider implements TokenAuthentication
 		$this->loadTrustedClient();
 
 		try {
-			$token = ApiToken::where(['token' => request()->authToken() ?? '', 'status' => TokenStatus::Active])->first();
+			$token = ApiToken::where(['token' => RequestManager::getRequest()->authToken() ?? '', 'status' => TokenStatus::Active])->first();
 			if ($token instanceof ApiToken && ($token->expiration === null || $token->expiration->isFuture())) {
 				return $this->loadIdentityUsingToken($token);
 			}
@@ -144,7 +145,7 @@ class TokenProvider extends Provider implements TokenAuthentication
 	protected function loadTrustedClient(): void
 	{
 		try {
-			$trusted_client = TrustedClient::where(['hash' => request()->authToken() ?? '', 'ip' => request()->ip()])->first();
+			$trusted_client = TrustedClient::where(['hash' => RequestManager::getRequest()->authToken() ?? '', 'ip' => RequestManager::getRequest()->ip()])->first();
 			if ($trusted_client instanceof TrustedClient && ($trusted_client->expiration === null || $trusted_client->expiration->isFuture())) {
 				$this->trusted_client = $trusted_client;
 			}

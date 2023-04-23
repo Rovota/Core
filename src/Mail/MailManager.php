@@ -11,6 +11,7 @@ namespace Rovota\Core\Mail;
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\User;
 use Rovota\Core\Facades\Registry;
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Localization\LocalizationManager;
 use Rovota\Core\Mail\Interfaces\Mailable;
@@ -39,11 +40,11 @@ final class MailManager
 		self::$defaults = [
 			'from' => [
 				'name' => Registry::string('mail_from_name', Registry::string('site_name')),
-				'address' => Registry::string('mail_from_address', 'no-reply@'.request()->targetHost()),
+				'address' => Registry::string('mail_from_address', 'no-reply@'.RequestManager::getRequest()->targetHost()),
 			],
 			'reply_to' => [
 				'name' => Registry::string('mail_reply_to_name', Registry::string('site_name')),
-				'address' => Registry::string('mail_reply_to_address', 'info@'.request()->targetHost()),
+				'address' => Registry::string('mail_reply_to_address', 'info@'.RequestManager::getRequest()->targetHost()),
 			],
 		];
 	}

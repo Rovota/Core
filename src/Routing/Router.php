@@ -15,6 +15,7 @@ namespace Rovota\Core\Routing;
 
 use Closure;
 use Rovota\Core\Http\Enums\StatusCode;
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Http\Response;
 use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Kernel\MiddlewareManager;
@@ -120,7 +121,7 @@ final class Router
 
 		echo $response;
 
-		if (request()->realMethod() === 'HEAD') {
+		if (RequestManager::getRequest()->realMethod() === 'HEAD') {
 			ob_end_clean();
 		}
 	}
@@ -129,8 +130,8 @@ final class Router
 
 	protected function attemptRoutes(bool $regular_route = false): Response|null
 	{
-		$method = request()->realMethod() === 'HEAD' ? 'GET' : request()->method();
-		$path = request()->path();
+		$method = RequestManager::getRequest()->realMethod() === 'HEAD' ? 'GET' : RequestManager::getRequest()->method();
+		$path = RequestManager::getRequest()->path();
 
 		foreach ($this->routes as $route) {
 			if ($route->listensTo($method)) {

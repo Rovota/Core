@@ -11,6 +11,7 @@ namespace Rovota\Core\Auth;
 use Rovota\Core\Cookie\Cookie;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Facades\Registry;
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Enums\Status;
@@ -167,7 +168,7 @@ final class AccessManager
 	public static function verifyCsrfToken(string|null $token = null): bool
 	{
 		if ($token === null) {
-			$token = request()->post->get(self::getCsrfTokenName());
+			$token = RequestManager::getRequest()->post->get(self::getCsrfTokenName());
 		}
 		return self::$csrf_token === $token;
 	}

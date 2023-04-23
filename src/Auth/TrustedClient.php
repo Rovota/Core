@@ -10,6 +10,7 @@ namespace Rovota\Core\Auth;
 
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Database\Model;
+use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
 
@@ -44,9 +45,9 @@ class TrustedClient extends Model
 	{
 		$attributes = array_merge([
 			'user_id' => $identity->getId(),
-			'name' => request()->device(),
-			'label' => request()->client() ?? 'Unknown',
-			'ip' => request()->ip(),
+			'name' => RequestManager::getRequest()->device(),
+			'label' => RequestManager::getRequest()->client() ?? 'Unknown',
+			'ip' => RequestManager::getRequest()->ip(),
 			'hash' => Str::random(80),
 		], $attributes);
 
