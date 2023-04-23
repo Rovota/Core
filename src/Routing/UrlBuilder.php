@@ -54,7 +54,7 @@ final class UrlBuilder
 			$this->domain(RequestManager::getRequest()->targetHost());
 		}
 
-		if (mb_strlen($name) === 0 || $name === 'www' || $name === '.') {
+		if ($name === null || mb_strlen($name) === 0 || $name === 'www' || $name === '.') {
 			$this->url->subdomain = null;
 			return $this;
 		}

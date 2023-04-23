@@ -36,7 +36,7 @@ final class Url
 		return self::make()->route($name, $params, $query);
 	}
 
-	public static function toSubdomain(string $name, string $path = '/', array $query = []): UrlBuilder
+	public static function toSubdomain(string|null $name, string $path = '/', array $query = []): UrlBuilder
 	{
 		return self::make()->subdomain($name)->path($path)->query($query);
 	}
