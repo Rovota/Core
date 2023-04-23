@@ -174,7 +174,7 @@ final class Router
 		return array_map(function ($match, $index) use ($matches) {
 
 			// We have a following parameter: take the substring from the current param position until the next one's position (thank you PREG_OFFSET_CAPTURE)
-			if (isset($matches[$index + 1]) && isset($matches[$index + 1][0]) && is_array($matches[$index + 1][0])) {
+			if (isset($matches[$index + 1][0]) && is_array($matches[$index + 1][0])) {
 				if ($matches[$index + 1][0][1] > -1) {
 					return trim(substr($match[0][0], 0, $matches[$index + 1][0][1] - $match[0][1]), '/');
 				}
