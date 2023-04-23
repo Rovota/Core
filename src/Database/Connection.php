@@ -12,7 +12,6 @@ use Envms\FluentPDO\Query as FluentQuery;
 use PDO;
 use PDOStatement;
 use Rovota\Core\Database\Builder\Query;
-use Rovota\Core\Database\Enums\Driver;
 use Rovota\Core\Database\Interfaces\ConnectionInterface;
 use Rovota\Core\Support\Traits\Conditionable;
 
