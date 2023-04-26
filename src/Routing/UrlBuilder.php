@@ -159,7 +159,7 @@ final class UrlBuilder
 	public function local(string $location, array $query = []): UrlBuilder
 	{
 		$data = $this->url->query;
-		$this->url = UrlObject::from($location);
+		$this->url = UrlObject::from(Str::start($location, '/'));
 		$this->url->query = array_merge($data, $query);
 		$this->url->domain = RequestManager::getRequest()->targetHost();
 		return $this;
