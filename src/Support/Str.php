@@ -59,6 +59,26 @@ final class Str
 		return htmlentities($string, encoding: $encoding);
 	}
 
+	public static function acronym(string $string, string $delimiter = '.'): string
+	{
+		// Inspired by the Laravel Str Acronym package.
+		if (empty($string)) return '';
+
+		$acronym = '';
+		foreach (preg_split('/[^\p{L}]+/u', trim($string)) as $word) {
+			if(strlen($word > 0)){
+				$first_letter = mb_substr($word, 0, 1);
+
+				// Only words starting with an uppercase letter should be included.
+				if ($first_letter !== Str::upper($first_letter)) {
+					$acronym .= $first_letter . $delimiter;
+				}
+			}
+		}
+
+		return $acronym;
+	}
+
 	public static function after(string $string, string $target): string
 	{
 		return str_contains($string, $target) ? explode($target, $string, 2)[1] : $string;

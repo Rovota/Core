@@ -85,6 +85,12 @@ final class Text implements Stringable, JsonSerializable
 
 	// -----------------
 
+	public function acronym(string $delimiter = '.'): Text
+	{
+		$this->string = Str::acronym($this->string, $delimiter);
+		return $this;
+	}
+
 	public function after(Stringable|string $target): Text
 	{
 		$this->string = Str::after($this->string, $target);
