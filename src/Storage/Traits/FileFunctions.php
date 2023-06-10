@@ -18,7 +18,7 @@ trait FileFunctions
 
 	public function asImage(): ImageObject|null
 	{
-		if (extension_loaded('imagick') === false || $this->properties->contents === null) {
+		if (extension_loaded('imagick') === false || $this->contents === null) {
 			return null;
 		}
 		return new ImageObject($this->asString(), $this->properties->extension, $this->properties->mime_type);
