@@ -16,6 +16,8 @@ class PhpArrayAdapter implements CacheAdapter
 
 	protected Bucket $storage;
 
+	protected string|null $last_modified_key = null;
+
 	// -----------------
 
 	public function __construct()
@@ -37,16 +39,19 @@ class PhpArrayAdapter implements CacheAdapter
 
 	public function set(string $key, mixed $value, int $retention): void
 	{
+		$this->last_modified_key = $key;
 		$this->storage->set($key, $value);
 	}
 
 	public function increment(string $key, int $step = 1): void
 	{
+		$this->last_modified_key = $key;
 		$this->storage->increment($key, $step);
 	}
 
 	public function decrement(string $key, int $step = 1): void
 	{
+		$this->last_modified_key = $key;
 		$this->storage->increment($key, $step);
 	}
 
@@ -57,6 +62,7 @@ class PhpArrayAdapter implements CacheAdapter
 
 	public function remove(string $key): void
 	{
+		$this->last_modified_key = $key;
 		$this->storage->remove($key);
 	}
 
@@ -65,6 +71,13 @@ class PhpArrayAdapter implements CacheAdapter
 	public function flush(): void
 	{
 		$this->storage->flush();
+	}
+
+	// -----------------
+
+	public function lastModifiedKey(): string|null
+	{
+		return $this->last_modified_key;
 	}
 
 }

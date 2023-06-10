@@ -29,4 +29,9 @@ interface CacheAdapter
 
 	public function flush(): void;
 
+	// -----------------
+
+	public function lastModifiedKey(): string|null;
+
+
 }

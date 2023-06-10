@@ -19,6 +19,8 @@ class RedisAdapter implements CacheAdapter
 
 	protected Redis $redis;
 
+	protected string|null $last_modified_key = null;
+
 	// -----------------
 
 	/**
@@ -53,6 +55,7 @@ class RedisAdapter implements CacheAdapter
 	 */
 	public function set(string $key, mixed $value, int $retention): void
 	{
+		$this->last_modified_key = $key;
 		$this->redis->set($key, Resolver::serialize($value), $retention);
 	}
 
@@ -61,6 +64,7 @@ class RedisAdapter implements CacheAdapter
 	 */
 	public function increment(string $key, int $step = 1): void
 	{
+		$this->last_modified_key = $key;
 		$this->redis->incrBy($key, max($step, 0));
 	}
 
@@ -69,6 +73,7 @@ class RedisAdapter implements CacheAdapter
 	 */
 	public function decrement(string $key, int $step = 1): void
 	{
+		$this->last_modified_key = $key;
 		$this->redis->decrBy($key, max($step, 0));
 	}
 
@@ -85,6 +90,7 @@ class RedisAdapter implements CacheAdapter
 	 */
 	public function remove(string $key): void
 	{
+		$this->last_modified_key = $key;
 		$this->redis->del($key);
 	}
 
@@ -96,6 +102,13 @@ class RedisAdapter implements CacheAdapter
 	public function flush(): void
 	{
 		$this->redis->flushDB();
+	}
+
+	// -----------------
+
+	public function lastModifiedKey(): string|null
+	{
+		return $this->last_modified_key;
 	}
 
 }
