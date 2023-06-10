@@ -19,9 +19,8 @@ use Rovota\Core\Support\Version;
  * @property int $id
  * @property string $name
  * @property string $label
- * @property string $description
+ * @property string|null $description
  * @property string $support
- * @property string $website
  * @property string $vendor
  * @property AddonChannel $channel
  * @property array|null $domain_list
