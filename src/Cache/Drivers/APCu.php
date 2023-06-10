@@ -9,15 +9,21 @@
 namespace Rovota\Core\Cache\Drivers;
 
 use Rovota\Core\Cache\Adapters\APCuAdapter;
+use Rovota\Core\Cache\Adapters\PhpArrayAdapter;
 use Rovota\Core\Cache\CacheConfig;
 use Rovota\Core\Cache\CacheStore;
+use Rovota\Core\Kernel\Application;
 
 class APCu extends CacheStore
 {
 
 	public function __construct(string $name, CacheConfig $config)
 	{
-		$adapter = new APCuAdapter();
+		if (extension_loaded('apcu') === false || Application::isEnvironment($this->config->faked_for)) {
+			$adapter = new PhpArrayAdapter();
+		} else {
+			$adapter = new APCuAdapter();
+		}
 
 		parent::__construct($name, $adapter, $config);
 	}

@@ -16,6 +16,7 @@ use Rovota\Core\Cache\Exceptions\CacheMisconfigurationException;
 use Rovota\Core\Cache\Exceptions\MissingCacheConfigException;
 use Rovota\Core\Cache\Exceptions\UnsupportedDriverException;
 use Rovota\Core\Cache\Interfaces\CacheInterface;
+use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Throwable;
 
@@ -75,7 +76,7 @@ final class CacheManager
 	{
 		$config = new CacheConfig($config);
 
-		if (Driver::isSupported($config->get('driver')) === false) {
+		if (Driver::isSupported($config->get('driver')) === false && Application::isEnvironment($config->faked_for) === false) {
 			ExceptionHandler::addThrowable(new UnsupportedDriverException("The selected driver '{$config->get('driver')}' is not supported."));
 			return null;
 		}

@@ -8,20 +8,27 @@
 
 namespace Rovota\Core\Cache\Drivers;
 
-use RedisException;
+use Exception;
+use Rovota\Core\Cache\Adapters\PhpArrayAdapter;
 use Rovota\Core\Cache\Adapters\RedisAdapter;
 use Rovota\Core\Cache\CacheConfig;
 use Rovota\Core\Cache\CacheStore;
+use Rovota\Core\Kernel\Application;
 
 class Redis extends CacheStore
 {
 
-	/**
-	 * @throws RedisException
-	 */
 	public function __construct(string $name, CacheConfig $config)
 	{
-		$adapter = new RedisAdapter($config->parameters);
+		if (extension_loaded('redis') === false || Application::isEnvironment($this->config->faked_for)) {
+			$adapter = new PhpArrayAdapter();
+		} else {
+			try {
+				$adapter = new RedisAdapter($config->parameters);
+			} catch (Exception) {
+				$adapter = new PhpArrayAdapter();
+			}
+		}
 
 		parent::__construct($name, $adapter, $config);
 	}
