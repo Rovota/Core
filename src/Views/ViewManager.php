@@ -82,7 +82,7 @@ final class ViewManager
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 * @noinspection DuplicatedCode
 	 */
 	public static function make(string $name, string|null $source): View
@@ -129,7 +129,7 @@ final class ViewManager
 	}
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 */
 	public static function makeClean(string $name, string|null $source): View
 	{
@@ -138,7 +138,7 @@ final class ViewManager
 	}
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 */
 	public static function makeMail(string $name, string|null $source, Language $language): View
 	{
@@ -303,7 +303,7 @@ final class ViewManager
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 */
 	protected static function getMatchingLayout(string $name, string|null $source = null): string
 	{
@@ -334,7 +334,7 @@ final class ViewManager
 	}
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 */
 	protected static function getMatchingMailLayout(string $name, string|null $source, Language $language): string
 	{

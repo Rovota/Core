@@ -40,8 +40,8 @@ final class LoggingManager
 
 	/**
 	 * @internal
-	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Logging\Exceptions\MissingChannelConfigException
+	 * @throws UnsupportedDriverException
+	 * @throws MissingChannelConfigException
 	 */
 	public static function initialize(): void
 	{

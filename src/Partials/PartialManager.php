@@ -36,7 +36,7 @@ final class PartialManager
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Partials\Exceptions\MissingPartialException
+	 * @throws MissingPartialException
 	 */
 	public static function make(string $name, string|null $source, array $variables = []): Partial
 	{
@@ -129,7 +129,7 @@ final class PartialManager
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Partials\Exceptions\MissingPartialException
+	 * @throws MissingPartialException
 	 */
 	protected static function getMatchingLayout(string $name, string|null $source = null): string
 	{

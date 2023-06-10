@@ -9,6 +9,7 @@
 namespace Rovota\Core\Support;
 
 use DateInterval;
+use Exception;
 
 final class MomentInterval
 {
@@ -26,7 +27,7 @@ final class MomentInterval
 	// -----------------
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function __construct(DateInterval|string $duration)
 	{

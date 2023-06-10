@@ -9,6 +9,9 @@
 namespace Rovota\Core\Facades;
 
 use Rovota\Core\Security\Encrypter;
+use Rovota\Core\Security\Exceptions\EncryptionException;
+use Rovota\Core\Security\Exceptions\IncorrectKeyException;
+use Rovota\Core\Security\Exceptions\PayloadException;
 
 final class Crypt
 {
@@ -26,7 +29,7 @@ final class Crypt
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\IncorrectKeyException
+	 * @throws IncorrectKeyException
 	 */
 	public static function initialize(): void
 	{
@@ -49,8 +52,8 @@ final class Crypt
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\EncryptionException
-	 * @throws \Rovota\Core\Security\Exceptions\IncorrectKeyException
+	 * @throws EncryptionException
+	 * @throws IncorrectKeyException
 	 */
 	public static function encrypt(mixed $value, bool $serialize = true): string
 	{
@@ -61,8 +64,8 @@ final class Crypt
 	}
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\EncryptionException
-	 * @throws \Rovota\Core\Security\Exceptions\IncorrectKeyException
+	 * @throws EncryptionException
+	 * @throws IncorrectKeyException
 	 */
 	public static function encryptString(string $string): string
 	{
@@ -73,8 +76,8 @@ final class Crypt
 	}
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\PayloadException
-	 * @throws \Rovota\Core\Security\Exceptions\IncorrectKeyException
+	 * @throws PayloadException
+	 * @throws IncorrectKeyException
 	 */
 	public static function decrypt(string $payload, bool $serialize = true): mixed
 	{
@@ -85,8 +88,8 @@ final class Crypt
 	}
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\PayloadException
-	 * @throws \Rovota\Core\Security\Exceptions\IncorrectKeyException
+	 * @throws PayloadException
+	 * @throws IncorrectKeyException
 	 */
 	public static function decryptString(string $string): string
 	{

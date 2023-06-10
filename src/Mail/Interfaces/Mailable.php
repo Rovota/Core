@@ -13,6 +13,7 @@ use Rovota\Core\Localization\Language;
 use Rovota\Core\Mail\Enums\Encoding;
 use Rovota\Core\Mail\Enums\Priority;
 use Rovota\Core\Storage\Interfaces\FileInterface;
+use Rovota\Core\Views\Exceptions\MissingViewException;
 use Rovota\Core\Views\View;
 
 interface Mailable
@@ -69,7 +70,7 @@ interface Mailable
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 */
 	public function render(): string|null;
 

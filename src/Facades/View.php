@@ -11,6 +11,7 @@ namespace Rovota\Core\Facades;
 use Rovota\Core\Views\Components\Meta;
 use Rovota\Core\Views\Components\Script;
 use Rovota\Core\Views\Components\Style;
+use Rovota\Core\Views\Exceptions\MissingViewException;
 use Rovota\Core\Views\View as ViewObject;
 use Rovota\Core\Views\ViewManager;
 
@@ -24,7 +25,7 @@ final class View
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 */
 	public static function make(string $name, string|null $source = null): ViewObject
 	{

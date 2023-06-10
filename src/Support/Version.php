@@ -18,7 +18,7 @@ final class Version implements JsonSerializable
 	protected SemVer $semver;
 
 	/**
-	 * @throws \PHLAK\SemVer\Exceptions\InvalidVersionException
+	 * @throws InvalidVersionException
 	 */
 	public function __construct(string $version = '0.1.0')
 	{

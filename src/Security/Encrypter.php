@@ -10,6 +10,7 @@
 
 namespace Rovota\Core\Security;
 
+use Exception;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Security\Exceptions\EncryptionException;
 use Rovota\Core\Security\Exceptions\IncorrectKeyException;
@@ -31,7 +32,7 @@ final class Encrypter
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\IncorrectKeyException
+	 * @throws IncorrectKeyException
 	 */
 	public function __construct(string $key, string|null $cipher = 'aes-256-gcm')
 	{
@@ -89,8 +90,8 @@ final class Encrypter
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\EncryptionException
-	 * @throws \Exception
+	 * @throws EncryptionException
+	 * @throws Exception
 	 */
 	public function encrypt(mixed $value, bool $serialize = true): string
 	{
@@ -118,7 +119,7 @@ final class Encrypter
 	}
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\EncryptionException
+	 * @throws EncryptionException
 	 */
 	public function encryptString(string $string): string
 	{
@@ -126,7 +127,7 @@ final class Encrypter
 	}
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\PayloadException
+	 * @throws PayloadException
 	 */
 	public function decrypt(string $payload, bool $deserialize = true): mixed
 	{
@@ -149,7 +150,7 @@ final class Encrypter
 	}
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\PayloadException
+	 * @throws PayloadException
 	 */
 	public function decryptString(string $payload): string
 	{
@@ -164,7 +165,7 @@ final class Encrypter
 	}
 
 	/**
-	 * @throws \Rovota\Core\Security\Exceptions\PayloadException
+	 * @throws PayloadException
 	 */
 	protected function getJsonPayload(string $payload): array
 	{

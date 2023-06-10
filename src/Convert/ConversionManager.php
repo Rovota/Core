@@ -33,8 +33,8 @@ final class ConversionManager
 	// -----------------
 
 	/**
+	 * @throws MissingLanguageException
 	 * @internal
-	 * @throws \Rovota\Core\Convert\Exceptions\MissingLanguageException
 	 */
 	public static function initialize(): void
 	{
@@ -67,7 +67,7 @@ final class ConversionManager
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Convert\Exceptions\MissingLanguageException
+	 * @throws MissingLanguageException
 	 */
 	public static function addConversion(string $name, callable $function, string|null $language = null): void
 	{

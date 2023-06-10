@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Partials;
 
+use Rovota\Core\Partials\Exceptions\MissingPartialException;
 use Rovota\Core\Partials\Traits\PartialModifiers;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -47,7 +48,7 @@ class Partial
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Partials\Exceptions\MissingPartialException
+	 * @throws MissingPartialException
 	 */
 	public static function make(array $variables = []): static
 	{

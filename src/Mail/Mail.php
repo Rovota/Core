@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Mail;
 
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Kernel\Application;
@@ -19,6 +20,7 @@ use Rovota\Core\Mail\Traits\Advanced;
 use Rovota\Core\Mail\Traits\Contents;
 use Rovota\Core\Mail\Traits\Testing;
 use Rovota\Core\Support\Traits\Conditionable;
+use Rovota\Core\Views\Exceptions\MissingViewException;
 use Rovota\Core\Views\View;
 use Throwable;
 
@@ -87,8 +89,8 @@ class Mail implements Mailable
 	// Internal
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
-	 * @throws \PHPMailer\PHPMailer\Exception
+	 * @throws MissingViewException
+	 * @throws Exception
 	 */
 	private function setMailData(): void
 	{
@@ -114,7 +116,7 @@ class Mail implements Mailable
 	}
 
 	/**
-	 * @throws \PHPMailer\PHPMailer\Exception
+	 * @throws Exception
 	 */
 	private function setMailReceiver(array $receiver): void
 	{

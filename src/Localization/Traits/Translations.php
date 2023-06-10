@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Localization\Traits;
 
+use Rovota\Core\Database\Model;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Localization\LocalizationManager;
 use Rovota\Core\Localization\Translation;
@@ -30,7 +31,7 @@ trait Translations
 	protected function loadTranslation(): void
 	{
 		/**
-		 * @var \Rovota\Core\Database\Model $this
+		 * @var Model $this
 		 */
 		$active_language_id = LocalizationManager::getActiveLanguage()->id;
 		$result = $this->{'i18n_model'}::where([$this->{'i18n_foreign_key'} => $this->getId(), 'language_id' => $active_language_id, 'status' => PostStatus::Visible])->first();

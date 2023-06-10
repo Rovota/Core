@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Mail;
 
+use Envms\FluentPDO\Exception;
 use Rovota\Core\Database\Model;
 use Rovota\Core\Facades\Cache;
 use Rovota\Core\Structures\Bucket;
@@ -42,7 +43,7 @@ class MailingList extends Model
 	// -----------------
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public function createQueue(): MailingQueue
 	{

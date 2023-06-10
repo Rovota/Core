@@ -12,6 +12,7 @@ use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
+use Rovota\Core\Views\Exceptions\MissingViewException;
 use Rovota\Core\Views\Traits\ViewModifiers;
 
 class View
@@ -49,7 +50,7 @@ class View
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 */
 	public static function make(array $variables = []): static
 	{

@@ -33,9 +33,9 @@ final class SessionManager
 	// -----------------
 
 	/**
-	 * @internal
-	 * @throws \Rovota\Core\Session\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Session\Exceptions\MissingSessionConfigException
+	 * @throws UnsupportedDriverException
+	 * @throws MissingSessionConfigException
+	 *@internal
 	 */
 	public static function initialize(): void
 	{
@@ -54,8 +54,8 @@ final class SessionManager
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Session\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Session\Exceptions\MissingSessionConfigException
+	 * @throws UnsupportedDriverException
+	 * @throws MissingSessionConfigException
 	 */
 	public static function define(string $name, array $options, bool $connect = false): void
 	{
@@ -66,8 +66,8 @@ final class SessionManager
 	}
 
 	/**
-	 * @throws \Rovota\Core\Session\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Session\Exceptions\MissingSessionConfigException
+	 * @throws UnsupportedDriverException
+	 * @throws MissingSessionConfigException
 	 */
 	public static function connect(string $name): void
 	{

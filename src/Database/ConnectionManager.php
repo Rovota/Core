@@ -39,7 +39,7 @@ final class ConnectionManager
 
 	/**
 	 * @internal
-	 * @throws \Rovota\Core\Database\Exceptions\MissingDatabaseConfigException
+	 * @throws MissingDatabaseConfigException
 	 */
 	public static function initialize(): void
 	{

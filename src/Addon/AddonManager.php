@@ -70,7 +70,7 @@ final class AddonManager
 	}
 
 	/**
-	 * @return \Rovota\Core\Addon\Library[]
+	 * @return Library[]
 	 */
 	public static function getLibraries(): array
 	{
@@ -90,7 +90,7 @@ final class AddonManager
 	}
 
 	/**
-	 * @return \Rovota\Core\Addon\Module[]
+	 * @return Module[]
 	 */
 	public static function getModules(): array
 	{

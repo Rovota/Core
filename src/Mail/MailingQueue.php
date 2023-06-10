@@ -10,6 +10,7 @@ namespace Rovota\Core\Mail;
 
 use ArrayAccess;
 use Countable;
+use Envms\FluentPDO\Exception;
 use Iterator;
 use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\User;
@@ -50,7 +51,7 @@ class MailingQueue implements ArrayAccess, Iterator, Countable, Arrayable
 	}
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public static function createFromList(MailingList|string $list): static
 	{

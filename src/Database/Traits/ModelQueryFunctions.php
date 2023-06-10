@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Database\Traits;
 
+use Envms\FluentPDO\Exception;
 use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Database\Builder\Query;
 use Rovota\Core\Database\Model;
@@ -132,7 +133,7 @@ trait ModelQueryFunctions
 	// CHUNKS
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public static function chunk(int $amount, callable $callback): int
 	{
@@ -144,7 +145,7 @@ trait ModelQueryFunctions
 	// SELECT
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public static function count(): int
 	{
@@ -153,7 +154,7 @@ trait ModelQueryFunctions
 	}
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public static function find(string|int|null $identifier, string|null $column = null, int $retention = 30): static|null
 	{
@@ -167,7 +168,7 @@ trait ModelQueryFunctions
 	}
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public static function all(): Bucket
 	{
@@ -176,7 +177,7 @@ trait ModelQueryFunctions
 	}
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public static function allBy(string $column): Bucket
 	{
@@ -200,7 +201,7 @@ trait ModelQueryFunctions
 	// INSERT
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public static function insert(array $attributes): int
 	{
@@ -212,7 +213,7 @@ trait ModelQueryFunctions
 	// DELETE
 
 	/**
-	 * @throws \Envms\FluentPDO\Exception
+	 * @throws Exception
 	 */
 	public static function destroy(array|string|int $identifiers, string|null $column = null, bool $permanent = false): int
 	{

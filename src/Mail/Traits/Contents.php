@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Mail\Traits;
 
+use League\Flysystem\FilesystemException;
 use Rovota\Core\Mail\Enums\Encoding;
 use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
@@ -75,7 +76,7 @@ trait Contents
 	// -----------------
 
 	/**
-	 * @throws \League\Flysystem\FilesystemException
+	 * @throws FilesystemException
 	 */
 	public function attachment(FileInterface|string $file, string|null $name = null, string|null $mime_type = null, Encoding $encoding = Encoding::UTF8): static
 	{

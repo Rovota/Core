@@ -9,6 +9,7 @@
 namespace Rovota\Core\Http\Client;
 
 use GuzzleHttp\Client as Guzzle;
+use GuzzleHttp\Exception\GuzzleException;
 use Rovota\Core\Http\Client\Traits\ConfigModifiers;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
@@ -40,7 +41,7 @@ final class Request
 	// -----------------
 
 	/**
-	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws GuzzleException
 	 */
 	public function execute(): Response
 	{

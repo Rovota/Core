@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Facades;
 
+use Rovota\Core\Partials\Exceptions\MissingPartialException;
 use Rovota\Core\Partials\Partial as PartialObject;
 use Rovota\Core\Partials\PartialManager;
 
@@ -21,7 +22,7 @@ final class Partial
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Partials\Exceptions\MissingPartialException
+	 * @throws MissingPartialException
 	 */
 	public static function make(string $name, string|null $source = null, array $variables = []): PartialObject
 	{

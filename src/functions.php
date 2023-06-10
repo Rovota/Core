@@ -7,6 +7,7 @@
  */
 
 use Dflydev\DotAccessData\Data;
+use League\Flysystem\FilesystemException;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\ApiToken;
 use Rovota\Core\Auth\AuthManager;
@@ -45,6 +46,7 @@ use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Validation\ValidationManager;
+use Rovota\Core\Views\Exceptions\MissingViewException;
 use Rovota\Core\Views\View;
 use Rovota\Core\Views\ViewManager;
 
@@ -248,7 +250,7 @@ if (!function_exists('to_route')) {
 
 if (!function_exists('view')) {
 	/**
-	 * @throws \Rovota\Core\Views\Exceptions\MissingViewException
+	 * @throws MissingViewException
 	 */
 	function view(string $name, string|null $source = null): View
 	{
@@ -270,7 +272,7 @@ if (!function_exists('partial')) {
 
 if (!function_exists('file')) {
 	/**
-	 * @throws \League\Flysystem\FilesystemException
+	 * @throws FilesystemException
 	 */
 	function file(string $location, string|null $disk = null): FileInterface|null
 	{
@@ -386,7 +388,7 @@ if (!function_exists('deprecated')) {
 
 if (!function_exists('throw_if')) {
 	/**
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	function throw_if(bool $bool, Throwable|string $throwable, string|null $message = ''): void
    {
@@ -398,7 +400,7 @@ if (!function_exists('throw_if')) {
 
 if (!function_exists('throw_unless')) {
 	/**
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	function throw_unless(bool $bool, Throwable|string $throwable, string|null $message = ''): void
    {

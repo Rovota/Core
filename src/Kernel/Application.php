@@ -14,18 +14,23 @@ use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
 use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Convert\ConversionManager;
+use Rovota\Core\Convert\Exceptions\MissingLanguageException;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Database\CastManager;
 use Rovota\Core\Database\ConnectionManager;
+use Rovota\Core\Database\Exceptions\MissingDatabaseConfigException;
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Http\ResponseManager;
 use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Kernel\Exceptions\SystemRequirementException;
 use Rovota\Core\Localization\LocalizationManager;
+use Rovota\Core\Logging\Exceptions\MissingChannelConfigException;
+use Rovota\Core\Logging\Exceptions\UnsupportedDriverException;
 use Rovota\Core\Logging\LoggingManager;
 use Rovota\Core\Mail\MailManager;
 use Rovota\Core\Routing\RouteManager;
+use Rovota\Core\Session\Exceptions\MissingSessionConfigException;
 use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Support\Arr;
@@ -59,12 +64,12 @@ final class Application
 
 	/**
 	 * @throws \Rovota\Core\Session\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Convert\Exceptions\MissingLanguageException
-	 * @throws \Rovota\Core\Logging\Exceptions\MissingChannelConfigException
-	 * @throws \Rovota\Core\Logging\Exceptions\UnsupportedDriverException
-	 * @throws \Rovota\Core\Database\Exceptions\MissingDatabaseConfigException
-	 * @throws \Rovota\Core\Kernel\Exceptions\SystemRequirementException
-	 * @throws \Rovota\Core\Session\Exceptions\MissingSessionConfigException
+	 * @throws MissingLanguageException
+	 * @throws MissingChannelConfigException
+	 * @throws UnsupportedDriverException
+	 * @throws MissingDatabaseConfigException
+	 * @throws SystemRequirementException
+	 * @throws MissingSessionConfigException
 	 */
 	public static function start(): void
 	{
@@ -139,7 +144,7 @@ final class Application
 	// -----------------
 
 	/**
-	 * @throws \Rovota\Core\Kernel\Exceptions\SystemRequirementException
+	 * @throws SystemRequirementException
 	 */
 	protected static function serverCompatCheck(): void
 	{
