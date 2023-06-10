@@ -23,7 +23,7 @@ abstract class CacheStore implements CacheInterface
 
 	protected CacheAdapter $adapter;
 
-	// protected string|null $last_modified_key = null;
+	protected string|null $prefix;
 
 	// -----------------
 
@@ -33,8 +33,7 @@ abstract class CacheStore implements CacheInterface
 		$this->config = $config;
 
 		$this->adapter = $adapter;
-
-		// $this->setPrefix($name);
+		$this->prefix = $name;
 	}
 
 	// -----------------
@@ -82,28 +81,21 @@ abstract class CacheStore implements CacheInterface
 
 	// -----------------
 
-	// public function getPrefix(): string
-	// {
-	// 	return $this->prefix;
-	// }
+	public function getPrefix(): string
+	{
+		return $this->prefix;
+	}
 
-	// public function setPrefix(string $prefix): void
-	// {
-	// 	$this->prefix = !empty($prefix) ? $prefix.':' : '';
-	// }
-
-	// -----------------
-
-	// public function lastModifiedKey(): string|null
-	// {
-	// 	return $this->last_modified_key;
-	// }
+	public function setPrefix(string $prefix): void
+	{
+		$this->prefix = !empty($prefix) ? $prefix . ':' : '';
+	}
 
 	// -----------------
 
-	// protected function setLastModifiedKey(string|int $key): void
-	// {
-	// 	$this->last_modified_key = $key;
-	// }
+	 public function lastModifiedKey(): string|null
+	 {
+	 	return $this->adapter->lastModifiedKey();
+	 }
 
 }
