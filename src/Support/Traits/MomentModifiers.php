@@ -8,10 +8,12 @@
 
 namespace Rovota\Core\Support\Traits;
 
+use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Localization\LocalizationManager;
 use Rovota\Core\Support\Moment;
 use DateInterval;
 use DateTimeZone;
+use Throwable;
 
 trait MomentModifiers
 {
@@ -19,7 +21,11 @@ trait MomentModifiers
 	public function setTimezone(DateTimeZone|string $timezone): Moment
 	{
 		if (!$timezone instanceof DateTimeZone) {
-			$timezone = new DateTimeZone($timezone);
+			try {
+				$timezone = new DateTimeZone($timezone);
+			} catch (Throwable $throwable) {
+				ExceptionHandler::addThrowable($throwable);
+			}
 		}
 		parent::setTimezone($timezone);
 		return $this;
