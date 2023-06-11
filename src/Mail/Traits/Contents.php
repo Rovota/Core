@@ -13,7 +13,7 @@ use Rovota\Core\Mail\Enums\Encoding;
 use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Support\Str;
-use Rovota\Core\Validation\ValidationManager;
+use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Views\View;
 use Rovota\Core\Views\ViewManager;
 
@@ -95,7 +95,7 @@ trait Contents
 	public function stringAttachment(string $content, string $name, string $mime_type, Encoding $encoding = Encoding::UTF8): static
 	{
 		if (Str::contains($name, '.') === false) {
-			$extensions = ValidationManager::mimeTypeExtensions($mime_type);
+			$extensions = ValidationTools::mimeTypeExtensions($mime_type);
 			$name = Str::finish($name.'.', empty($extensions) ? 'txt' : $extensions[0]);
 		}
 

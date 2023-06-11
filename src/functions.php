@@ -45,7 +45,7 @@ use Rovota\Core\Support\Text;
 use Rovota\Core\Support\Interfaces\Arrayable;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
-use Rovota\Core\Validation\ValidationManager;
+use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Views\Exceptions\MissingViewException;
 use Rovota\Core\Views\View;
 use Rovota\Core\Views\ViewManager;
@@ -138,7 +138,7 @@ if (!function_exists('sanitize_select')) {
 if (!function_exists('sanitize_extension')) {
 	function sanitize_extension(string $type, string $extension): string|null
 	{
-		$extensions = ValidationManager::mimeTypeExtensions($type);
+		$extensions = ValidationTools::mimeTypeExtensions($type);
 
 		if (Arr::contains($extensions, $extension)) {
 			return $extension;
@@ -151,7 +151,7 @@ if (!function_exists('sanitize_extension')) {
 if (!function_exists('sanitize_mime_type')) {
 	function sanitize_mime_type(string $extension, string $type): string|null
 	{
-		$mime_types = ValidationManager::extensionMimeTypes($extension);
+		$mime_types = ValidationTools::extensionMimeTypes($extension);
 
 		if (Arr::contains($mime_types, $type)) {
 			return $type;
