@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Support;
 
+use Closure;
 use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Localization\LocalizationManager;
 use Throwable;
@@ -115,7 +116,7 @@ final class Str
 
 	public static function between(string $string, string $start, string $end): string
 	{
-		if (self::containsAll($string, [$start, $end])) {
+		if (self::contains($string, [$start, $end])) {
 			$string = self::after($string, $start);
 			return self::beforeLast($string, $end);
 		}
@@ -127,16 +128,19 @@ final class Str
 		return lcfirst(self::pascal($string));
 	}
 
-	public static function contains(string $string, string $needle): bool
+	public static function contains(string $string, mixed $needle): bool
 	{
-		return str_contains($string, $needle);
-	}
+		$needles = is_array($needle) ? $needle : [$needle];
 
-	public static function containsAll(string $string, array $values): bool
-	{
-		foreach ($values as $value) {
-			if (!str_contains($string, $value)) {
-				return false;
+		foreach ($needles as $needle) {
+			if ($needle instanceof Closure) {
+				if ($needle($string) === false) {
+					return false;
+				}
+			} else {
+				if (str_contains($string, $needle) === false) {
+					return false;
+				}
 			}
 		}
 		return true;
