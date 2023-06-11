@@ -139,14 +139,9 @@ final class Text implements Stringable, JsonSerializable
 		return $this;
 	}
 
-	public function contains(Stringable|string $needle): bool
+	public function contains(Stringable|string|array $needle): bool
 	{
 		return Str::contains($this->string, $needle);
-	}
-
-	public function containsAll(array $needles): bool
-	{
-		return Str::containsAll($this->string, $needles);
 	}
 
 	public function containsAny(array $needles): bool
