@@ -22,8 +22,8 @@ use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Support\UrlTools;
 use Rovota\Core\Validation\Enums\FilterAction;
-use Rovota\Core\Validation\Traits\RequestValidation;
-use Rovota\Core\Validation\ValidationManager;
+use Rovota\Core\Validation\FilterManager;
+use Rovota\Core\ValidationOld\Traits\RequestValidation;
 use Throwable;
 
 final class Request
@@ -205,7 +205,7 @@ final class Request
 
 	public function ipAllowed(string|null $ip = null): bool
 	{
-		$filter = ValidationManager::getFilter('access_control');
+		$filter = FilterManager::get('access_control');
 		if ($filter !== null && $filter->action === FilterAction::Block) {
 			return Arr::contains($filter->values, $ip ?? $this->ip()) === false;
 		}
