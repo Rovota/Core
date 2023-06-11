@@ -191,7 +191,7 @@ trait MomentValidation
 
 	public function isBetween(mixed $start, mixed $end): bool
 	{
-		return !($this < moment($start) || $this > moment($end));
+		return !($this <= moment($start) || $this >= moment($end));
 	}
 
 	public function isOutside(mixed $start, mixed $end): bool
