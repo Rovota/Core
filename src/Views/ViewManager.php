@@ -14,7 +14,6 @@ use Rovota\Core\Facades\Localization;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Localization\Language;
-use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Views\Components\Meta;
 use Rovota\Core\Views\Components\Script;
 use Rovota\Core\Views\Components\Style;
@@ -30,12 +29,9 @@ final class ViewManager
 	 */
 	protected static array $views = [];
 
-	protected static Bucket $errors;
-
 	/**
 	 * @var array<string, array<string, Style>>
 	 */
-
 	protected static array $styles = [];
 	/**
 	 * @var array<string, array<string, Script>>
@@ -62,8 +58,6 @@ final class ViewManager
 
 	public static function initialize(): void
 	{
-		self::$errors = new Bucket();
-
 		self::addMeta('*', 'application-name', ['name' => 'application-name', 'content' => Registry::string('site_name')]);
 		self::addMeta('*', 'description', ['name' => 'description', 'content' => Registry::string('site_description')]);
 		self::addMeta('*', 'keywords', ['name' => 'keywords', 'content' => Registry::string('site_keywords')]);
@@ -97,7 +91,7 @@ final class ViewManager
 				'scripts' => array_merge(self::$scripts['*'] ?? [], self::$scripts[$name] ?? []),
 				'variables' => array_merge(self::$variables['*'] ?? [], self::$variables[$name] ?? []),
 				'meta' => array_merge(self::$meta['*'] ?? [], self::$meta[$name] ?? []),
-			],  self::$errors);
+			]);
 		}
 
 		$layout = self::getMatchingLayout($name, $source);
@@ -107,7 +101,7 @@ final class ViewManager
 			'scripts' => array_merge(self::$scripts['*'] ?? [], self::$scripts[$name] ?? []),
 			'variables' => array_merge(self::$variables['*'] ?? [], self::$variables[$name] ?? []),
 			'meta' => array_merge(self::$meta['*'] ?? [], self::$meta[$name] ?? []),
-		],  self::$errors);
+		]);
 	}
 
 	public static function register(string $name, string $class): void
@@ -134,7 +128,7 @@ final class ViewManager
 	public static function makeClean(string $name, string|null $source): View
 	{
 		$layout = self::getMatchingLayout($name, $source);
-		return new View($layout, [], new Bucket());
+		return new View($layout, []);
 	}
 
 	/**
@@ -143,7 +137,7 @@ final class ViewManager
 	public static function makeMail(string $name, string|null $source, Language $language): View
 	{
 		$layout = self::getMatchingMailLayout($name, $source, $language);
-		return new View($layout, [], new Bucket());
+		return new View($layout, []);
 	}
 
 	// -----------------

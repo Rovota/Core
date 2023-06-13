@@ -9,6 +9,7 @@
 namespace Rovota\Core\Views;
 
 use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\ErrorBucket;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
@@ -17,21 +18,20 @@ use Rovota\Core\Views\Traits\ViewModifiers;
 
 class View
 {
-	use Macroable, ViewModifiers, Errors, Conditionable;
+	use Macroable, ViewModifiers, Conditionable, Errors;
 
 	protected string|null $file = null;
 
 	// -----------------
 
-	public function __construct(string|null $file, array $data, Bucket $errors)
+	public function __construct(string|null $file, array $data)
 	{
 		$this->variables = new Bucket();
+		$this->errors = new ErrorBucket();
 
 		if ($this->file === null) {
 			$this->file = $file;
 		}
-
-		$this->passErrors($errors->toArray());
 
 		foreach ($data as $type => $items) {
 			if ($type === 'variables') {
@@ -73,7 +73,6 @@ class View
 		ob_start();
 
 		extract($this->variables->toArray());
-		$errors = $this->errors;
 		$this->variables->flush();
 
 		include base_path($this->file);

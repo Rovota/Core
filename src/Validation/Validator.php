@@ -9,113 +9,114 @@
 namespace Rovota\Core\Validation;
 
 use Closure;
-use Rovota\Core\Database\ConnectionManager;
-use Rovota\Core\Http\UploadedFile;
-use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Structures\ErrorBucket;
 use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Str;
+use Rovota\Core\Support\ErrorMessage;
+use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
-use Rovota\Core\Validation\Traits\AdvancedRules;
-use Rovota\Core\Validation\Traits\BasicRules;
-use Rovota\Core\Validation\Traits\DateTimeRules;
-use Rovota\Core\Validation\Traits\FileRules;
+use Rovota\Core\Validation\Interfaces\RuleContextInterface;
+use Rovota\Core\Validation\Interfaces\RuleInterface;
+use Rovota\Core\Validation\Interfaces\ValidatorInterface;
 
-class Validator
+class Validator implements ValidatorInterface
 {
-	use Macroable, Errors, BasicRules, DateTimeRules, AdvancedRules, FileRules;
+	use Macroable, Errors, Conditionable;
 
-	protected Bucket $data;
-	protected Bucket $data_validated;
+	protected Bucket $unsafe_data;
+
+	protected Bucket $safe_data;
 
 	protected array $rules;
 
 	// -----------------
 
-	public function __construct(mixed $data = [], array $rules = [], array $messages = [])
+	public function __construct(mixed $data, array $rules, array $messages = [])
 	{
-		$this->data = new Bucket($data);
-		$this->data_validated = new Bucket();
+		$this->errors = new ErrorBucket();
+		$this->unsafe_data = new Bucket($data);
+		$this->safe_data = new Bucket();
 		$this->rules = $rules;
 
 		if (empty($messages) === false) {
-			$this->addErrorMessages($messages);
+			$this->setMessageOverrides($messages);
 		}
 	}
 
 	// -----------------
 
-	public static function create(mixed $data = [], array $rules = [], array $messages = []): static
+	public static function create(mixed $data, array $rules, array $messages = []): static
 	{
 		return new static($data, $rules, $messages);
 	}
 
 	// -----------------
 
-	public function clear(): void
+	public function succeeds(): bool
 	{
-		$this->data->flush();
-		$this->data_validated->flush();
-		$this->rules = [];
-		$this->clearErrorMessages();
-		$this->clearErrors();
-	}
-
-	// -----------------
-
-	public function validate(): bool
-	{
-		foreach ($this->rules as $field => $rules) {
-			$data = $this->data->get($field);
-			if ($this->validateField($field, $data, $rules)) {
-				$this->data_validated->set($field, $data);
+		foreach ($this->rules as $attribute => $rules) {
+			$value = $this->unsafe_data->get($attribute);
+			if ($this->validateAttribute($attribute, $value, $rules)) {
+				$this->safe_data->set($attribute, $value);
 			}
 		}
 
-		return $this->hasErrors() === false;
+		return $this->errors()->isEmpty();
 	}
 
 	public function fails(): bool
 	{
-		return $this->validate() === false;
-	}
-
-	public function populate(mixed $data = [], array $rules = [], array $messages = []): static
-	{
-		$this->data = new Bucket($data);
-		$this->rules = $rules;
-
-		if (empty($messages) === false) {
-			$this->addErrorMessages($messages);
-		}
-
-		return $this;
-	}
-
-	public function safe(): Bucket
-	{
-		return $this->data_validated;
+		return $this->succeeds() === false;
 	}
 
 	// -----------------
 
-	protected function validateField(string $field, mixed $data, array $rules): bool
+	public function clear(): static
+	{
+		$this->unsafe_data->flush();
+		$this->safe_data->flush();
+		$this->rules = [];
+		return $this;
+	}
+
+	public function addRule(string $attribute, string $name, array|string $options = []): static
+	{
+		$this->rules[$attribute][$name] = $options;
+		return $this;
+	}
+
+	public function addData(string $name, mixed $value): static
+	{
+		$this->unsafe_data->set($name, $value);
+		return $this;
+	}
+
+	// -----------------
+
+	public function safe(): Bucket
+	{
+		return $this->safe_data;
+	}
+
+	// -----------------
+
+	protected function validateAttribute($attribute, $value, $rules): bool
 	{
 		$rules = $this->getNormalizedRules($rules);
 		$stop_on_failure = array_key_exists('bail', $rules);
 
-		if (array_key_exists('required', $rules) && !$this->data->has($field)) {
-			$this->addError($field, 'required');
+		if (array_key_exists('required', $rules) && $this->unsafe_data->missing($attribute)) {
+			$this->setError($attribute, 'required', 'This attribute is required.');
 			return false;
 		}
 
-		if (array_key_exists('sometimes', $rules) && !$this->data->has($field)) {
+		if (array_key_exists('sometimes', $rules) && $this->unsafe_data->missing($attribute)) {
 			return true;
 		}
 
-		if (Arr::missing($rules, ['nullable', 'required_if_enabled', 'required_if_disabled']) && $data === null) {
-			$this->addError($field, 'nullable');
+		if (Arr::missing($rules, ['nullable', 'required_if_enabled', 'required_if_disabled']) && $value === null) {
+			$this->setError($attribute, 'required', 'This attribute may not be empty.');
 			return false;
 		}
 
@@ -124,85 +125,45 @@ class Validator
 				continue;
 			}
 
-			if ($stop_on_failure && $this->hasErrors($field)) {
+			if ($stop_on_failure && $this->errors()->count($attribute) === 0) {
 				return false;
 			}
 
-			if ($options instanceof Closure) {
-				if ($options($data) === false) {
-					$this->addError($field, $name);
-				}
-				continue;
-			}
+			$result = match(true) {
+				$options instanceof Closure => $options($value),
+				default => $this->getUsableRule($name)->validate($attribute, $value, $options),
+			};
 
-			$method = 'rule'.Str::pascal($name);
-			if (method_exists($this, $method)) {
-				$this->{$method}($field, $data, $options);
+			if ($result instanceof ErrorMessage) {
+				$this->setError($attribute, $name, $result);
 			}
-
 		}
 
-		return $this->hasErrors($field) === false;
+		return $this->errors()->count($attribute) === 0;
 	}
 
 	protected function getNormalizedRules(array $rules): array
 	{
 		$normalized = [];
+
 		foreach ($rules as $name => $options) {
 			if (is_int($name)) {
-				$normalized[$options] = null;
+				$normalized[$options] = [];
 			} else {
-				$normalized[$name] = $options;
+				$normalized[$name] = is_array($options) ? $options : [$options];
 			}
 		}
 
 		return $normalized;
 	}
 
-	protected function getSize(mixed $data): int|float
+	protected function getUsableRule(string|RuleInterface $name): RuleInterface|null
 	{
-		return match(true) {
-			$data instanceof FileInterface => round($data->properties()->size / 1024), // Bytes to Kilobytes
-			$data instanceof UploadedFile => round($data->variant('original')->properties()->size / 1024), // Bytes to Kilobytes
-			is_int($data), is_float($data) => $data,
-			is_numeric($data), is_string($data) => Str::length($data),
-			is_array($data) => count($data),
-			default => 0
-		};
-	}
-
-	// -----------------
-
-	protected function processDatabaseOptions(string $field, string|array $options): array
-	{
-		$config = [
-			'connection' => ConnectionManager::getDefault(),
-			'column' => $field,
-			'model' => null,
-		];
-
-		if (is_string($options)) {
-			$options = [$options];
+		$rule = $name instanceof RuleInterface ? $name : RuleManager::get($name);
+		if ($rule instanceof RuleContextInterface) {
+			$rule->setContext($this->unsafe_data->toArray());
 		}
-
-		if (str_contains($options[0],'\\')) {
-			$model = new $options[0]();
-			$config['connection'] = $model->getConnection();
-			$config['table'] = $model->getTable();
-			$config['model'] = $model::class;
-		} else if (str_contains($options[0],'.')) {
-			$location = explode('.', $options[0]);
-			$config['connection'] = $location[0];
-			$config['table'] = $location[1];
-		} else {
-			$config['table'] = $options[0];
-		}
-
-		if (isset($options[1]) && is_string($options[1])) {
-			$config['column'] = $options[1];
-		}
-
-		return $config;
+		return $rule;
 	}
 
 }

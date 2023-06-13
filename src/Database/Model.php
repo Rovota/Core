@@ -14,6 +14,7 @@ use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Database\Traits\ModelQueryFunctions;
 use Rovota\Core\Facades\DB;
 use Rovota\Core\Kernel\ExceptionHandler;
+use Rovota\Core\Structures\ErrorBucket;
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
@@ -30,7 +31,7 @@ use TypeError;
  */
 abstract class Model implements JsonSerializable
 {
-	use ModelValidation, Errors, Macroable, ModelQueryFunctions, Conditionable;
+	use ModelValidation, Macroable, ModelQueryFunctions, Conditionable, Errors;
 
 	protected string|null $table = null;
 	protected string|null $connection = null;
@@ -58,6 +59,8 @@ abstract class Model implements JsonSerializable
 
 	public function __construct(array $attributes = [])
 	{
+		$this->errors = new ErrorBucket();
+
 		if ($this->apply_default_casts || $this->manage_timestamps) {
 			$this->setOption('casts', [
 				'created' => 'moment',

@@ -15,6 +15,7 @@ use Rovota\Core\Http\Traits\RequestInput;
 use Rovota\Core\Kernel\Application;
 use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Routing\Route as RouteObject;
+use Rovota\Core\Structures\ErrorBucket;
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Str;
@@ -23,12 +24,12 @@ use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Support\UrlTools;
 use Rovota\Core\Validation\Enums\FilterAction;
 use Rovota\Core\Validation\FilterManager;
-use Rovota\Core\ValidationOld\Traits\RequestValidation;
+use Rovota\Core\Validation\Traits\RequestValidation;
 use Throwable;
 
 final class Request
 {
-	use RequestInput, RequestValidation, Errors, Macroable;
+	use RequestInput, RequestValidation, Macroable, Errors;
 
 	protected array $headers;
 
@@ -50,6 +51,8 @@ final class Request
 
 		$this->client_names = include base_path('vendor/rovota/core/src/Http/client_names.php');
 		$this->client_robots = include base_path('vendor/rovota/core/src/Http/client_robots.php');
+
+		$this->errors = new ErrorBucket();
 	}
 
 	public function __get(string $name): mixed

@@ -13,7 +13,8 @@ use Rovota\Core\Validation\Validator;
 trait ModelValidation
 {
 
-	protected Validator|string $validation_class = Validator::class;
+	protected Validator|string $validator_class = Validator::class;
+
 	protected array $validation_rules = [];
 	protected array $validation_messages = [];
 
@@ -27,10 +28,10 @@ trait ModelValidation
 		$rules = array_merge($this->validation_rules, $rules);
 		$messages = array_merge($this->validation_messages, $messages);
 
-		$validator = $this->validation_class::create($this->attributes_modified, $rules, $messages);
+		$validator = $this->validator_class::create($this->attributes_modified, $rules, $messages);
 
 		if ($validator->fails()) {
-			$this->passErrors($validator->getErrors());
+			$this->errors()->import($validator->errors());
 			return false;
 		}
 
@@ -43,10 +44,10 @@ trait ModelValidation
 			return true;
 		}
 
-		$validator = $this->validation_class::create([$attribute => $value], $this->getValidationRulesWithType($attribute), $this->getValidationMessagesWithType($attribute));
+		$validator = $this->validator_class::create([$attribute => $value], $this->getValidationRulesWithType($attribute), $this->getValidationMessagesWithType($attribute));
 
 		if ($validator->fails()) {
-			$this->passErrors($validator->getErrors());
+			$this->errors()->import($validator->errors());
 
 			if ($this->reject_invalid_assignments) {
 				return false;

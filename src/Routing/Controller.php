@@ -9,15 +9,17 @@
 namespace Rovota\Core\Routing;
 
 use BadMethodCallException;
+use Rovota\Core\Structures\ErrorBucket;
 use Rovota\Core\Support\Traits\Errors;
 
 abstract class Controller
 {
 	use Errors;
 
-	// -----------------
-
-	public function __construct() {}
+	public function __construct()
+	{
+		$this->errors = new ErrorBucket();
+	}
 
 	public function __call($method, $parameters)
 	{

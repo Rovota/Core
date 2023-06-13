@@ -9,23 +9,17 @@
 namespace Rovota\Core\Validation;
 
 use Rovota\Core\Kernel\ExceptionHandler;
-use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Support\Enums\Status;
-use Throwable;
+use Rovota\Core\Validation\Exceptions\MissingValidatorException;
+use Rovota\Core\Validation\Interfaces\ValidatorInterface;
 
 final class ValidationManager
 {
 	/**
-	 * @var array<string, Validator>
+	 * @var array<string, ValidatorInterface>
 	 */
 	protected static array $validators = [];
 
-	protected static string $default = 'default';
-
-	protected static Bucket $filters;
-
-	protected static array $mime_types = [];
-	protected static array $mime_types_reverse = [];
+	protected static string|null $default = null;
 
 	// -----------------
 
@@ -35,111 +29,71 @@ final class ValidationManager
 
 	// -----------------
 
-	/**
-	 * @internal
-	 */
 	public static function initialize(): void
 	{
-		self::addValidator('default', new Validator());
+		self::registerDefaultValidators();
+		self::setDefault('default');
 
-		try {
-			self::$filters = Filter::where('status', Status::Enabled)->getBy('name');
-		} catch (Throwable $throwable) {
-			ExceptionHandler::addThrowable($throwable, true);
-		}
+		RuleManager::initialize();
+		FilterManager::initialize();
 	}
 
 	// -----------------
 
-	public static function hasValidator(string $name): bool
+	public static function register(string $name, Validator $validator): void
 	{
-		return isset(self::$validators[$name]);
-	}
-
-	public static function addValidator(string $name, Validator $validator): void
-	{
-		if (self::hasValidator($name) === false) {
+		if (isset(self::$validators[$name]) === false) {
 			self::$validators[$name] = $validator;
 		}
 	}
 
-	public static function getValidator(string|null $name = null): Validator|null
+	// -----------------
+
+	public static function has(string $name): bool
+	{
+		return isset(self::$validators[$name]);
+	}
+
+	public static function get(string|null $name = null): ValidatorInterface|null
 	{
 		if ($name === null) {
 			$name = self::$default;
 		}
+		if (!isset(self::$validators[$name])) {
+			ExceptionHandler::addThrowable(new MissingValidatorException("There is no validator registered with the name '$name'."));
+		}
 		return self::$validators[$name] ?? null;
 	}
 
+	/**
+	 * @returns array<string, ValidatorInterface>
+	 */
+	public static function all(): array
+	{
+		return self::$validators;
+	}
+
 	// -----------------
+
+	public static function getDefault(): string|null
+	{
+		return self::$default;
+	}
 
 	public static function setDefault(string $name): void
 	{
-		if (self::hasValidator($name)) {
-			self::$default = $name;
+		if (isset(self::$validators[$name]) === false) {
+			ExceptionHandler::addThrowable(new MissingValidatorException("Undefined validators cannot be set as default: '$name'."));
 		}
+		self::$default = $name;
 	}
 
 	// -----------------
 
-	public static function hasFilter(string $name): bool
+	protected static function registerDefaultValidators(): void
 	{
-		return self::$filters->has($name);
+		self::register('default', new Validator([], []));
 	}
 
-	public static function getFilter(string $name): Filter|null
-	{
-		return self::$filters->get($name);
-	}
-
-	/**
-	 * @return array<string, Filter>
-	 */
-	public static function getFilters(): array
-	{
-		return self::$filters->toArray();
-	}
-
-	// -----------------
-
-	public static function mimeTypeExists(string $type): bool
-	{
-		self::loadMimeTypes();
-		return isset(self::$mime_types[$type]);
-	}
-
-	public static function mimeTypeExtensions(string $type): array
-	{
-		self::loadMimeTypes();
-		return self::$mime_types[$type] ?? [];
-	}
-
-	public static function extensionExists(string $extension): bool
-	{
-		self::loadMimeTypesReversed();
-		return isset(self::$mime_types_reverse[$extension]);
-	}
-
-	public static function extensionMimeTypes(string $extension): array
-	{
-		self::loadMimeTypesReversed();
-		return self::$mime_types_reverse[$extension] ?? [];
-	}
-
-	// -----------------
-
-	protected static function loadMimeTypes(): void
-	{
-		if (empty(self::$mime_types)) {
-			self::$mime_types = include 'mime_types.php';
-		}
-	}
-
-	protected static function loadMimeTypesReversed(): void
-	{
-		if (empty(self::$mime_types_reverse)) {
-			self::$mime_types_reverse = include 'mime_types_reverse.php';
-		}
-	}
 
 }

@@ -8,8 +8,8 @@
 
 namespace Rovota\Core\Validation\Traits;
 
-use Rovota\Core\Facades\Validator;
 use Rovota\Core\Structures\Bucket;
+use Rovota\Core\Validation\Validator;
 
 trait RequestValidation
 {
@@ -25,13 +25,10 @@ trait RequestValidation
 
 	public function validate(array $rules = [], array $messages = []): bool
 	{
-		$rules = array_merge($this->validationRules(), $rules);
-		$messages = array_merge($this->validationMessages(), $messages);
-
 		$validator = Validator::create($this->getInputData(), $rules, $messages);
 
 		if ($validator->fails()) {
-			$this->passErrors($validator->getErrors());
+			$this->errors()->import($validator->errors());
 			$this->fillSafeData($validator->safe()->toArray());
 			return false;
 		}
@@ -41,16 +38,6 @@ trait RequestValidation
 	}
 
 	// -----------------
-
-	protected function validationRules(): array
-	{
-		return [];
-	}
-
-	protected function validationMessages(): array
-	{
-		return [];
-	}
 
 	protected function fillSafeData(array $data): void
 	{
