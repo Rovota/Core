@@ -39,6 +39,25 @@ class ErrorBucket implements ArrayAccess, IteratorAggregate, Countable, Arrayabl
 
 	// -----------------
 
+	public function formatted(string|null $key = null): array
+	{
+		$result = [];
+
+		foreach ($this->toArray() as $type => $items) {
+			if ($key !== null && $key !== $type) {
+				continue;
+			}
+
+			foreach ($items as $identifier => $error) {
+				$result[$type][$identifier] = $error->formatted();
+			}
+		}
+
+		return $key !== null ? $result[$key] : $result;
+	}
+
+	// -----------------
+
 	public function copy(): ErrorBucket
 	{
 		return clone $this;

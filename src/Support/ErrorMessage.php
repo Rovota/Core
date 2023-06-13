@@ -38,6 +38,13 @@ class ErrorMessage
 
 	public function __toString(): string
 	{
+		return $this->formatted();
+	}
+
+	// -----------------
+
+	public function formatted(): string
+	{
 		return Str::translate($this->message, $this->data);
 	}
 

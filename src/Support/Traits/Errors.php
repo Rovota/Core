@@ -73,24 +73,4 @@ trait Errors
 		$this->message_overrides = [];
 	}
 
-	// TODO: Create a formatted errors method either here or within ErrorBucket, implement a formatted() method to ErrorMessage too.
-//	public function getFormattedErrors(string|null $type = null, string|null $source = null): array
-//	{
-//		$formatted = [];
-//		if ($type === null) {
-//			foreach ($this->errors as $type => $errors) {
-//				foreach ($errors as $identifier => $error) {
-//					$formatted[$type][$identifier] = __($error['message'], $error['data'], $source);
-//				}
-//			}
-//		} else {
-//			if (isset($this->errors[$type])) {
-//				foreach ($this->errors[$type] as $identifier => $error) {
-//					$formatted[$identifier] = __($error['message'], $error['data'], $source);
-//				}
-//			}
-//		}
-//		return $formatted;
-//	}
-
 }
