@@ -53,7 +53,7 @@ class ErrorBucket implements ArrayAccess, IteratorAggregate, Countable, Arrayabl
 			}
 		}
 
-		return $key !== null ? $result[$key] : $result;
+		return ($key !== null ? $result[$key] ?? [] : $result) ?? [];
 	}
 
 	// -----------------
@@ -65,7 +65,7 @@ class ErrorBucket implements ArrayAccess, IteratorAggregate, Countable, Arrayabl
 
 	public function count(mixed $key = null): int
 	{
-		return count($key !== null ? $this->get($key) : $this->items->export());
+		return count($key !== null ? ($this->get($key) ?? []) : $this->items->export());
 	}
 
 	public function flush(): ErrorBucket

@@ -27,7 +27,7 @@ trait RequestValidation
 	{
 		$validator = Validator::create($this->getInputData(), $rules, $messages);
 
-		if ($validator->fails()) {
+		if ($validator->succeeds() === false) {
 			$this->errors()->import($validator->errors());
 			$this->fillSafeData($validator->safe()->toArray());
 			return false;
