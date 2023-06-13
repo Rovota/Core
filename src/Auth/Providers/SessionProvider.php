@@ -81,13 +81,13 @@ class SessionProvider extends Provider implements SessionAuthentication
 
 	public function setSessionCookie(Session $session): void
 	{
-		$name = Registry::string('rovota.auth_session_name', 'account');
+		$name = Registry::string('auth_session_name', 'account');
 		CookieManager::queue($name, $session->hash, ['expires' => $session->expiration]);
 	}
 
 	public function expireSessionCookie(): void
 	{
-		CookieManager::expire(Registry::string('rovota.auth_session_name', 'account'));
+		CookieManager::expire(Registry::string('auth_session_name', 'account'));
 	}
 
 	// -----------------
@@ -96,7 +96,7 @@ class SessionProvider extends Provider implements SessionAuthentication
 	{
 		$this->loadTrustedClient();
 
-		$cookie = Cookie::findReceived(Registry::string('rovota.auth_session_name', 'account'));
+		$cookie = Cookie::findReceived(Registry::string('auth_session_name', 'account'));
 		if ($cookie !== null) {
 			if (mb_strlen($cookie->value) !== 80) {
 				return !$cookie->expire();
