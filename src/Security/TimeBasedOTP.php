@@ -10,6 +10,8 @@ namespace Rovota\Core\Security;
 
 use OTPHP\TOTP;
 use Rovota\Core\Cache\CacheManager;
+use Rovota\Core\Facades\Registry;
+use Rovota\Core\Support\Str;
 
 class TimeBasedOTP
 {
@@ -135,7 +137,7 @@ class TimeBasedOTP
 	{
 		$otp_url = url()->foreign('otpauth://totp/'.$this->getLabel(), [
 			'secret' => $this->getSecret(),
-			'issuer' => $this->getIssuer() ?? registry('site_name'),
+			'issuer' => $this->getIssuer() ?? Registry::string('site_name'),
 		]);
 
 		/** @noinspection SpellCheckingInspection */

@@ -66,9 +66,9 @@ final class ViewManager
 		self::setOpenGraphTags();
 		self::setTwitterTags();
 
-		if (Registry::bool('enable_rovota_branding')) {
+		if (Registry::bool('enable_rovota_branding', true)) {
 			self::addMeta('*', 'generator', [
-				'name' => 'generator', 'content' => Registry::string('site_generator')
+				'name' => 'generator', 'content' => Registry::string('site_generator', 'Rovota Core')
 			]);
 		}
 	}
