@@ -38,18 +38,11 @@
 /* ---------------------- */
 /* Themes */
 
-.theme-light, .theme-automatic {
+.theme-automatic {
     --color-base: 246, 246, 246;
     --color-card: 255, 255, 255;
     --color-input: 250, 250, 250;
     --color-font: 26, 27, 30;
-}
-
-.theme-dark {
-    --color-base: 26, 27, 30;
-    --color-card: 32, 33, 37;
-    --color-input: 40, 41, 46;
-    --color-font: 233, 233, 240;
 }
 
 /* ---------------------- */
@@ -78,69 +71,9 @@
 /* ---------------------- */
 /* General Accents */
 
-.accent-rovota {
+.accent-default {
     --color-accent: 196, 20, 66;
     --color-accent-alt: 222, 23, 75;
-}
-
-.accent-blueberry {
-    --color-accent: 131, 73, 236;
-    --color-accent-alt: 142, 107, 240;
-}
-
-.accent-lavender {
-    --color-accent: 170, 79, 225;
-    --color-accent-alt: 197, 102, 255;
-}
-
-.accent-rose {
-    --color-accent: 239, 87, 142;
-    --color-accent-alt: 255, 122, 170;
-}
-
-.accent-raspberry {
-    --color-accent: 229, 70, 70;
-    --color-accent-alt: 235, 112, 112;
-}
-
-.accent-sunrise {
-    --color-accent: 246, 144, 45;
-    --color-accent-alt: 248, 172, 98;
-}
-
-.accent-pineapple {
-    --color-accent: 244, 181, 42;
-    --color-accent-alt: 245, 199, 96;
-}
-
-.accent-lime {
-    --color-accent: 139, 195, 74;
-    --color-accent-alt: 167, 209, 117;
-}
-
-.accent-emerald {
-    --color-accent: 20, 195, 149;
-    --color-accent-alt: 22, 217, 166;
-}
-
-.accent-mint {
-    --color-accent: 8, 181, 170;
-    --color-accent-alt: 9, 206, 194;
-}
-
-.accent-turquoise {
-    --color-accent: 55, 184, 225;
-    --color-accent-alt: 100, 200, 232;
-}
-
-.accent-carolina {
-    --color-accent: 13, 137, 207;
-    --color-accent-alt: 14, 153, 230;
-}
-
-.accent-azure {
-    --color-accent: 61, 105, 218;
-    --color-accent-alt: 76, 126, 253;
 }
 
 /* ---------------------- */
@@ -154,16 +87,8 @@
         --color-font: 233, 233, 235;
     }
 
-    .accent-rovota {
+    .accent-default {
         --color-accent: 212, 46, 90;
         --color-accent-alt: 235, 51, 100;
     }
-}
-
-/* ---------------------- */
-/* Accent Corrections */
-
-.theme-dark.accent-rovota, .theme-dark .accent-rovota {
-    --color-accent: 212, 46, 90;
-    --color-accent-alt: 235, 51, 100;
 }
