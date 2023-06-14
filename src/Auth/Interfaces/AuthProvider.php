@@ -44,6 +44,11 @@ interface AuthProvider
 	 */
 	public function logout(): bool;
 
+	/**
+	 * Verify an identity manually.
+	 */
+	public function verify(): bool;
+
 	// -----------------
 
 	/**

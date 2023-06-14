@@ -162,6 +162,15 @@ class SessionProvider extends Provider implements SessionAuthentication
 		return true;
 	}
 
+	public function verify(): bool
+	{
+		if ($this->hasSession()) {
+			$this->verifySession();
+			return true;
+		}
+		return false;
+	}
+
 	// -----------------
 
 	public function validate(array $credentials): Identity|false

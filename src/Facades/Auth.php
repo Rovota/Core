@@ -78,6 +78,11 @@ final class Auth
 		return AuthManager::activeProvider()?->logout() ?? false;
 	}
 
+	public static function verify(): bool
+	{
+		return AuthManager::activeProvider()?->verify() ?? false;
+	}
+
 	// -----------------
 
 	public static function validate(array $credentials): Identity|bool

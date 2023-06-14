@@ -106,6 +106,11 @@ class TokenProvider extends Provider implements TokenAuthentication
 		return false;
 	}
 
+	public function verify(): bool
+	{
+		return true;
+	}
+
 	// -----------------
 
 	public function validate(array $credentials): Identity|bool
