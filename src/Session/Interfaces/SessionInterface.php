@@ -60,9 +60,9 @@ interface SessionInterface
 
 	// -----------------
 
-	public function flash(string|int $key, mixed $value): void;
+	public function flash(string|int $key, mixed $value, int $cycles = 1): void;
 
-	public function flashMany(array $values): void;
+	public function flashMany(array $values, int $cycles = 1): void;
 
 	public function reflash(): void;
 

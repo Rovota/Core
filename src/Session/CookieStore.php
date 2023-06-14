@@ -9,6 +9,7 @@
 namespace Rovota\Core\Session;
 
 use Rovota\Core\Facades\Registry;
+use Rovota\Core\Facades\Storage;
 use Rovota\Core\Session\Interfaces\SessionInterface;
 use Rovota\Core\Support\Arr;
 
@@ -188,47 +189,36 @@ class CookieStore implements SessionInterface
 
 	// -----------------
 
-	public function flash(string|int $key, mixed $value): void
+	public function flash(string|int $key, mixed $value, int $cycles = 1): void
 	{
 		$this->loadSession();
 		$this->put($key, $value);
-		$_SESSION['flashes'][] = $key;
-		$this->removeFlashes([$key]);
+		$_SESSION['flashed'][$key] = $cycles;
 	}
 
-	public function flashMany(array $values): void
+	public function flashMany(array $values, int $cycles = 1): void
 	{
 		$this->loadSession();
 		foreach ($values as $key => $value) {
-			$this->flash($key, $value);
+			$this->flash($key, $value, $cycles);
 		}
 	}
 
 	public function reflash(): void
 	{
 		$this->loadSession();
-		$this->setFlashes($_SESSION['flashes_old']);
-		$_SESSION['flashes_old'] = [];
+		foreach ($_SESSION['flashes'] as $key => $cycles) {
+			$_SESSION['flashes'][$key] = 1;
+		}
 	}
 
 	public function keep(array|string $keys): void
 	{
 		$this->loadSession();
 		$keys = is_string($keys) ? [$keys] : $keys;
-		$this->setFlashes($keys);
-		$this->removeFlashes($keys);
-	}
-
-	// -----------------
-
-	protected function setFlashes(array $keys): void
-	{
-		$_SESSION['flashes'] = array_unique(array_merge($_SESSION['flashes'], $keys));
-	}
-
-	protected function removeFlashes(array $keys): void
-	{
-		$_SESSION['flashes_old'] = array_diff($_SESSION['flashes_old'], $keys);
+		foreach ($keys as $key => $cycles) {
+			$_SESSION['flashes'][$key]++;
+		}
 	}
 
 	// -----------------
@@ -248,16 +238,23 @@ class CookieStore implements SessionInterface
 			session_name('__Secure-'.$this->cookie_name);
 
 			if (session_start()) {
+
+				if (Storage::disk('public')->missing('urls.txt')) {
+					Storage::disk('public')->write('urls.txt', '-------');
+				}
+				Storage::disk('public')->append('urls.txt', request()->url());
 				if (isset($_SESSION['data']) === false) {
 					$_SESSION['data'] = [];
 				}
 
-				foreach ($_SESSION['flashes_old'] ?? [] as $key) {
-					unset($_SESSION['data'][$key]);
+				foreach ($_SESSION['flashed'] ?? [] as $key => $cycles) {
+					if ($cycles === 0) {
+						unset($_SESSION['flashed'][$key]);
+						unset($_SESSION['data'][$key]);
+						continue;
+					}
+					$_SESSION['flashed'][$key]--;
 				}
-
-				$_SESSION['flashes_old'] = $_SESSION['flashes'] ?? [];
-				$_SESSION['flashes'] = [];
 
 				$this->loaded = true;
 			}

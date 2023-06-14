@@ -121,14 +121,14 @@ final class Session
 
 	// -----------------
 
-	public static function flash(string|int $key, mixed $value): void
+	public static function flash(string|int $key, mixed $value, int $cycles = 1): void
 	{
-		SessionManager::get()->flash($key, $value);
+		SessionManager::get()->flash($key, $value, $cycles);
 	}
 
-	public static function flashMany(array $values): void
+	public static function flashMany(array $values, int $cycles = 1): void
 	{
-		SessionManager::get()->flashMany($values);
+		SessionManager::get()->flashMany($values, $cycles);
 	}
 
 	public static function reflash(): void
