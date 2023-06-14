@@ -249,12 +249,20 @@ trait DiskFunctions
 
 	public function prepend(string $location, string $contents, bool $new_line = true): void
 	{
-		$this->retrieveFileWithFields($location, [])?->prepend($contents, $new_line)->save();
+		if ($this->missing($location)) {
+			$this->write($location, $contents);
+		} else {
+			$this->retrieveFileWithFields($location, [])?->prepend($contents, $new_line)->save();
+		}
 	}
 
 	public function append(string $location, string $contents, bool $new_line = true): void
 	{
-		$this->retrieveFileWithFields($location, [])?->append($contents, $new_line)->save();
+		if ($this->missing($location)) {
+			$this->write($location, $contents);
+		} else {
+			$this->retrieveFileWithFields($location, [])?->append($contents, $new_line)->save();
+		}
 	}
 
 	public function findAndReplace(string $location, array|string $search, array|string $replace): int
