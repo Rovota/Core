@@ -620,6 +620,24 @@ if (!function_exists('csrf_token_name')) {
 	}
 }
 
+if (!function_exists('form_submit_time')) {
+	function form_submit_time(): float
+	{
+		return microtime(true) - RequestManager::getRequest()->float('submit_timestamp');
+	}
+}
+
+if (!function_exists('form_submit_time_allowed')) {
+	function form_submit_time_allowed(): bool
+	{
+		$submit_time = form_submit_time();
+		$submit_time_min = registry()->float('form_submit_time_min');
+		$submit_time_max = registry()->float('form_submit_time_max');
+
+		return $submit_time > $submit_time_min && $submit_time < $submit_time_max;
+	}
+}
+
 // -----------------
 // Internal
 
