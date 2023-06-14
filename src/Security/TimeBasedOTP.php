@@ -11,7 +11,6 @@ namespace Rovota\Core\Security;
 use OTPHP\TOTP;
 use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Facades\Registry;
-use Rovota\Core\Support\Str;
 
 class TimeBasedOTP
 {

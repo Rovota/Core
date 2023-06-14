@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Validation\Rules\Basic;
 
-use BackedEnum;
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Rules\Rule;

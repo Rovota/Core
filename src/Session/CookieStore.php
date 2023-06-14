@@ -9,7 +9,6 @@
 namespace Rovota\Core\Session;
 
 use Rovota\Core\Facades\Registry;
-use Rovota\Core\Facades\Storage;
 use Rovota\Core\Session\Interfaces\SessionInterface;
 use Rovota\Core\Support\Arr;
 
