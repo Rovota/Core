@@ -120,4 +120,11 @@ class RedirectResponse extends Response
 		return $this;
 	}
 
+	public function current(array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
+	{
+		$this->setHttpCode($code);
+		$this->builder->local(RequestManager::getRequest()->path(), $query);
+		return $this;
+	}
+
 }
