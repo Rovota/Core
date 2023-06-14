@@ -137,7 +137,7 @@ class ErrorBucket implements ArrayAccess, IteratorAggregate, Countable, Arrayabl
 		return $this;
 	}
 
-	public function set(mixed $key, ErrorMessage|string $value): ErrorBucket
+	public function set(mixed $key, ErrorMessage|string $value, array $data = []): ErrorBucket
 	{
 		if (is_array($key)) {
 			foreach ($key as $offset => $item) {
@@ -145,7 +145,7 @@ class ErrorBucket implements ArrayAccess, IteratorAggregate, Countable, Arrayabl
 			}
 		} else {
 			if (is_string($value)) {
-				$value = new ErrorMessage(Str::afterLast($key, '.'), $value);
+				$value = new ErrorMessage(Str::afterLast($key, '.'), $value, data: $data);
 			}
 			$this->offsetSet($key, $value);
 		}
