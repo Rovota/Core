@@ -238,11 +238,6 @@ class CookieStore implements SessionInterface
 			session_name('__Secure-'.$this->cookie_name);
 
 			if (session_start()) {
-
-				if (Storage::disk('public')->missing('urls.txt')) {
-					Storage::disk('public')->write('urls.txt', '-------');
-				}
-				Storage::disk('public')->append('urls.txt', request()->url());
 				if (isset($_SESSION['data']) === false) {
 					$_SESSION['data'] = [];
 				}
