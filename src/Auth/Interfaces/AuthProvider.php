@@ -63,7 +63,7 @@ interface AuthProvider
 
 	// -----------------
 
-	public function trustClient(array $attributes = []): void;
+	public function trustClient(array $attributes = [], Identity|null $identity = null): void;
 
 	public function isClientTrusted(array $attributes = []): bool;
 

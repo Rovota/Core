@@ -97,9 +97,9 @@ final class Auth
 
 	// -----------------
 
-	public static function trustClient(array $attributes = []): void
+	public static function trustClient(array $attributes = [], Identity|null $identity = null): void
 	{
-		AuthManager::activeProvider()->trustClient($attributes);
+		AuthManager::activeProvider()->trustClient($attributes, $identity);
 	}
 
 	public static function isClientTrusted(array $attributes = []): bool

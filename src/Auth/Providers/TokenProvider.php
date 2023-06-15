@@ -134,7 +134,7 @@ class TokenProvider extends Provider implements TokenAuthentication
 
 	// -----------------
 
-	public function trustClient(array $attributes = []): void
+	public function trustClient(array $attributes = [], Identity|null $identity = null): void
 	{
 		$attributes['expiration'] = $attributes['expiration'] ?? now()->addDays(30);
 		$attributes['hash'] = $attributes['hash'] ?? $this->token->token;

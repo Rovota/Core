@@ -192,10 +192,10 @@ class SessionProvider extends Provider implements SessionAuthentication
 
 	// -----------------
 
-	public function trustClient(array $attributes = []): void
+	public function trustClient(array $attributes = [], Identity|null $identity = null): void
 	{
 		$attributes['expiration'] = $attributes['expiration'] ?? now()->addDays(30);
-		$client = TrustedClient::createUsing($this->identity, $attributes);
+		$client = TrustedClient::createUsing($identity ?? $this->identity, $attributes);
 
 		if ($client->save()) {
 			CookieManager::queue('trusted_client', $client->hash, ['expires' => $attributes['expiration']]);
