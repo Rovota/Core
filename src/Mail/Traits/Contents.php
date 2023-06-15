@@ -133,9 +133,9 @@ trait Contents
 		if ($view instanceof View) {
 			$this->mailer->isHTML();
 			foreach ($this->variables as $name => $value) {
-				$this->view->with($name, $value);
+				$view->with($name, $value);
 			}
-			$content = $this->view->render();
+			$content = $view->render();
 		}
 
 		return $content;
