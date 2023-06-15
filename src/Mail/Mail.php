@@ -86,6 +86,13 @@ class Mail implements Mailable
 	}
 
 	// -----------------
+
+	public function getMailer(): PHPMailer|null
+	{
+		return $this->mailer;
+	}
+
+	// -----------------
 	// Internal
 
 	/**
