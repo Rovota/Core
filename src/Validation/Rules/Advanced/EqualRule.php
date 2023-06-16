@@ -17,7 +17,7 @@ class EqualRule extends Rule implements RuleContextInterface
 
 	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|true
 	{
-		if ($this->context->get([$options[0]]) !== $value) {
+		if ($this->context->get($options[0]) !== $value) {
 			return new ErrorMessage($this->name, 'The value must be equal to :target.', data: [
 				'target' => $options[0],
 			]);
