@@ -221,7 +221,7 @@ trait RequestInput
 
 	// -----------------
 
-	protected function getInputData(): RequestData
+	public function getInputData(): RequestData
 	{
 		if ($this->input_data === null) {
 			$this->input_data = new RequestData(array_merge($this->query->all(), $this->post->all()));
