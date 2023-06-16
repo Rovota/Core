@@ -44,6 +44,7 @@ final class Str
 				}
 				$args = as_bucket($args)->sortBy(fn ($variable, $key) => mb_strlen($key), descending: true);
 				foreach ($args as $name => $value) {
+					if (is_array($value)) continue;
 					$string = str_replace(':'.$name, Str::translate($value, source: $source), $string);
 				}
 			}
