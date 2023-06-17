@@ -22,7 +22,7 @@ class FilterRule extends Rule
 			return true;
 		}
 
-		foreach ($options[0] as $filter_name) {
+		foreach ($options as $filter_name) {
 			if (FilterManager::has($filter_name)) {
 				$filter = FilterManager::get($filter_name);
 
