@@ -94,7 +94,7 @@ final class Route
 	public static function whereHash(array|string $parameter, string|int $algorithm): RouteGroup
 	{
 		if (is_string($parameter)) {
-			$parameter = [$parameter => '\[a-zA-Z0-9_-]{'.is_string($algorithm) ? hash_length($algorithm) ?? 1 : $algorithm.'}'];
+			$parameter = [$parameter => '[a-zA-Z0-9_-]{'.(is_string($algorithm) ? hash_length($algorithm) ?? 1 : $algorithm).'}'];
 		}
 		return RouteManager::getGroup('wheres', $parameter);
 	}
@@ -110,7 +110,7 @@ final class Route
 	public static function whereSlug(array|string $parameter, int|null $length = null): RouteGroup
 	{
 		if (is_string($parameter)) {
-			$parameter = [$parameter => '\[a-zA-Z0-9_-]'.($length ? '{'.$length.'}' : '+')];
+			$parameter = [$parameter => '[a-zA-Z0-9_-]'.($length ? '{'.$length.'}' : '+')];
 		}
 		return RouteManager::getGroup('wheres', $parameter);
 	}

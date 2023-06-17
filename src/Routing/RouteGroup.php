@@ -76,7 +76,7 @@ final class RouteGroup
 
 	public function whereHash(array|string $parameter, string|int $algorithm): RouteGroup
 	{
-		$this->where($parameter, '\[a-zA-Z0-9_-]{'.is_string($algorithm) ? hash_length($algorithm) ?? 1 : $algorithm.'}');
+		$this->where($parameter, '[a-zA-Z0-9_-]{'.(is_string($algorithm) ? hash_length($algorithm) ?? 1 : $algorithm).'}');
 		return $this;
 	}
 
@@ -88,7 +88,7 @@ final class RouteGroup
 
 	public function whereSlug(array|string $parameter, int|null $length = null): RouteGroup
 	{
-		$this->where($parameter, '\[a-zA-Z0-9_-]'.($length ? '{'.$length.'}' : '+'));
+		$this->where($parameter, '[a-zA-Z0-9_-]'.($length ? '{'.$length.'}' : '+'));
 		return $this;
 	}
 

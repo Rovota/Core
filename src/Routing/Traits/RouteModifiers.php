@@ -73,7 +73,7 @@ trait RouteModifiers
 
 	public function whereHash(array|string $parameter, string|int $algorithm): static
 	{
-		$this->where($parameter, '\[a-zA-Z0-9_-]{'.is_string($algorithm) ? hash_length($algorithm) ?? 1 : $algorithm.'}');
+		$this->where($parameter, '[a-zA-Z0-9_-]{'.(is_string($algorithm) ? hash_length($algorithm) ?? 1 : $algorithm).'}');
 		return $this;
 	}
 
@@ -85,7 +85,7 @@ trait RouteModifiers
 
 	public function whereSlug(array|string $parameter, int|null $length = null): static
 	{
-		$this->where($parameter, '\[a-zA-Z0-9_-]'.($length ? '{'.$length.'}' : '+'));
+		$this->where($parameter, '[a-zA-Z0-9_-]'.($length ? '{'.$length.'}' : '+'));
 		return $this;
 	}
 
