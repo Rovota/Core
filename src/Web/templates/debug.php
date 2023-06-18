@@ -21,7 +21,7 @@ use Rovota\Core\Kernel\Interfaces\Solution;
 	<link rel="stylesheet" href="/vendor/Rovota/core/src/Web/assets/styles/theming.css">
 	<link rel="stylesheet" href="/vendor/Rovota/core/src/Web/assets/styles/debug.css">
 </head>
-<body class="theme-automatic accent-rovota">
+<body class="theme-automatic accent-default">
 
 <container>
 
