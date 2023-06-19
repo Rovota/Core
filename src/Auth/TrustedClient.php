@@ -29,7 +29,7 @@ use Rovota\Core\Support\Str;
 class TrustedClient extends Model
 {
 
-	protected string|null $table = 'trusted_clients';
+	protected string|null $table = '_trusted_clients';
 
 	protected array $casts = [
 		'expiration' => 'moment',

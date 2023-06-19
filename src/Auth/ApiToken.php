@@ -35,7 +35,7 @@ use function now;
 class ApiToken extends Model
 {
 
-	protected string|null $table = 'api_tokens';
+	protected string|null $table = '_api_tokens';
 
 	protected array $attributes = [
 		'throttle_limit' => 200,

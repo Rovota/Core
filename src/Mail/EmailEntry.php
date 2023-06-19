@@ -26,7 +26,7 @@ use Rovota\Core\Support\Moment;
 class EmailEntry extends Model
 {
 
-	protected string|null $table = 'email_log';
+	protected string|null $table = '_email_log';
 
 	protected array $attributes = [
 		'type' => 'regular',

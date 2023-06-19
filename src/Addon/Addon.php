@@ -37,7 +37,7 @@ use Rovota\Core\Support\Version;
 class Addon extends Model
 {
 
-	protected string|null $table = 'addons';
+	protected string|null $table = '_addons';
 
 	protected array $attributes = [
 		'channel' => AddonChannel::Stable,

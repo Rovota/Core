@@ -16,6 +16,6 @@ use Rovota\Core\Support\Meta;
 class RoleMeta extends Meta
 {
 
-	protected string|null $table = 'role_meta';
+	protected string|null $table = '_role_meta';
 
 }

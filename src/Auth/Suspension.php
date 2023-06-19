@@ -28,7 +28,7 @@ use function now;
 class Suspension extends Model
 {
 
-	protected string|null $table = 'suspensions';
+	protected string|null $table = '_suspensions';
 
 	protected array $attributes = [
 		'type' => SuspensionType::Automatic,

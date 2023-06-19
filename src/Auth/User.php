@@ -44,7 +44,7 @@ class User extends Model implements Identity
 {
 	use Permissions, Metadata;
 
-	protected string|null $table = 'users';
+	protected string|null $table = '_users';
 
 	protected array $attributes = [
 		'email_verified' => false,

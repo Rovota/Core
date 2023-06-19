@@ -27,7 +27,7 @@ use Rovota\Core\Support\Moment;
 class Permission extends Model
 {
 
-	protected string|null $table = 'permissions';
+	protected string|null $table = '_permissions';
 
 	protected array $attributes = [
 		'protected' => false,

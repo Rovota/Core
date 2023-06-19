@@ -31,7 +31,7 @@ class Role extends Model
 {
 	use Permissions, Metadata;
 
-	protected string|null $table = 'roles';
+	protected string|null $table = '_roles';
 
 	protected array $attributes = [
 		'protected' => false,

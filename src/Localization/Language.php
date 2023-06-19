@@ -26,7 +26,7 @@ use Rovota\Core\Support\Moment;
 class Language extends Model
 {
 
-	protected string|null $table = 'languages';
+	protected string|null $table = '_languages';
 
 	protected array $attributes = [
 		'status' => Status::Disabled,

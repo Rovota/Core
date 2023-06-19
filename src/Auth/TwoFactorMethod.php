@@ -42,7 +42,7 @@ use Throwable;
 class TwoFactorMethod extends Model
 {
 
-	protected string|null $table = 'two_factor_methods';
+	protected string|null $table = '_two_factor_methods';
 
 	protected array $attributes = [
 		'is_default' => false,
