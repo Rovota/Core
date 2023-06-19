@@ -22,11 +22,11 @@ use Rovota\Core\Support\Version;
  * @property string|null $description
  * @property string $support
  * @property string $vendor
- * @property AddonChannel $channel
  * @property array|null $domain_list
- * @property array|null $dependency_list
- * @property string|null $license
  * @property Version $version
+ * @property AddonChannel $channel
+ * @property array|null $dependency_list
+ * @property string|null $license_key
  * @property bool $auto_update
  * @property AddonType $type
  * @property Status $status
@@ -46,10 +46,10 @@ class Addon extends Model
 	];
 
 	protected array $casts = [
-		'channel' => ['enum', AddonChannel::class],
 		'domain_list' => 'array',
-		'dependency_list' => 'array',
 		'version' => ['object', Version::class],
+		'channel' => ['enum', AddonChannel::class],
+		'dependency_list' => 'array',
 		'auto_update' => 'bool',
 		'type' => ['enum', AddonType::class],
 		'status' => ['enum', Status::class],
@@ -70,6 +70,16 @@ class Addon extends Model
 	// -----------------
 
 	/**
+	 * Called when all add-ons have been successfully loaded.
+	 */
+	public function eventAllAddonsLoaded(): void
+	{
+
+	}
+
+	// -----------------
+
+	/**
 	 * Called when each add-on is being loaded.
 	 */
 	protected function registerRoutes(): void
@@ -80,15 +90,5 @@ class Addon extends Model
 	// -----------------
 
 	// TODO: uninstall & table methods
-
-	// -----------------
-
-	/**
-	 * Called when all add-ons have been successfully loaded.
-	 */
-	public function eventAllAddonsLoaded(): void
-	{
-
-	}
 
 }
