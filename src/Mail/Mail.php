@@ -65,8 +65,8 @@ class Mail implements Mailable
 				$this->setMailData();
 
 				if ($this->mailer->send()) {
-					$model = new EmailEntry([
-						'email' => $receiver['address'],
+					$model = new EmailLogEntry([
+						'receiver' => $receiver['address'],
 						'view' => $this->view === null ?: ($this->view instanceof View ? $this->view::class : $this->view['name']),
 						'language_id' => $this->language->id,
 						'subject' => $this->subject,
