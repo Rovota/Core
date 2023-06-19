@@ -10,7 +10,7 @@ namespace Rovota\Core\Facades;
 
 use BackedEnum;
 use Rovota\Core\Kernel\Application;
-use Rovota\Core\Kernel\RegistryOption;
+use Rovota\Core\Kernel\RegistryEntry;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Support\Text;
 
@@ -70,7 +70,7 @@ final class Registry
 		return Application::$registry->has($name);
 	}
 
-	public static function get(string $name): RegistryOption|null
+	public static function get(string $name): RegistryEntry|null
 	{
 		return Application::$registry->get($name);
 	}

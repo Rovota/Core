@@ -28,7 +28,7 @@ final class Registry
 		$this->options = new Bucket();
 
 		try {
-			$options = RegistryOption::all();
+			$options = RegistryEntry::all();
 			foreach ($options as $option) {
 				$this->options->set($option->vendor.'.'.$option->name, $option);
 			}
@@ -97,7 +97,7 @@ final class Registry
 		return $this->options->has($this->getNameWithVendor($name));
 	}
 
-	public function get(string $name): RegistryOption|null
+	public function get(string $name): RegistryEntry|null
 	{
 		return $this->options->get($this->getNameWithVendor($name)) ?? null;
 	}
@@ -123,7 +123,7 @@ final class Registry
 
 		[$vendor, $name] = explode('.', $this->getNameWithVendor($name));
 
-		$option = new RegistryOption();
+		$option = new RegistryEntry();
 		$option->name = $name;
 		$option->vendor = $vendor;
 		$option->value = $value;

@@ -21,7 +21,7 @@ use Rovota\Core\Support\Moment;
  * @property Moment|null $edited
  * @property Moment|null $deleted
  */
-final class RegistryOption extends Model
+final class RegistryEntry extends Model
 {
 
 	protected string|null $table = '_registry';
