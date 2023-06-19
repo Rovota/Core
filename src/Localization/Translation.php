@@ -20,7 +20,7 @@ use Rovota\Core\Support\Moment;
  * @property Moment|null $edited
  * @property Moment|null $deleted
  */
-class Translation extends Model
+abstract class Translation extends Model
 {
 
 	protected array $attributes = [
