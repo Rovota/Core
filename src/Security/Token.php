@@ -22,7 +22,7 @@ use function now;
  * @property string $device
  * @property string $hash
  * @property string $code
- * @property int $uses
+ * @property int $times_used
  * @property Moment|null $expiration
  * @property Moment|null $created
  * @property Moment|null $edited
@@ -34,7 +34,7 @@ class Token extends Model
 	protected string|null $table = '_tokens';
 
 	protected array $attributes = [
-		'uses' => 0,
+		'times_used' => 0,
 	];
 
 	protected array $casts = [
