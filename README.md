@@ -1,4 +1,4 @@
-![Rovota Logo](https://cdn.rovota.com/branding/symbols/primary/64x64.png)
+![Rovota Logo](https://cdn.rovota.com/branding/rovota/main/64x64.png)
 
 ![GitHub](https://img.shields.io/github/license/Rovota/Core?style=flat-square)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Rovota/Core?sort=semver&style=flat-square)
