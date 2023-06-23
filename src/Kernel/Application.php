@@ -92,7 +92,7 @@ final class Application
 		SessionManager::initialize();
 		RequestManager::initialize();
 
-		if (self::$registry->bool('enable_ip_blocking') && RequestManager::getRequest()->ipAllowed() === false) {
+		if (RequestManager::getRequest()->ipAllowed() === false) {
 			http_response_code(403); exit;
 		}
 
