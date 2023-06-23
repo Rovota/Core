@@ -29,7 +29,7 @@ class CookieStore implements SessionInterface
 		$this->name = $name;
 		$this->options = $options;
 
-		$this->cookie_name = Registry::string('core_session_cookie_name', 'session');
+		$this->cookie_name = Registry::string('general_session_name', 'session');
 
 		if (empty($_COOKIE[$this->cookie_name]) === false) {
 			$this->loadSession();

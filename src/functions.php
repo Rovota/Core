@@ -613,7 +613,7 @@ if (!function_exists('csrf_token')) {
 	}
 }
 
-if (!function_exists('csrf_token_name')) {
+if (!function_exists('security_csrf_token')) {
 	function csrf_token_name(): string
 	{
 		return AccessManager::getCsrfTokenName();

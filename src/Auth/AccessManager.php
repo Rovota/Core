@@ -162,7 +162,7 @@ final class AccessManager
 
 	public static function getCsrfTokenName(): string
 	{
-		return Registry::string('csrf_token_name', 'csrf_protection_token');
+		return Registry::string('security_csrf_token', 'csrf_protection_token');
 	}
 
 	public static function verifyCsrfToken(string|null $token = null): bool

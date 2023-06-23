@@ -40,10 +40,10 @@ final class CookieManager
 	 */
 	public static function initialize(): void
 	{
-		self::$except = array_merge(['locale', 'csrf_protection_token'], Registry::array('core_plaintext_cookies'));
+		self::$except = array_merge(['locale', 'csrf_protection_token'], Registry::array('security_plaintext_cookies'));
 
 		foreach ($_COOKIE as $name => $value) {
-			if ($name === '__Secure-'.Registry::string('core_session_cookie_name', 'session')) {
+			if ($name === '__Secure-'.Registry::string('general_session_name', 'session')) {
 				continue;
 			}
 

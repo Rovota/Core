@@ -59,7 +59,7 @@ class Session extends Model
 			'ip' => RequestManager::getRequest()->ip(),
 			'client' => RequestManager::getRequest()->client(),
 			'hash' => Str::random(80),
-			'expiration' => now()->addDays(Registry::int('user_session_duration', 7)),
+			'expiration' => now()->addDays(Registry::int('identity_session_duration', 7)),
 		], $attributes);
 
 		return new static($attributes);
