@@ -82,12 +82,12 @@ final class Registry
 
 	public function string(string $name, string $default = ''): string
 	{
-		return $this->get($name)->value ?? $default;
+		return $this->get($name)?->value ?? $default;
 	}
 
 	public function text(string $name, Text|string $default = ''): Text
 	{
-		return new Text($this->get($name)->value ?? $default);
+		return new Text($this->get($name)?->value ?? $default);
 	}
 
 	// -----------------

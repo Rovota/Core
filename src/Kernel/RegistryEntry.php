@@ -14,7 +14,7 @@ use Rovota\Core\Support\Moment;
 /**
  * @property int $id
  * @property string $name
- * @property string $value
+ * @property string|null $value
  * @property string $vendor
  * @property bool $protected
  * @property Moment|null $created
