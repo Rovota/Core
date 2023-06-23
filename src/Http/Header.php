@@ -15,7 +15,7 @@ use Rovota\Core\Support\Moment;
 /**
  * @property int $id
  * @property string $name
- * @property string $value
+ * @property string|null $value
  * @property Status $status
  * @property Moment|null $created
  * @property Moment|null $edited
