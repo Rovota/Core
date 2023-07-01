@@ -299,7 +299,7 @@ trait MomentValidation
 		return $this->getDayOfWeek() === $day;
 	}
 
-	public function isDayOfMonth(int $day = 1): bool
+	public function isDayOfMonth(int $day): bool
 	{
 		return (int)$this->format('d') === $day;
 	}
