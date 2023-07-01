@@ -40,7 +40,7 @@ interface ValidatorInterface
 
 	// -----------------
 
-	public function passErrors(ErrorBucket|array $errors): static;
+	public function withErrors(ErrorBucket|array $errors): static;
 
 	// -----------------
 
