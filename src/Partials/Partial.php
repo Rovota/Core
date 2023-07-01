@@ -8,11 +8,13 @@
 
 namespace Rovota\Core\Partials;
 
+use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Partials\Exceptions\MissingPartialException;
 use Rovota\Core\Partials\Traits\PartialModifiers;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Macroable;
+use Throwable;
 
 class Partial
 {
@@ -47,14 +49,16 @@ class Partial
 
 	// -----------------
 
-	/**
-	 * @throws MissingPartialException
-	 */
 	public static function make(array $variables = []): static
 	{
-		$partial = PartialManager::make(static::class, null);
-		foreach ($variables as $name => $value) {
-			$partial->with($name, $value);
+		try {
+			$partial = PartialManager::make(static::class, null);
+			foreach ($variables as $name => $value) {
+				$partial->with($name, $value);
+			}
+		} catch (Throwable $throwable) {
+			ExceptionHandler::addThrowable($throwable);
+			exit;
 		}
 		return $partial;
 	}
