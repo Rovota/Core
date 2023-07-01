@@ -28,7 +28,7 @@ use Rovota\Core\Validation\Enums\FilterAction;
 class Filter extends Model
 {
 
-	protected string|null $table = '_filters';
+	protected string|null $table = 'filters';
 
 	protected array $attributes = [
 		'action' => FilterAction::Block,

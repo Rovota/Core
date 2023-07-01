@@ -24,7 +24,7 @@ use Rovota\Core\Support\Moment;
 final class Header extends Model
 {
 
-	protected string|null $table = '_headers';
+	protected string|null $table = 'headers';
 
 	protected array $attributes = [
 		'status' => Status::Enabled,

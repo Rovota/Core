@@ -16,6 +16,6 @@ use Rovota\Core\Support\Meta;
 class UserMeta extends Meta
 {
 
-	protected string|null $table = '_user_meta';
+	protected string|null $table = 'user_meta';
 
 }

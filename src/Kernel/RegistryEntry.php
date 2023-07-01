@@ -24,7 +24,7 @@ use Rovota\Core\Support\Moment;
 final class RegistryEntry extends Model
 {
 
-	protected string|null $table = '_registry';
+	protected string|null $table = 'registry';
 
 	protected array $attributes = [
 		'protected' => false,

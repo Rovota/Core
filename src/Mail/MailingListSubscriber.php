@@ -24,7 +24,7 @@ use Rovota\Core\Support\Moment;
 class MailingListSubscriber extends Model
 {
 
-	protected string|null $table = '_mailing_list_subscribers';
+	protected string|null $table = 'mailing_list_subscribers';
 
 	protected array $guarded = ['id', 'created', 'edited', 'deleted'];
 

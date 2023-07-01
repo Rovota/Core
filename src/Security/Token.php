@@ -31,7 +31,7 @@ use function now;
 class Token extends Model
 {
 
-	protected string|null $table = '_tokens';
+	protected string|null $table = 'tokens';
 
 	protected array $attributes = [
 		'times_used' => 0,

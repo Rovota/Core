@@ -33,7 +33,7 @@ use function now;
 class Session extends Model
 {
 
-	protected string|null $table = '_sessions';
+	protected string|null $table = 'sessions';
 
 	protected array $attributes = [
 		'type' => SessionType::Browser,
