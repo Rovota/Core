@@ -121,7 +121,7 @@ final class Limiter
 			if ($limit->tooManyAttempts()) {
 				$response = Resolver::invoke($limit->getResponse());
 				echo ($response instanceof Response) ? $response : response($response);
-				die;
+				exit;
 			}
 		}
 	}
