@@ -21,7 +21,7 @@
       "docs": "https://rovota.gitbook.io/core"
    },
    "require": {
-      "php-64bit": "^8.1.0",
+      "php-64bit": "^8.2.0",
       "ext-curl": "*",
       "ext-exif": "*",
       "ext-fileinfo": "*",
@@ -32,19 +32,19 @@
       "ext-zip": "*",
       "dflydev/dot-access-data": "^3.0",
       "envms/fluentpdo": "^2.2",
-      "guzzlehttp/guzzle": "^7.5",
-      "league/commonmark": "^2.3",
-      "league/flysystem": "^3.12",
-      "league/flysystem-read-only": "^3.10",
-      "monolog/monolog": "^3.2",
+      "guzzlehttp/guzzle": "^7.7",
+      "league/commonmark": "^2.4",
+      "league/flysystem": "^3.15",
+      "league/flysystem-read-only": "^3.15",
+      "monolog/monolog": "^3.4",
       "phlak/semver": "^4.1",
-      "phpmailer/phpmailer": "^6.7",
+      "phpmailer/phpmailer": "^6.8",
       "phpseclib/phpseclib": "^3.0",
-      "spomky-labs/otphp": "^11.1"
+      "spomky-labs/otphp": "^11.2"
    },
    "require-dev": {
-      "league/flysystem-aws-s3-v3": "^3.11",
-      "league/flysystem-sftp-v3": "^3.10"
+      "league/flysystem-aws-s3-v3": "^3.15",
+      "league/flysystem-sftp-v3": "^3.15"
    },
    "suggest": {
       "league/flysystem-aws-s3-v3": "Allows usage of S3 compatible services as file storage.",
