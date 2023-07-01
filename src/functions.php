@@ -506,11 +506,11 @@ if (!function_exists('user_has')) {
 				return false;
 			}
 
-			if (isset($conditions['twofactor_enabled']) && $provider->user()->hasTwoFactorMethods() !== $conditions['twofactor_enabled']) {
+			if (isset($conditions['2fa_enabled']) && $provider->user()->hasTwoFactorMethods() !== $conditions['2fa_enabled']) {
 				return false;
 			}
 
-			if (isset($conditions['twofactor_method']) && $provider->user()->hasTwoFactorMethod($conditions['twofactor_method']) === false) {
+			if (isset($conditions['2fa_method']) && $provider->user()->hasTwoFactorMethod($conditions['2fa_method']) === false) {
 				return false;
 			}
 
