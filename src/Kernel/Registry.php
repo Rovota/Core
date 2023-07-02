@@ -111,6 +111,26 @@ final class Registry
 		}
 	}
 
+	public function temporary(string $name, mixed $value): void
+	{
+		$value = $this->getConvertedValue($value);
+
+		if ($this->has($name)) {
+			$option = $this->get($name);
+			$option->value = $value;
+			return;
+		}
+
+		[$vendor, $name] = explode('.', $this->getNameWithVendor($name));
+
+		$option = new RegistryEntry();
+		$option->name = $name;
+		$option->vendor = $vendor;
+		$option->value = $value;
+
+		$this->options->set($vendor.'.'.$name, $option);
+	}
+
 	public function save(string $name, mixed $value): bool
 	{
 		$value = $this->getConvertedValue($value);

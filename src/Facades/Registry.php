@@ -80,6 +80,11 @@ final class Registry
 		return Application::$registry->all($vendor);
 	}
 
+	public static function temporary(string $name, mixed $value): void
+	{
+		Application::$registry->temporary($name, $value);
+	}
+
 	public static function save(string $name, mixed $value): bool
 	{
 		return Application::$registry->save($name, $value);
