@@ -91,9 +91,9 @@ class Client
 
 	// -----------------
 
-	protected function buildRequest(string $method, string $location, array $config = [], array $query = []): Request
+	protected function buildRequest(string $method, string $location, array $config = []): Request
 	{
-		return new Request($this->getGuzzle(), $method, $location, $config, $query);
+		return new Request($this->getGuzzle(), $method, $location, $config, $this->query);
 	}
 
 	protected function setClientDefaults(): void
@@ -117,7 +117,7 @@ class Client
 
 	protected function getGuzzle(): Guzzle
 	{
-		return $this->guzzle ?? new Guzzle(array_merge($this->config->toArray(), ['query' => $this->query]));
+		return $this->guzzle ?? new Guzzle($this->config->toArray());
 	}
 
 }
