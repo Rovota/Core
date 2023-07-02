@@ -28,6 +28,8 @@ class Client
 
 	protected Bucket $config;
 
+	protected array $query = [];
+
 	// -----------------
 
 	public function __construct(Bucket|array $config = [])
@@ -89,9 +91,9 @@ class Client
 
 	// -----------------
 
-	protected function buildRequest(string $method, string $location, array $config = []): Request
+	protected function buildRequest(string $method, string $location, array $config = [], array $query = []): Request
 	{
-		return new Request($this->getGuzzle(), $method, $location, $config);
+		return new Request($this->getGuzzle(), $method, $location, $config, $query);
 	}
 
 	protected function setClientDefaults(): void
@@ -115,7 +117,7 @@ class Client
 
 	protected function getGuzzle(): Guzzle
 	{
-		return $this->guzzle ?? new Guzzle($this->config->toArray());
+		return $this->guzzle ?? new Guzzle(array_merge($this->config->toArray(), ['query' => $this->query]));
 	}
 
 }

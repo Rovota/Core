@@ -84,7 +84,7 @@ trait ConfigModifiers
 			$parameters = [$parameters => $value];
 		}
 		foreach ($parameters as $name => $value) {
-			$this->config->set('query.'.$name, $value);
+			$this->query[$name] = $value;
 		}
 		return $this;
 	}

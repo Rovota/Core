@@ -28,14 +28,17 @@ final class Request
 
 	protected Bucket $config;
 
+	protected array $query = [];
+
 	// -----------------
 
-	public function __construct(Guzzle $guzzle, string $method, string $location, array $config)
+	public function __construct(Guzzle $guzzle, string $method, string $location, array $config, array $query)
 	{
 		$this->guzzle = $guzzle;
 		$this->method = $method;
 		$this->location = $location;
 		$this->config = new Bucket($config);
+		$this->query = $query;
 	}
 
 	// -----------------
@@ -45,7 +48,7 @@ final class Request
 	 */
 	public function execute(): Response
 	{
-		$response = $this->guzzle->request($this->method, $this->location, $this->config->toArray());
+		$response = $this->guzzle->request($this->method, $this->location, array_merge($this->config->toArray(), ['query' => $this->query]));
 		return new Response($response);
 	}
 
