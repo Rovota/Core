@@ -236,6 +236,19 @@ final class Arr
 		return $modes;
 	}
 
+	public static function percentage(array $array, mixed $value, int $precision = 2): float
+	{
+		if (empty($array)) return 0.00;
+
+		if ($value instanceof Closure) {
+			$count = count(Arr::filter($array, $value));
+		} else {
+			$count = count(Arr::filter($array, fn ($data) => $data === $value));
+		}
+
+		return round($count / count($array) * 100);
+	}
+
 	/**
 	 * Returns a new array with each entry only containing the specified field, optionally keyed by the given key.
 	 */
