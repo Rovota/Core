@@ -42,7 +42,7 @@ final class Registry
 	public function array(string $name, array $default = []): array
 	{
 		$option = $this->get($name);
-		return ($option !== null) ? explode(',', $option->value) : $default;
+		return ($option !== null) ? explode(',', $option->value ?? '') : $default;
 	}
 
 	public function bool(string $name, bool $default = false): bool
