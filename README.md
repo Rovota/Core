@@ -13,7 +13,7 @@ In fact, we are so confident in this framework, it has become the underlying pla
 
 ## System Requirements
 
-* PHP 8.1 or newer.
+* PHP 8.2 or newer.
 * MySQL 8+ with InnoDB, MariaDB 10.6+ or PostgreSQL 14+.
 
 ## Dependencies
