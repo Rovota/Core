@@ -161,10 +161,13 @@ trait ModelQueryFunctions
 		$model = new static;
 		$column = $column ?? $model->getPrimaryKey();
 		$key = 'model_'.$model::class.':'.$column.':'.$identifier;
-		
-		return CacheManager::get()->remember($key, function () use ($model, $identifier, $column, $key) {
-			return $model->newQueryBuilder()->find($identifier, $column)?->saveCacheKey($key);
-		}, $retention);
+
+		// TODO: Fix model caching
+//		return CacheManager::get()->remember($key, function () use ($model, $identifier, $column, $key) {
+//			return $model->newQueryBuilder()->find($identifier, $column)?->saveCacheKey($key);
+//		}, $retention);
+
+		return $model->newQueryBuilder()->find($identifier, $column);
 	}
 
 	/**
