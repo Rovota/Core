@@ -77,12 +77,6 @@ interface CacheInterface
 
 	// -----------------
 
-	public function getPrefix(): string;
-
-	public function setPrefix(string $prefix): void;
-
-	// -----------------
-
 	public function lastModifiedKey(): string|null;
 
 }

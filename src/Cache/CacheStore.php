@@ -23,8 +23,6 @@ abstract class CacheStore implements CacheInterface
 
 	protected CacheAdapter $adapter;
 
-	protected string|null $prefix;
-
 	// -----------------
 
 	public function __construct(string $name, CacheAdapter $adapter, CacheConfig $config)
@@ -33,7 +31,6 @@ abstract class CacheStore implements CacheInterface
 		$this->config = $config;
 
 		$this->adapter = $adapter;
-		$this->prefix = $name;
 	}
 
 	// -----------------
@@ -77,18 +74,6 @@ abstract class CacheStore implements CacheInterface
 	public function adapter(): CacheAdapter
 	{
 		return $this->adapter;
-	}
-
-	// -----------------
-
-	public function getPrefix(): string
-	{
-		return $this->prefix;
-	}
-
-	public function setPrefix(string $prefix): void
-	{
-		$this->prefix = !empty($prefix) ? $prefix . ':' : '';
 	}
 
 	// -----------------

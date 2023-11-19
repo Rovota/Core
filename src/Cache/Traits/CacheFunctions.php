@@ -27,7 +27,7 @@ trait CacheFunctions
 			return;
 		}
 		foreach (is_array($key) ? $key : [$key => $value] as $key => $value) {
-			$this->adapter->set($this->getFullKey($key), $value, $this->getRetentionPeriod($retention));
+			$this->adapter->set($key, $value, $this->getRetentionPeriod($retention));
 		}
 	}
 
@@ -41,7 +41,7 @@ trait CacheFunctions
 	public function has(string|int|array $key): bool
 	{
 		foreach (is_array($key) ? $key : [$key] as $key) {
-			if ($this->adapter->has($this->getFullKey($key)) === false) {
+			if ($this->adapter->has($key) === false) {
 				return false;
 			}
 		}
@@ -52,7 +52,7 @@ trait CacheFunctions
 	public function missing(string|int|array $key): bool
 	{
 		foreach (is_array($key) ? $key : [$key] as $key) {
-			if ($this->adapter->has($this->getFullKey($key)) === true) {
+			if ($this->adapter->has($key) === true) {
 				return false;
 			}
 		}
@@ -114,12 +114,12 @@ trait CacheFunctions
 
 	public function increment(string|int $key, int $step = 1): void
 	{
-		$this->adapter->increment($this->getFullKey($key), $step);
+		$this->adapter->increment($key, $step);
 	}
 
 	public function decrement(string|int $key, int $step = 1): void
 	{
-		$this->adapter->decrement($this->getFullKey($key), $step);
+		$this->adapter->decrement($key, $step);
 	}
 
 	// -----------------
@@ -127,7 +127,7 @@ trait CacheFunctions
 	public function remove(string|int|array $key): void
 	{
 		foreach (is_array($key) ? $key : [$key] as $key) {
-			$this->adapter->remove($this->getFullKey($key));
+			$this->adapter->remove($key);
 		}
 	}
 
@@ -151,14 +151,6 @@ trait CacheFunctions
 	protected function getRetentionPeriod(int|null $retention): int
 	{
 		return $retention ?? $this->config->retention;
-	}
-
-	protected function getFullKey(string|int $key): string
-	{
-		if ($this->prefix === null || mb_strlen($this->prefix) === 0) {
-			return (string) $key;
-		}
-		return $this->prefix.':'.$key;
 	}
 
 }
