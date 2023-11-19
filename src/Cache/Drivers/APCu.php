@@ -20,9 +20,9 @@ class APCu extends CacheStore
 	public function __construct(string $name, CacheConfig $config)
 	{
 		if (extension_loaded('apcu') === false || Application::isEnvironment($this->config->faked_for)) {
-			$adapter = new PhpArrayAdapter();
+			$adapter = new PhpArrayAdapter($config->parameters);
 		} else {
-			$adapter = new APCuAdapter();
+			$adapter = new APCuAdapter($config->parameters);
 		}
 
 		parent::__construct($name, $adapter, $config);

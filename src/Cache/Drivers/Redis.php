@@ -21,12 +21,12 @@ class Redis extends CacheStore
 	public function __construct(string $name, CacheConfig $config)
 	{
 		if (extension_loaded('redis') === false || Application::isEnvironment($this->config->faked_for)) {
-			$adapter = new PhpArrayAdapter();
+			$adapter = new PhpArrayAdapter($config->parameters);
 		} else {
 			try {
 				$adapter = new RedisAdapter($config->parameters);
 			} catch (Exception) {
-				$adapter = new PhpArrayAdapter();
+				$adapter = new PhpArrayAdapter($config->parameters);
 			}
 		}
 

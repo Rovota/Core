@@ -17,7 +17,7 @@ class PhpArray extends CacheStore
 
 	public function __construct(string $name, CacheConfig $config)
 	{
-		$adapter = new PhpArrayAdapter();
+		$adapter = new PhpArrayAdapter($config->parameters);
 
 		parent::__construct($name, $adapter, $config);
 	}
