@@ -195,7 +195,7 @@ class SessionProvider extends Provider implements SessionAuthentication
 	public function trustClient(array $attributes = [], Identity|null $identity = null): void
 	{
 		$identity = $identity ?? $this->identity;
-		$attributes['expiration'] = $attributes['expiration'] ?? now()->addDays(30);
+		$attributes['expiration'] = $attributes['expiration'] ?? now()->addDays(Registry::int('identity_trusted_device_duration', 30));
 		$client = TrustedClient::createUsing($identity, $attributes);
 
 		if ($client->save()) {
