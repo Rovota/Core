@@ -18,7 +18,7 @@ abstract class Provider implements AuthProvider
 
 	protected Identity|null $identity = null;
 
-	protected TrustedClient|null $trusted_client = null;
+	protected array $trusted_clients = [];
 
 	protected array $config = [];
 
@@ -68,15 +68,27 @@ abstract class Provider implements AuthProvider
 
 	public function isClientTrusted(array $attributes = []): bool
 	{
-		if ($this->trusted_client === null) {
+		if (empty($this->trusted_clients)) {
 			return false;
 		}
 
-		foreach ($attributes as $name => $value) {
-			if ($this->trusted_client->{$name} !== $value) return false;
+		foreach ($this->trusted_clients as $trusted_client) {
+
+			$valid_attributes = 0;
+
+			foreach ($attributes as $name => $value) {
+				if ($trusted_client->{$name} !== $value) {
+					continue;
+				};
+				$valid_attributes++;
+			}
+
+			if ($valid_attributes === count($attributes)) {
+				return true;
+			}
 		}
 
-		return true;
+		return false;
 	}
 
 }

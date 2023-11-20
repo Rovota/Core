@@ -81,22 +81,22 @@ class SessionProvider extends Provider implements SessionAuthentication
 
 	public function setSessionCookie(Session $session): void
 	{
-		$name = Registry::string('auth_session_name', 'account');
+		$name = Registry::string('identity_session_name', 'account');
 		CookieManager::queue($name, $session->hash, ['expires' => $session->expiration]);
 	}
 
 	public function expireSessionCookie(): void
 	{
-		CookieManager::expire(Registry::string('auth_session_name', 'account'));
+		CookieManager::expire(Registry::string('identity_session_name', 'account'));
 	}
 
 	// -----------------
 
 	public function authenticate(): bool
 	{
-		$this->loadTrustedClient();
+		$this->loadTrustedClients();
 
-		$cookie = Cookie::findReceived(Registry::string('auth_session_name', 'account'));
+		$cookie = Cookie::findReceived(Registry::string('identity_session_name', 'account'));
 		if ($cookie !== null) {
 			if (mb_strlen($cookie->value) !== 80) {
 				return !$cookie->expire();
@@ -194,37 +194,49 @@ class SessionProvider extends Provider implements SessionAuthentication
 
 	public function trustClient(array $attributes = [], Identity|null $identity = null): void
 	{
+		$identity = $identity ?? $this->identity;
 		$attributes['expiration'] = $attributes['expiration'] ?? now()->addDays(30);
-		$client = TrustedClient::createUsing($identity ?? $this->identity, $attributes);
+		$client = TrustedClient::createUsing($identity, $attributes);
 
 		if ($client->save()) {
-			CookieManager::queue('trusted_client', $client->hash, ['expires' => $attributes['expiration']]);
-		}
+			$name = Registry::string('identity_trusted_client_name', 'trusted_client').':'.hash('sha256', $identity->getName());
+			CookieManager::queue($name, $client->hash, ['expires' => $attributes['expiration']]);
 
-		$this->trusted_client = $client;
+			$this->trusted_clients[$name] = $client;
+		}
 	}
 
 	// -----------------
 
-	protected function loadTrustedClient(): void
+	protected function loadTrustedClients(): void
 	{
-		$cookie = CookieManager::findReceived('trusted_client');
-		if ($cookie !== null) {
-			if (mb_strlen($cookie->value) !== 80) {
-				$cookie->expire();
-			} else {
-				try {
-					$trusted_client = TrustedClient::where(['hash' => $cookie->value, 'ip' => RequestManager::getRequest()->ip()])->first();
-					if ($trusted_client instanceof TrustedClient && ($trusted_client->expiration === null || $trusted_client->expiration->isFuture())) {
-						$this->trusted_client = $trusted_client;
-					} else {
-						$cookie->expire();
+		$cookies = CookieManager::getReceived();
+
+		foreach ($cookies as $cookie) {
+
+			if (str_starts_with($cookie->name, Registry::string('identity_trusted_client_name', 'trusted_client')) === false) {
+				continue;
+			}
+
+			if ($cookie instanceof \Rovota\Core\Cookie\Cookie) {
+				if (mb_strlen($cookie->value) !== 80) {
+					$cookie->expire();
+				} else {
+					try {
+						$trusted_client = TrustedClient::where(['hash' => $cookie->value, 'ip' => RequestManager::getRequest()->ip()])->first();
+						if ($trusted_client instanceof TrustedClient && ($trusted_client->expiration === null || $trusted_client->expiration->isFuture())) {
+							$this->trusted_clients[$cookie->name] = $trusted_client;
+						} else {
+							$cookie->expire();
+						}
+					} catch (Throwable $throwable) {
+						ExceptionHandler::addThrowable($throwable);
 					}
-				} catch (Throwable $throwable) {
-					ExceptionHandler::addThrowable($throwable);
 				}
 			}
+
 		}
+
 	}
 
 }
