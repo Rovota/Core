@@ -25,6 +25,8 @@ interface Identity
 
 	public function getName(): string;
 
+	public function getDisplayName(): string;
+
 	public function getEmail(): string;
 
 	// -----------------

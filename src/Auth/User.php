@@ -91,6 +91,11 @@ class User extends Model implements Identity
 
 	public function getName(): string
 	{
+		return $this->username;
+	}
+
+	public function getDisplayName(): string
+	{
 		return $this->nickname;
 	}
 
