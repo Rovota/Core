@@ -39,9 +39,18 @@ final class Number
 		return $formatter->formatCurrency($amount, $in ?? $formatter->getSymbol(NumberFormatter::INTL_CURRENCY_SYMBOL));
 	}
 
+	public static function percentage(int|float $number, int $precision = 0, string|null $locale = null): string
+	{
+		$value = self::format($number, $precision, self::getLocale($locale));
+
+		return sprintf('%s %s', $value, '%');
+	}
+
 	public static function storage(int|float $bytes, int $precision = 0, string|null $locale = null): string
 	{
-		$data = LocaleDataManager::get(self::getLocale($locale));
+		$locale = self::getLocale($locale);
+
+		$data = LocaleDataManager::get($locale);
 		$suffixes = $data->array('units.storage.short');
 
 		$class = min((int)log($bytes, 1024), count($suffixes) - 1);
