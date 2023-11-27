@@ -10,6 +10,7 @@ namespace Rovota\Core\Facades;
 
 use Rovota\Core\Http\Enums\StatusCode;
 use Rovota\Core\Kernel\Application;
+use Rovota\Core\Kernel\Registry;
 use Rovota\Core\Kernel\Server;
 use Rovota\Core\Support\Version;
 
@@ -30,6 +31,11 @@ final class App
 	public static function server(): Server
 	{
 		return Application::$server;
+	}
+
+	public static function registry(): Registry
+	{
+		return Application::$registry;
 	}
 
 	// -----------------
