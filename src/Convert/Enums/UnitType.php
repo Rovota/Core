@@ -9,6 +9,7 @@
 namespace Rovota\Core\Convert\Enums;
 
 use Rovota\Core\Convert\Units\Length;
+use Rovota\Core\Convert\Units\Temperature;
 use Rovota\Core\Support\Traits\EnumHelpers;
 
 enum UnitType: int
@@ -20,7 +21,7 @@ enum UnitType: int
 //	case Area = 3;
 //	case Volume = 4;
 //	case Time = 5;
-//	case Temperature = 6;
+	case Temperature = 6;
 //	case Amount = 7;
 //	case Velocity = 8;
 
@@ -34,7 +35,7 @@ enum UnitType: int
 //			UnitType::Area => 'Area',
 //			UnitType::Volume => 'Volume',
 //			UnitType::Time => 'Time',
-//			UnitType::Temperature => 'Temperature',
+			UnitType::Temperature => 'Temperature',
 //			UnitType::Amount => 'Amount',
 //			UnitType::Velocity => 'Velocity',
 		};
@@ -48,7 +49,7 @@ enum UnitType: int
 //			UnitType::Area => '',
 //			UnitType::Volume => '',
 //			UnitType::Time => '',
-//			UnitType::Temperature => '',
+			UnitType::Temperature => Temperature::class,
 //			UnitType::Amount => '',
 //			UnitType::Velocity => '',
 		};
