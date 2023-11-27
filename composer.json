@@ -30,6 +30,7 @@
       "ext-pdo": "*",
       "ext-sodium": "*",
       "ext-zip": "*",
+      "ext-intl": "*",
       "dflydev/dot-access-data": "^3.0",
       "envms/fluentpdo": "^2.2",
       "guzzlehttp/guzzle": "^7.7",
