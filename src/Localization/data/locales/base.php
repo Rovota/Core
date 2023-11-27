@@ -22,24 +22,10 @@ return [
 	// 	],
 	// 	'first_day_of_week' => 1
 	// ],
-	//
-	// 'money' => [
-	// 	'formats' => [
-	// 		'' => '',
-	// 	],
-	// ],
 
 	'storage' => [
 		'unit' => [
 			'short' => ['B', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB'],
-		],
-	],
-
-	'number' => [
-		'format' => [
-			'default' => function(mixed $input, int $decimals = 2) {
-				return number_format($input, $decimals);
-			},
 		],
 	],
 
