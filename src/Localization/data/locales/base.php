@@ -23,9 +23,9 @@ return [
 	// 	'first_day_of_week' => 1
 	// ],
 
-	'storage' => [
-		'unit' => [
-			'short' => ['B', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB'],
+	'units' => [
+		'storage' => [
+			'short' => ['B', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB']
 		],
 	],
 

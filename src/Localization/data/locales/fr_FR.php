@@ -10,8 +10,8 @@ return array_replace_recursive(require __DIR__ . '/base.php', [
 		]
 	],
 
-	'storage' => [
-		'unit' => [
+	'units' => [
+		'storage' => [
 			'short' => ['o', 'Ko', 'Mo', 'Go', 'To', 'Eo', 'Zo', 'Yo'],
 		],
 	],

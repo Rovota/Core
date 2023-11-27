@@ -34,7 +34,7 @@ final class Number
 	public static function capacity(int|float $bytes, int $precision = 2, string|null $locale = null): string
 	{
 		$data = LocaleDataManager::get(self::getLocale($locale));
-		$suffixes = $data->array('storage.unit.short');
+		$suffixes = $data->array('units.storage.short');
 
 		$class = min((int)log($bytes, 1024), count($suffixes) - 1);
 		$value = self::format($bytes / pow(1024, $class), $precision, $locale);
