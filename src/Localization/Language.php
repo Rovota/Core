@@ -42,7 +42,7 @@ class Language extends Model
 
 	public function format(string $key, mixed $default = null): mixed
 	{
-		return LocalizationManager::getFormatsByLocale($this->locale)->get($key, $default);
+		return LocaleDataManager::get($this->locale)->get($key, $default);
 	}
 
 	// -----------------

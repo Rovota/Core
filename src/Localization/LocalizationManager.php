@@ -63,7 +63,7 @@ final class LocalizationManager
 		self::$active_timezone = Registry::string('default_timezone', ini_get('date.timezone'));
 		self::$default_source = 'core';
 
-		self::$formats = self::loadFormatsByLocale(self::$active_locale);
+		self::$formats = LocaleDataManager::get(self::$active_locale);
 		self::addSource('core', 'vendor/Rovota/Core/src/Localization');
 	}
 
@@ -81,7 +81,7 @@ final class LocalizationManager
 			self::loadStringsFromSource($source);
 		}
 
-		self::$formats = self::loadFormatsByLocale(self::$active_locale);
+		self::$formats = LocaleDataManager::get(self::$active_locale);
 	}
 
 	public static function getActiveLanguage(): Language
@@ -264,7 +264,7 @@ final class LocalizationManager
 
 	public static function getFormatsByLocale(string $locale): Bucket
 	{
-		return self::loadFormatsByLocale($locale);
+		return LocaleDataManager::get($locale);
 	}
 
 	// -----------------
@@ -283,7 +283,7 @@ final class LocalizationManager
 			self::loadStringsFromSource($source);
 		}
 
-		self::$formats = self::loadFormatsByLocale(self::$active_locale);
+		self::$formats = LocaleDataManager::get(self::$active_locale);
 	}
 
 	// -----------------
@@ -299,18 +299,6 @@ final class LocalizationManager
 			}
 		}
 		self::$loaded[$name] = $results;
-	}
-
-	protected static function loadFormatsByLocale(string $locale): Bucket
-	{
-		$formats = new Bucket();
-		$file = __DIR__.'/data/locales/'.$locale.'.php';
-		if (file_exists($file)) {
-			$formats->import(include $file);
-		} else {
-			$formats->import(include __DIR__ . '/data/locales/base.php');
-		}
-		return $formats;
 	}
 
 	protected static function findLanguageByIdentifier(string|int $identifier): Language|null
