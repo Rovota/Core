@@ -42,9 +42,10 @@ final class Number
 		return sprintf('%s %s', $value, $suffixes[$class]);
 	}
 
-	public static function currency(int|float $amount, string|null $in = null, string|null $locale = null): string
+	public static function currency(int|float $amount, string|null $in = null, int $precision = 2, string|null $locale = null): string
 	{
 		$formatter = NumberFormatter::create(self::getLocale($locale), NumberFormatter::CURRENCY);
+		$formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $precision);
 
 		return $formatter->formatCurrency($amount, $in ?? $formatter->getSymbol(NumberFormatter::INTL_CURRENCY_SYMBOL));
 	}
