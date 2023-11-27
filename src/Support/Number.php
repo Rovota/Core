@@ -53,7 +53,7 @@ final class Number
 
 	protected static function getLocale(string|null $locale): string
 	{
-		return $locale ?? LocalizationManager::getActiveLanguage()->$locale ?? 'en_US';
+		return $locale ?? LocalizationManager::getActiveLanguage()->locale ?? 'en_US';
 	}
 
 }
