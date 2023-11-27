@@ -9,7 +9,7 @@
 namespace Rovota\Core\Kernel;
 
 use Rovota\Core\Convert\ConversionManager;
-use Rovota\Core\Facades\Format;
+use Rovota\Core\Support\Number;
 use Rovota\Core\Support\Str;
 use const PHP_INT_MAX;
 
@@ -106,34 +106,34 @@ final class Server
 		return $this->variables[$name] ?? $default;
 	}
 
-	public function diskSize(bool $format = false): int|array
+	public function diskSize(bool $format = false): string|float|int
 	{
-		return $format ? Format::asCapacity($this->space_total) : $this->space_total;
+		return $format ? Number::storage($this->space_total) : $this->space_total;
 	}
 
-	public function diskSpace(bool $format = false): int|array
+	public function diskSpace(bool $format = false): string|float|int
 	{
-		return $format ? Format::asCapacity($this->space_free) : $this->space_free;
+		return $format ? Number::storage($this->space_free) : $this->space_free;
 	}
 
-	public function diskUsage(bool $format = false): int|array
+	public function diskUsage(bool $format = false): string|float|int
 	{
-		return $format ? Format::asCapacity($this->space_used) : $this->space_used;
+		return $format ? Number::storage($this->space_used) : $this->space_used;
 	}
 
-	public function memoryAllocated(bool $format = false): int|array
+	public function memoryAllocated(bool $format = false): string|float
 	{
-		return $format ? Format::asCapacity(memory_get_usage(true)) : memory_get_usage(true);
+		return $format ? Number::storage(memory_get_usage(true)) : (float)memory_get_usage(true);
 	}
 
-	public function memoryUsage(bool $format = false): int|array
+	public function memoryUsage(bool $format = false): string|float
 	{
-		return $format ? Format::asCapacity(memory_get_usage()) : memory_get_usage();
+		return $format ? Number::storage(memory_get_usage()) : (float)memory_get_usage();
 	}
 
-	public function memoryPeakUsage(bool $format = false): int|array
+	public function memoryPeakUsage(bool $format = false): string|float
 	{
-		return $format ? Format::asCapacity(memory_get_peak_usage(true)) : (float)memory_get_peak_usage(true);
+		return $format ? Number::storage(memory_get_peak_usage(true)) : (float)memory_get_peak_usage(true);
 	}
 
 }
