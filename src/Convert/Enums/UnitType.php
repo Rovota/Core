@@ -16,42 +16,38 @@ enum UnitType: int
 {
 	use EnumHelpers;
 
-//	case Mass = 1;
-	case Length = 2;
-//	case Area = 3;
-//	case Volume = 4;
-//	case Time = 5;
-	case Temperature = 6;
-//	case Amount = 7;
-//	case Velocity = 8;
+//	case Area = 1;
+//	case DataTransferRate = 2;
+//	case DigitalStorage = 3;
+//	case Energy = 4;
+//	case Frequency = 5;
+//	case FuelEconomy = 6;
+	case Length = 7;
+//	case Mass = 8;
+//	case Pressure = 9;
+//	case Speed = 10;
+	case Temperature = 11;
+//	case Time = 12;
+//	case Volume = 13;
 
 	// -----------------
-
-	public function label(): string
-	{
-		return match ($this) {
-//			UnitType::Mass => 'Mass',
-			UnitType::Length => 'Length',
-//			UnitType::Area => 'Area',
-//			UnitType::Volume => 'Volume',
-//			UnitType::Time => 'Time',
-			UnitType::Temperature => 'Temperature',
-//			UnitType::Amount => 'Amount',
-//			UnitType::Velocity => 'Velocity',
-		};
-	}
 
 	public function class(): string
 	{
 		return match ($this) {
-//			UnitType::Mass => '',
-			UnitType::Length => Length::class,
 //			UnitType::Area => '',
-//			UnitType::Volume => '',
-//			UnitType::Time => '',
+//			UnitType::DataTransferRate => '',
+//			UnitType::DigitalStorage => '',
+//			UnitType::Energy => '',
+//			UnitType::Frequency => '',
+//			UnitType::FuelEconomy => '',
+			UnitType::Length => Length::class,
+//			UnitType::Mass => '',
+//			UnitType::Pressure => '',
+//			UnitType::Speed => '',
 			UnitType::Temperature => Temperature::class,
-//			UnitType::Amount => '',
-//			UnitType::Velocity => '',
+//			UnitType::Time => '',
+//			UnitType::Volume => '',
 		};
 	}
 
