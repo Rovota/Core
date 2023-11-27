@@ -8,10 +8,10 @@
 
 namespace Rovota\Core\Convert\Units\Length;
 
-use Rovota\Core\Convert\Interfaces\Metric;
+use Rovota\Core\Convert\Interfaces\Imperial;
 use Rovota\Core\Convert\Units\Length;
 
-final class Mile extends Length implements Metric
+final class Mile extends Length implements Imperial
 {
 
 	const SYMBOL = 'mi';
