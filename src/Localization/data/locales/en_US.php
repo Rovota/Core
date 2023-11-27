@@ -1,12 +1,12 @@
-<?php /** @noinspection SpellCheckingInspection */
+<?php
 
-return array_replace_recursive(require __DIR__.'/base.php', [
+return array_replace_recursive(require __DIR__ . '/base.php', [
 
 	'about' => [
 		'name' => [
-			'native' => 'Polskie',
-			'english-us' => 'Polish',
-			'local' => __('Polish'),
+			'native' => 'English (US)',
+			'english-us' => 'English (US)',
+			'local' => __('English (US)'),
 		]
 	],
 
@@ -19,7 +19,7 @@ return array_replace_recursive(require __DIR__.'/base.php', [
 	'number' => [
 		'format' => [
 			'default' => function(mixed $input, int $decimals = 2) {
-				return number_format($input, $decimals, ',', '.');
+				return number_format($input, $decimals);
 			},
 		],
 	],

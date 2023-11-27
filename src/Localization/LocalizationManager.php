@@ -301,24 +301,24 @@ final class LocalizationManager
 		self::$loaded[$name] = $results;
 	}
 
+	protected static function loadFormatsByLocale(string $locale): Bucket
+	{
+		$formats = new Bucket();
+		$file = __DIR__.'/data/locales/'.$locale.'.php';
+		if (file_exists($file)) {
+			$formats->import(include $file);
+		} else {
+			$formats->import(include __DIR__ . '/data/locales/base.php');
+		}
+		return $formats;
+	}
+
 	protected static function findLanguageByIdentifier(string|int $identifier): Language|null
 	{
 		if (is_string($identifier) && isset(self::$locales[$identifier])) {
 			$identifier = self::$locales[$identifier];
 		}
 		return self::$languages[$identifier] ?? null;
-	}
-
-	protected static function loadFormatsByLocale(string $locale): Bucket
-	{
-		$formats = new Bucket();
-		$file = __DIR__.'/data/'.$locale.'.php';
-		if (file_exists($file)) {
-			$formats->import(include $file);
-		} else {
-			$formats->import(include __DIR__.'/data/base.php');
-		}
-		return $formats;
 	}
 
 }

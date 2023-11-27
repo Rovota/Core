@@ -1,12 +1,12 @@
-<?php /** @noinspection SpellCheckingInspection */
+<?php
 
-return array_replace_recursive(require __DIR__.'/base.php', [
+return array_replace_recursive(require __DIR__ . '/base.php', [
 
 	'about' => [
 		'name' => [
-			'native' => 'svenska',
-			'english-us' => 'Swedish',
-			'local' => __('Swedish'),
+			'native' => 'Italiano',
+			'english-us' => 'Italian',
+			'local' => __('Italian'),
 		]
 	],
 
