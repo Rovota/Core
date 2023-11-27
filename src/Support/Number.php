@@ -31,7 +31,15 @@ final class Number
 
 	// -----------------
 
-	public static function capacity(int|float $bytes, int $precision = 2, string|null $locale = null): string
+	public static function currency(int|float $amount, string|null $in = null, int $precision = 2, string|null $locale = null): string
+	{
+		$formatter = NumberFormatter::create(self::getLocale($locale), NumberFormatter::CURRENCY);
+		$formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $precision);
+
+		return $formatter->formatCurrency($amount, $in ?? $formatter->getSymbol(NumberFormatter::INTL_CURRENCY_SYMBOL));
+	}
+
+	public static function storage(int|float $bytes, int $precision = 2, string|null $locale = null): string
 	{
 		$data = LocaleDataManager::get(self::getLocale($locale));
 		$suffixes = $data->array('units.storage.short');
@@ -40,14 +48,6 @@ final class Number
 		$value = self::format($bytes / pow(1024, $class), $precision, $locale);
 
 		return sprintf('%s %s', $value, $suffixes[$class]);
-	}
-
-	public static function currency(int|float $amount, string|null $in = null, int $precision = 2, string|null $locale = null): string
-	{
-		$formatter = NumberFormatter::create(self::getLocale($locale), NumberFormatter::CURRENCY);
-		$formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $precision);
-
-		return $formatter->formatCurrency($amount, $in ?? $formatter->getSymbol(NumberFormatter::INTL_CURRENCY_SYMBOL));
 	}
 
 	// -----------------
