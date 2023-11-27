@@ -39,7 +39,7 @@ final class Number
 		return $formatter->formatCurrency($amount, $in ?? $formatter->getSymbol(NumberFormatter::INTL_CURRENCY_SYMBOL));
 	}
 
-	public static function storage(int|float $bytes, int $precision = 2, string|null $locale = null): string
+	public static function storage(int|float $bytes, int $precision = 0, string|null $locale = null): string
 	{
 		$data = LocaleDataManager::get(self::getLocale($locale));
 		$suffixes = $data->array('units.storage.short');
