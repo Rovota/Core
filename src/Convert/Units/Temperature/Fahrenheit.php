@@ -8,10 +8,10 @@
 
 namespace Rovota\Core\Convert\Units\Temperature;
 
-use Rovota\Core\Convert\Interfaces\Metric;
+use Rovota\Core\Convert\Interfaces\Imperial;
 use Rovota\Core\Convert\Units\Temperature;
 
-final class Fahrenheit extends Temperature implements Metric
+final class Fahrenheit extends Temperature implements Imperial
 {
 
 	const SYMBOL = '°F';
