@@ -14,6 +14,7 @@ return [
 			'local' => __('English'),
 		],
 		'direction' => 'ltr',
+		'units' => 'metric',
 	],
 
 	// 'date' => [
