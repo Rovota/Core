@@ -9,9 +9,10 @@
 namespace Rovota\Core\Validation\Rules\Advanced;
 
 use Rovota\Core\Support\ErrorMessage;
+use Rovota\Core\Validation\Interfaces\RuleContextInterface;
 use Rovota\Core\Validation\Rules\Rule;
 
-class RequiredIfDisabledRule extends Rule
+class RequiredIfDisabledRule extends Rule implements RuleContextInterface
 {
 
 	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|true
