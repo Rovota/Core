@@ -9,6 +9,7 @@
 namespace Rovota\Core\Validation;
 
 use Closure;
+use Rovota\Core\Facades\Session;
 use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Structures\ErrorBucket;
 use Rovota\Core\Support\Arr;
@@ -53,13 +54,17 @@ class Validator implements ValidatorInterface
 
 	// -----------------
 
-	public function succeeds(): bool
+	public function succeeds(bool $flash_errors = true): bool
 	{
 		foreach ($this->rules as $attribute => $rules) {
 			$value = $this->unsafe_data->get($attribute);
 			if ($this->validateAttribute($attribute, $value, $rules)) {
 				$this->safe_data->set($attribute, $value);
 			}
+		}
+
+		if ($flash_errors === true && $this->errors()->isEmpty() === false) {
+			Session::flash('validation_errors', $this->errors());
 		}
 
 		return $this->errors()->isEmpty();
@@ -115,9 +120,8 @@ class Validator implements ValidatorInterface
 			return true;
 		}
 
-		if (Arr::missing($rules, ['nullable', 'required_if_enabled', 'required_if_disabled']) && $value === null) {
-			$this->setError($attribute, 'required', 'This attribute may not be empty.');
-			return false;
+		if (array_key_exists('nullable', $rules) && $value === null) {
+			return true;
 		}
 
 		foreach ($rules as $name => $options) {
