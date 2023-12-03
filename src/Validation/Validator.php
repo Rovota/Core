@@ -129,7 +129,7 @@ class Validator implements ValidatorInterface
 				continue;
 			}
 
-			if ($stop_on_failure && $this->errors()->count($attribute) === 0) {
+			if ($stop_on_failure && $this->errors()->count($attribute) > 0) {
 				return false;
 			}
 
