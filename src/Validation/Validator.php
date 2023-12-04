@@ -17,6 +17,7 @@ use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
+use Rovota\Core\Validation\Enums\ValidationAction;
 use Rovota\Core\Validation\Interfaces\RuleContextInterface;
 use Rovota\Core\Validation\Interfaces\RuleInterface;
 use Rovota\Core\Validation\Interfaces\ValidatorInterface;
@@ -137,6 +138,10 @@ class Validator implements ValidatorInterface
 				$options instanceof Closure => $options($value),
 				default => $this->getUsableRule($name)->validate($attribute, $value, $options),
 			};
+
+			if ($result === ValidationAction::NextField) {
+				return $this->errors()->count($attribute) === 0;
+			}
 
 			if ($result instanceof ErrorMessage) {
 				$this->setError($attribute, $name, $result);

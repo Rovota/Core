@@ -11,12 +11,13 @@ namespace Rovota\Core\Validation\Rules\Storage;
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Support\ErrorMessage;
+use Rovota\Core\Validation\Enums\ValidationAction;
 use Rovota\Core\Validation\Rules\Rule;
 
 class MimeTypesRule extends Rule
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|true
+	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof UploadedFile) {
 			$value = $value->variant('original');
@@ -27,6 +28,6 @@ class MimeTypesRule extends Rule
 				'allowed' => $options,
 			]);
 		}
-		return true;
+		return ValidationAction::NextRule;
 	}
 }

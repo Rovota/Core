@@ -10,12 +10,13 @@ namespace Rovota\Core\Validation\Rules\Advanced;
 
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\ValidationTools;
+use Rovota\Core\Validation\Enums\ValidationAction;
 use Rovota\Core\Validation\Rules\Rule;
 
 class ExistsRule extends Rule
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|true
+	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value) && !is_int($value)) {
 			$value = (string)$value;
@@ -29,6 +30,6 @@ class ExistsRule extends Rule
 				'value' => $value,
 			]);
 		}
-		return true;
+		return ValidationAction::NextRule;
 	}
 }

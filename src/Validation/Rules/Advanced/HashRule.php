@@ -9,12 +9,13 @@
 namespace Rovota\Core\Validation\Rules\Advanced;
 
 use Rovota\Core\Support\ErrorMessage;
+use Rovota\Core\Validation\Enums\ValidationAction;
 use Rovota\Core\Validation\Rules\Rule;
 
 class HashRule extends Rule
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|true
+	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
 	{
 		[$algorithm, $reference] = $options;
 		$hash = hash($algorithm, $reference);
@@ -26,6 +27,6 @@ class HashRule extends Rule
 				'hash' => $hash,
 			]);
 		}
-		return true;
+		return ValidationAction::NextRule;
 	}
 }

@@ -10,13 +10,14 @@ namespace Rovota\Core\Validation\Rules\Advanced;
 
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\FilterAction;
+use Rovota\Core\Validation\Enums\ValidationAction;
 use Rovota\Core\Validation\FilterManager;
 use Rovota\Core\Validation\Rules\Rule;
 
 class FilterRule extends Rule
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|true
+	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value)) {
 			return true;
@@ -42,6 +43,6 @@ class FilterRule extends Rule
 			}
 		}
 
-		return true;
+		return ValidationAction::NextRule;
 	}
 }

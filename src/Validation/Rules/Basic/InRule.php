@@ -10,12 +10,13 @@ namespace Rovota\Core\Validation\Rules\Basic;
 
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\ErrorMessage;
+use Rovota\Core\Validation\Enums\ValidationAction;
 use Rovota\Core\Validation\Rules\Rule;
 
 class InRule extends Rule
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|true
+	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
 	{
 		if (count($options) === 1 && str_contains($options[0], '\\')) {
 			if ($options[0]::tryFrom($value) === null) {
@@ -29,6 +30,6 @@ class InRule extends Rule
 			]);
 		}
 
-		return true;
+		return ValidationAction::NextRule;
 	}
 }
