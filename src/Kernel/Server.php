@@ -38,26 +38,41 @@ final class Server
 
 	// -----------------
 
+	/**
+	 * Returns the name of the operating system, such as "Windows".
+	 */
 	public function os(): string
 	{
 		return trim(str_replace('NT', '', php_uname('s')));
 	}
 
+	/**
+	 * Returns the major release version of the operating system.
+	 */
 	public function release(): string
 	{
 		return php_uname('r');
 	}
 
+	/**
+	 * returns the exact version/build number of the operating system.
+	 */
 	public function version(): string
 	{
 		return php_uname('v');
 	}
 
+	/**
+	 * Returns the (host)name of the server.
+	 */
 	public function name(): string
 	{
 		return php_uname('n');
 	}
 
+	/**
+	 * Returns the type of platform the server is running on, such as "AMD64".
+	 */
 	public function platform(): string
 	{
 		return php_uname('m');
