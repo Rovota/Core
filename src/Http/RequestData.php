@@ -59,7 +59,7 @@ final class RequestData implements ArrayAccess, IteratorAggregate, Countable, Ar
 	{
 		$keys = is_array($key) ? $key : [$key];
 		foreach ($keys as $key) {
-			if ($this->items->get($key) === null) {
+			if ($this->items->get($key, null) === null) {
 				return false;
 			}
 		}
