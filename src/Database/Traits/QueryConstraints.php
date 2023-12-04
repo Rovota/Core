@@ -92,7 +92,7 @@ trait QueryConstraints
 	public function whereFullText(string|array $column, string $string): static
 	{
 		if (is_array($column)) {
-			$column = implode(', ', $column);
+			$column = implode(',', $column);
 		}
 		$this->addStatement('where', sprintf('MATCH(%s) AGAINST(? IN NATURAL LANGUAGE MODE)', $column), $string);
 		return $this;

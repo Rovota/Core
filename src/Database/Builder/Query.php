@@ -112,6 +112,25 @@ final class Query
 		return is_array($result ?? null) ? $result : [];
 	}
 
+	/**
+	 * @throws Exception
+	 */
+	protected function fetchAllRaw(string $column = ''): array
+	{
+		if ($this->config->include_deleted === 0) {
+			$this->whereNull('deleted');
+		}
+		if ($this->config->include_deleted === 2) {
+			$this->whereNotNull('deleted');
+		}
+
+		$this->buildQuery();
+
+		$result = $this->fluent->fetchAll($column);
+
+		return is_array($result ?? null) ? $result : [];
+	}
+
 	// -----------------
 	// Misc
 

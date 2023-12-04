@@ -82,6 +82,15 @@ trait QuerySelect
 	/**
 	 * @throws Exception
 	 */
+	public function getRaw(): array
+	{
+		$this->setQueryMode('select');
+		return $this->fetchAllRaw();
+	}
+
+	/**
+	 * @throws Exception
+	 */
 	public function getBy(string $column): Bucket
 	{
 		$this->setQueryMode('select');
