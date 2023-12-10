@@ -56,8 +56,9 @@ abstract class Unit implements Stringable, JsonSerializable
 
 	public static function from(float|int $value, string $unit): Unit
 	{
+		$unit = trim($unit);
 		if (str_contains($unit, '\\') === false) {
-			$unit = static::UNIT_TYPE->class()::classFromIdentifier($unit);
+			$unit = static::UNIT_TYPE->class()::classFromIdentifier(trim($unit));
 			if ($unit === null) {
 				return new static(0);
 			}
