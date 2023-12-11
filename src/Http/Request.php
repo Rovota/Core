@@ -295,7 +295,7 @@ final class Request
 	public function platform(): string
 	{
 		$platform = $this->header('Sec-CH-UA-Platform');
-		return $platform !== null ? trim($platform) : 'Unknown';
+		return $platform !== null ? trim($platform, '"') : 'Unknown';
 	}
 
 	public function port(): int
