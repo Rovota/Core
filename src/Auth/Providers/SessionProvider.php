@@ -82,7 +82,7 @@ class SessionProvider extends Provider implements SessionAuthentication
 	public function setSessionCookie(Session $session): void
 	{
 		$name = Registry::string('identity_session_name', 'account');
-		CookieManager::queue($name, $session->hash, ['expires' => $session->expiration]);
+		CookieManager::queue($name, $session->hash, $session->temporary ? [] : ['expires' => $session->expiration]);
 	}
 
 	public function expireSessionCookie(): void

@@ -23,9 +23,10 @@ use function now;
  * @property string $ip
  * @property string $client
  * @property string $hash
+ * @property Moment $expiration
+ * @property bool $temporary
  * @property SessionType $type
  * @property bool $verified
- * @property Moment $expiration
  * @property Moment|null $created
  * @property Moment|null $edited
  * @property Moment|null $deleted
@@ -54,13 +55,19 @@ class Session extends Model
 
 	public static function createUsing(Identity $identity, array $attributes = []): static
 	{
+		$duration = Registry::int('identity_session_duration');
+
 		$attributes = array_merge([
 			'user_id' => $identity->getId(),
 			'ip' => RequestManager::getRequest()->ip(),
 			'client' => RequestManager::getRequest()->client(),
 			'hash' => Str::random(80),
-			'expiration' => now()->addDays(Registry::int('identity_session_duration', 7)),
+			'expiration' => now()->addDays($duration === 0 ? 1 : $duration),
 		], $attributes);
+
+		if ($duration === 0) {
+			$attributes['temporary'] = true;
+		}
 
 		return new static($attributes);
 	}
