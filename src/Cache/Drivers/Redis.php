@@ -20,7 +20,7 @@ class Redis extends CacheStore
 
 	public function __construct(string $name, CacheConfig $config)
 	{
-		if (extension_loaded('redis') === false || Application::isEnvironment($this->config->faked_for)) {
+		if (extension_loaded('redis') === false || Application::isEnvironment($config->faked_for)) {
 			$adapter = new PhpArrayAdapter($config->parameters);
 		} else {
 			try {
