@@ -122,15 +122,21 @@ trait QueryConstraints
 		return $this;
 	}
 
-	public function whereLike(string $column, string $value): static
+	public function whereLike(string $column, string $value, bool $wildcards = true): static
 	{
-		$this->addStatement('where', $column." LIKE '?'", self::normalized($column, $value));
+		if ($wildcards === true) {
+			$value = Str::wrap(self::normalized($column, $value), '%');
+		}
+		$this->addStatement('where', $column.' LIKE ?', $value);
 		return $this;
 	}
 
-	public function whereNotLike(string $column, string $value): static
+	public function whereNotLike(string $column, string $value, bool $wildcards = true): static
 	{
-		$this->addStatement('where', $column." NOT LIKE '?'", self::normalized($column, $value));
+		if ($wildcards === true) {
+			$value = Str::wrap(self::normalized($column, $value), '%');
+		}
+		$this->addStatement('where', $column.' NOT LIKE ?', $value);
 		return $this;
 	}
 
@@ -217,15 +223,21 @@ trait QueryConstraints
 		return $this;
 	}
 
-	public function orWhereLike(string $column, string $value): static
+	public function orWhereLike(string $column, string $value, bool $wildcards = true): static
 	{
-		$this->addStatement('whereOr', $column." LIKE '?'", self::normalized($column, $value));
+		if ($wildcards === true) {
+			$value = Str::wrap(self::normalized($column, $value), '%');
+		}
+		$this->addStatement('whereOr', $column.' LIKE ?', $value);
 		return $this;
 	}
 
-	public function orWhereNotLike(string $column, string $value): static
+	public function orWhereNotLike(string $column, string $value, bool $wildcards = true): static
 	{
-		$this->addStatement('whereOr', $column." NOT LIKE '?'", self::normalized($column, $value));
+		if ($wildcards === true) {
+			$value = Str::wrap(self::normalized($column, $value), '%');
+		}
+		$this->addStatement('whereOr', $column.' NOT LIKE ?', $value);
 		return $this;
 	}
 

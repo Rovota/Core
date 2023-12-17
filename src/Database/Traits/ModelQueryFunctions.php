@@ -75,16 +75,16 @@ trait ModelQueryFunctions
 		return $builder->whereNotNull($columns);
 	}
 
-	public static function whereLike(string $column, string $value): Query
+	public static function whereLike(string $column, string $value, bool $wildcards = true): Query
 	{
 		$builder = (new static)->newQueryBuilder();
-		return $builder->whereLike($column, $value);
+		return $builder->whereLike($column, $value, $wildcards);
 	}
 
-	public static function whereNotLike(string $column, string $value): Query
+	public static function whereNotLike(string $column, string $value, bool $wildcards = true): Query
 	{
 		$builder = (new static)->newQueryBuilder();
-		return $builder->whereNotLike($column, $value);
+		return $builder->whereNotLike($column, $value, $wildcards);
 	}
 
 	public static function whereRaw(string $condition, string|int $value): Query
