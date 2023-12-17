@@ -46,20 +46,39 @@ final class Number
 		return sprintf('%s %s', $value, '%');
 	}
 
-	public static function storage(int|float $bytes, int $precision = 0, string|null $locale = null): string
+	public static function storage(int|float $bytes, int $precision = 0, string $format = 'short', string|null $locale = null): string
 	{
 		$locale = self::getLocale($locale);
+		$suffixes = LocaleDataManager::get($locale)->array('units.storage.'.$format);
 
-		$data = LocaleDataManager::get($locale);
-		$suffixes = $data->array('units.storage.short');
+		$data = self::getAbbreviationData($bytes, 1024, $suffixes);
+		$value = self::format($data['value'], $precision, $locale);
 
-		$class = min((int)log($bytes, 1024), count($suffixes) - 1);
-		$value = self::format($bytes / pow(1024, $class), $precision, $locale);
+		return sprintf('%s%s', $value, Str::prepend($data['suffix'], $format === 'long' ? ' ' : ''));
+	}
 
-		return sprintf('%s %s', $value, $suffixes[$class]);
+	public static function shorten(int|float $number, int $precision = 0, string $format = 'short', string|null $locale = null): string
+	{
+		$locale = self::getLocale($locale);
+		$suffixes = LocaleDataManager::get($locale)->array('units.numbers.'.$format);
+
+		$data = self::getAbbreviationData($number, 1000, $suffixes);
+		$value = self::format($data['value'], $precision, $locale);
+
+		return sprintf('%s%s', $value, Str::prepend($data['suffix'], $format === 'long' ? ' ' : ''));
 	}
 
 	// -----------------
+
+	protected static function getAbbreviationData(int|float $value, int $scale, array $suffixes): array
+	{
+		$class = min((int)log($value, $scale), count($suffixes) - 1);
+
+		return [
+			'value' => $value / pow($scale, $class),
+			'suffix' => $suffixes[$class],
+		];
+	}
 
 	protected static function getLocale(string|null $locale): string
 	{
