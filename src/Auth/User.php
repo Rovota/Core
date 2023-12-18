@@ -36,6 +36,7 @@ use function now;
  * @property array|null $permission_list
  * @property array|null $permissions_denied
  * @property Moment|null $last_active
+ * @property Status $status
  * @property Moment|null $created
  * @property Moment|null $edited
  * @property Moment|null $deleted
@@ -56,6 +57,7 @@ class User extends Model implements Identity
 		'permission_list' => 'array',
 		'permissions_denied' => 'array',
 		'last_active' => 'moment',
+		'status' => ['enum', Status::class],
 	];
 
 	protected array $guarded = ['id', 'created', 'edited', 'deleted'];
