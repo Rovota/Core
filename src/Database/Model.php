@@ -336,7 +336,7 @@ abstract class Model implements JsonSerializable
 					}
 					static::insert($this->attributes);
 
-					if ($this->auto_increment) {
+					if ($this->auto_increment && isset($this->attributes[$this->primary_key]) === false) {
 						$this->attributes[$this->primary_key] = DB::connection($this->connection)->lastId();
 					}
 
