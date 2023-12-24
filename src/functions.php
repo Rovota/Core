@@ -281,7 +281,17 @@ if (!function_exists('file')) {
 }
 
 if (!function_exists('asset')) {
+	/**
+	 * @deprecated Use asset_url() instead.
+	 */
 	function asset(string $path, array $query = [], string|null $disk = null): UrlBuilder|null
+	{
+		return asset_url($path, $query, $disk);
+	}
+}
+
+if (!function_exists('asset_url')) {
+	function asset_url(string $path, array $query = [], string|null $disk = null): UrlBuilder|null
 	{
 		if ($disk === null && StorageManager::isConnected('public')) {
 			$disk = 'public';
