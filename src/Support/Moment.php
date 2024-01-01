@@ -21,6 +21,16 @@ use DateTimeZone;
 use Rovota\Core\Support\Traits\MomentValidation;
 use Throwable;
 
+/**
+ * @property-read int $year
+ * @property-read int $quarter
+ * @property-read int $month
+ * @property-read int $week
+ * @property-read int $day
+ * @property-read int $hour
+ * @property-read int $minute
+ * @property-read int $second
+ */
 final class Moment extends DateTime implements JsonSerializable
 {
 	use Macroable, Conditionable, MomentModifiers, MomentFormatters, MomentValidation;
@@ -67,6 +77,16 @@ final class Moment extends DateTime implements JsonSerializable
 	public function __toString(): string
 	{
 		return $this->format($this->default_format);
+	}
+
+	public function __get(string $property): int|null
+	{
+		$method = sprintf('get%s', Str::pascal($property));
+		if (method_exists($this, $method)) {
+			return $this->{$method}();
+		}
+
+		return null;
 	}
 
 	// -----------------
