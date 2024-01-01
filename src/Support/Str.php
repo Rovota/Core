@@ -517,6 +517,18 @@ final class Str
 		return strtr($string, $map);
 	}
 
+	public static function take(string $string, int $amount): string
+	{
+		return Str::limit($string, 0, $amount);
+	}
+
+	public static function takeLast(string $string, int $amount): string
+	{
+		$string = Str::reverse($string);
+		$string = Str::limit($string, 0, $amount);
+		return Str::reverse($string);
+	}
+
 	public static function title(string $string): string
 	{
 		return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
