@@ -448,6 +448,18 @@ final class Text implements Stringable, JsonSerializable
 		return $this;
 	}
 
+	public function take(string $string, int $amount): string
+	{
+		$this->string = Str::take($string, $amount);
+		return $this;
+	}
+
+	public function takeLast(string $string, int $amount): string
+	{
+		$this->string = Str::takeLast($string, $amount);
+		return $this;
+	}
+
 	public function tap(callable $callback): Text
 	{
 		$callback($this);
