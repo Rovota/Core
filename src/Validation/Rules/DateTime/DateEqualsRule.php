@@ -19,6 +19,13 @@ class DateEqualsRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('date_equals');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!moment($value)->isEqual($this->target)) {

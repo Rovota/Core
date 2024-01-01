@@ -21,9 +21,9 @@ class TimezoneRule extends Base
 
 	// -----------------
 
-	public function __construct(string $name)
+	public function __construct()
 	{
-		parent::__construct($name);
+		parent::__construct('timezone');
 
 		$this->timezones = timezone_identifiers_list();
 	}

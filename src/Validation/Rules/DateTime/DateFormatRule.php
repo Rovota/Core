@@ -20,6 +20,13 @@ class DateFormatRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('date_format');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		foreach ($this->formats as $format) {

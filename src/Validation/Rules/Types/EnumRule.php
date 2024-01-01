@@ -20,6 +20,13 @@ class EnumRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('enum');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof $this->enum === false) {

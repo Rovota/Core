@@ -20,6 +20,13 @@ class DifferentRule extends Base implements ContextAware
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('different');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($this->context->get($this->target) === $value) {

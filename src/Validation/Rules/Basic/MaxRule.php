@@ -20,6 +20,13 @@ class MaxRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('max');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		$actual = ValidationTools::getSize($value);

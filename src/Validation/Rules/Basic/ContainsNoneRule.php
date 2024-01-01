@@ -21,6 +21,13 @@ class ContainsNoneRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('containts_none');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (is_string($value) && Str::containsAny($value, $this->items)) {

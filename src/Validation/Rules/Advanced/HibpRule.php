@@ -20,6 +20,13 @@ class HibpRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('hibp');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value)) {

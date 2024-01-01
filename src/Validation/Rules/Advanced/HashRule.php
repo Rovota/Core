@@ -20,6 +20,13 @@ class HashRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('hash');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		$hash = hash($this->algorithm, $this->reference);

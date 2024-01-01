@@ -20,6 +20,13 @@ class OutsideDatesRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('outside_dates');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!moment($value)->isOutside($this->start, $this->end)) {

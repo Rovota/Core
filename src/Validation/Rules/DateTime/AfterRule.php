@@ -19,6 +19,13 @@ class AfterRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('after');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!moment($value)->isAfter($this->target)) {

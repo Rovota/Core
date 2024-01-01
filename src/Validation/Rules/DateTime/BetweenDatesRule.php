@@ -20,6 +20,13 @@ class BetweenDatesRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('between_dates');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!moment($value)->isBetween($this->start, $this->end)) {

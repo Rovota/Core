@@ -15,6 +15,13 @@ use Rovota\Core\Validation\Rules\Base;
 class BooleanRule extends Base
 {
 
+	public function __construct()
+	{
+		parent::__construct('boolean');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_bool($value)) {

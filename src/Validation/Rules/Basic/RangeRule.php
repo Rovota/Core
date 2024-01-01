@@ -21,6 +21,13 @@ class RangeRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('range');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		$actual = ValidationTools::getSize($value);

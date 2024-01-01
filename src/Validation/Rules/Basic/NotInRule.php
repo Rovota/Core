@@ -20,6 +20,13 @@ class NotInRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('not_in');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (count($this->items) === 1 && str_contains($this->items[0], '\\')) {

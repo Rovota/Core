@@ -21,6 +21,13 @@ class ExtensionsRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('extensions');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof UploadedFile) {

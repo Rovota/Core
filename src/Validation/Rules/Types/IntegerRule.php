@@ -15,6 +15,13 @@ use Rovota\Core\Validation\Rules\Base;
 class IntegerRule extends Base
 {
 
+	public function __construct()
+	{
+		parent::__construct('integer');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_int($value)) {

@@ -20,6 +20,13 @@ class GreaterThanRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('gt');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		$actual = ValidationTools::getSize($value);

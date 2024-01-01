@@ -17,6 +17,13 @@ use Rovota\Core\Validation\Rules\Base;
 class FileRule extends Base
 {
 
+	public function __construct()
+	{
+		parent::__construct('file');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof UploadedFile) {

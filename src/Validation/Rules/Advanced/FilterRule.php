@@ -21,6 +21,13 @@ class FilterRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('filter');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value)) {

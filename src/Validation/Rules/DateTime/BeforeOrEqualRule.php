@@ -19,6 +19,13 @@ class BeforeOrEqualRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('before_or_equal');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!moment($value)->isBeforeOrEqual($this->target)) {

@@ -21,6 +21,13 @@ class ContainsRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('contains');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (is_string($value) && Str::contains($value, $this->items) === false) {

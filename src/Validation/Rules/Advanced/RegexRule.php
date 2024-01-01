@@ -19,6 +19,13 @@ class RegexRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('regex');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (preg_match($this->pattern, $value) === false) {

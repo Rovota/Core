@@ -19,6 +19,13 @@ class AfterOrEqualRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('after_or_equal');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!moment($value)->isAfterOrEqual($this->target)) {

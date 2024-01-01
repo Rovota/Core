@@ -22,6 +22,13 @@ class MimesRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('mimes');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof UploadedFile) {

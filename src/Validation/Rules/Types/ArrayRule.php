@@ -15,6 +15,13 @@ use Rovota\Core\Validation\Rules\Base;
 class ArrayRule extends Base
 {
 
+	public function __construct()
+	{
+		parent::__construct('array');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_array($value)) {

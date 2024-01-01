@@ -19,6 +19,13 @@ class BeforeRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('before');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!moment($value)->isBefore($this->target)) {

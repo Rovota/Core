@@ -16,6 +16,13 @@ use Rovota\Core\Validation\Rules\Base;
 class MomentRule extends Base
 {
 
+	public function __construct()
+	{
+		parent::__construct('moment');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof Moment === false) {

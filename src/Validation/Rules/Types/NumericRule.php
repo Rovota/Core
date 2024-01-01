@@ -15,6 +15,13 @@ use Rovota\Core\Validation\Rules\Base;
 class NumericRule extends Base
 {
 
+	public function __construct()
+	{
+		parent::__construct('numeric');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_numeric($value)) {

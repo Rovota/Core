@@ -20,6 +20,13 @@ class UniqueRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('unique');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value) && !is_int($value)) {

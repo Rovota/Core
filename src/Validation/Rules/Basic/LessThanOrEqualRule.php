@@ -20,6 +20,13 @@ class LessThanOrEqualRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('lte');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		$actual = ValidationTools::getSize($value);

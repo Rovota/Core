@@ -19,6 +19,13 @@ class NotRegexRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('not_regex_rule');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (preg_match($this->pattern, $value)) {

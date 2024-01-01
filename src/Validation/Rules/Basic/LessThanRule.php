@@ -20,6 +20,13 @@ class LessThanRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('lt');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		$actual = ValidationTools::getSize($value);

@@ -20,6 +20,13 @@ class RequiredIfDisabled extends Base implements ContextAware
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('required_if_disabled');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($this->context->bool($this->target) === false && $value === null) {

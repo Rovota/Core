@@ -20,6 +20,13 @@ class MinRule extends Base
 
 	// -----------------
 
+	public function __construct()
+	{
+		parent::__construct('min');
+	}
+
+	// -----------------
+
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		$actual = ValidationTools::getSize($value);
