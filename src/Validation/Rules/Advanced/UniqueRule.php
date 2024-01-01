@@ -11,26 +11,43 @@ namespace Rovota\Core\Validation\Rules\Advanced;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class UniqueRule extends Rule
+class UniqueRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected array $config = [];
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value) && !is_int($value)) {
 			$value = (string)$value;
 		}
 
-		$config = ValidationTools::processDatabaseOptions($attribute, $options);
+		$config = ValidationTools::processDatabaseOptions($attribute, $this->config);
 		$occurrences = ValidationTools::getOccurrences($config, $value);
 
 		if ($occurrences > 0) {
 			return new ErrorMessage($this->name, 'The provided value must be unique.', data: [
 				'value' => $value,
-				'occurrences' => $options[0],
+				'occurrences' => $occurrences,
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (empty($options) === false) {
+			$this->config = $options;
+		}
+
+		return $this;
+	}
+
 }

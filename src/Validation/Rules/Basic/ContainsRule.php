@@ -12,25 +12,41 @@ use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class ContainsRule extends Rule
+class ContainsRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected array $items = [];
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		if (is_string($value) && Str::contains($value, $options) === false) {
+		if (is_string($value) && Str::contains($value, $this->items) === false) {
 			return new ErrorMessage($this->name, 'The value must contain all of the specified items.', data: [
-				'items' => $options,
+				'items' => $this->items,
 			]);
 		}
 
-		if (is_array($value) && Arr::contains($value, $options) === false) {
+		if (is_array($value) && Arr::contains($value, $this->items) === false) {
 			return new ErrorMessage($this->name, 'The value must contain all of the specified items.', data: [
-				'items' => $options,
+				'items' => $this->items,
 			]);
 		}
 
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (empty($options) === false) {
+			$this->items = $options;
+		}
+
+		return $this;
+	}
+
 }

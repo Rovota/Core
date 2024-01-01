@@ -6,21 +6,22 @@
  * @license     MIT
  */
 
-namespace Rovota\Core\Validation\Rules\Basic;
+namespace Rovota\Core\Validation\Rules\Types;
 
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\Moment;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class MomentRule extends Rule
+class MomentRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof Moment === false) {
 			return new ErrorMessage($this->name, 'The value must be a valid Moment instance.');
 		}
 		return ValidationAction::NextRule;
 	}
+
 }

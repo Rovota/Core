@@ -6,20 +6,21 @@
  * @license     MIT
  */
 
-namespace Rovota\Core\Validation\Rules\Basic;
+namespace Rovota\Core\Validation\Rules\Types;
 
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class BooleanRule extends Rule
+class BooleanRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_bool($value)) {
 			return new ErrorMessage($this->name, 'The value must be a valid boolean.');
 		}
 		return ValidationAction::NextRule;
 	}
+
 }

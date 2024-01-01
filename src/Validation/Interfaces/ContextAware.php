@@ -8,9 +8,12 @@
 
 namespace Rovota\Core\Validation\Interfaces;
 
-interface RuleContextInterface
-{
+use Rovota\Core\Structures\Bucket;
 
-	public function setContext(array $data): void;
+interface ContextAware
+{
+	public function withContext(array $data): static;
+
+	public function getContext(): Bucket;
 
 }

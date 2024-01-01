@@ -11,18 +11,38 @@ namespace Rovota\Core\Validation\Rules\Basic;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class LessThanRule extends Rule
+class LessThanRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected float|int $target = 0;
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		if (ValidationTools::getSize($value) >= $options[0]) {
+		$actual = ValidationTools::getSize($value);
+
+		if ($actual >= $this->target) {
 			return new ErrorMessage($this->name, 'The value must be less than :target.', data: [
-				'target' => $options[0],
+				'actual' => $actual,
+				'target' => $this->target,
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (isset($options[0])) {
+			$this->target = $options[0];
+		}
+
+		return $this;
+	}
+
 }

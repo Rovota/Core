@@ -11,18 +11,22 @@ namespace Rovota\Core\Validation\Rules\Basic;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\Str;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class CaseRule extends Rule
+class CaseRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected string $casing = '-';
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value)) {
 			return ValidationAction::NextRule;
 		}
 
-		$matches = match($options[0]) {
+		$matches = match($this->casing) {
 			'camel' => Str::camel($value) === $value,
 			'kebab' => Str::kebab($value) === $value,
 			'lower' => Str::lower($value) === $value,
@@ -35,9 +39,22 @@ class CaseRule extends Rule
 
 		if ($matches === false) {
 			return new ErrorMessage($this->name, 'The value must follow the specified casing.', data: [
-				'casing' => $options[0],
+				'casing' => $this->casing,
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (isset($options[0])) {
+			$this->casing = $options[0];
+		}
+
+		return $this;
+	}
+
 }

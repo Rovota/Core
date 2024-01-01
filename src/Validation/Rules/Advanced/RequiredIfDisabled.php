@@ -6,29 +6,30 @@
  * @license     MIT
  */
 
-namespace Rovota\Core\Validation\Rules\Basic;
+namespace Rovota\Core\Validation\Rules\Advanced;
 
 use Rovota\Core\Support\ErrorMessage;
-use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Validation\Enums\ValidationAction;
 use Rovota\Core\Validation\Rules\Base;
+use Rovota\Core\Validation\Interfaces\ContextAware;
 
-class SizeRule extends Base
+class RequiredIfDisabled extends Base implements ContextAware
 {
 
-	protected float|int $target = 0;
+	protected string $target = '-';
 
 	// -----------------
 
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		$actual = ValidationTools::getSize($value);
-
-		if ($actual !== $this->target) {
-			return new ErrorMessage($this->name, 'The value must be of the required size.', data: [
-				'actual' => $actual,
+		if ($this->context->bool($this->target) === false && $value === null) {
+			return new ErrorMessage($this->name, "A value is required when ':target' is disabled.", data: [
 				'target' => $this->target,
 			]);
+		}
+
+		if ($this->context->bool($this->target) && $value === null) {
+			return ValidationAction::NextField;
 		}
 
 		return ValidationAction::NextRule;

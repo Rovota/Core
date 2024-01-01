@@ -10,18 +10,35 @@ namespace Rovota\Core\Validation\Rules\DateTime;
 
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class DateEqualsRule extends Rule
+class DateEqualsRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected mixed $target = 'now';
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		if (!moment($value)->isEqual($options[0])) {
+		if (!moment($value)->isEqual($this->target)) {
 			return new ErrorMessage($this->name, 'The value must match the specified date.', data: [
-				'target' => $options[0],
+				'target' => moment($this->target),
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (isset($options[0])) {
+			$this->target = $options[0];
+		}
+
+		return $this;
+	}
+
 }

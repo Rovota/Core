@@ -11,14 +11,18 @@ namespace Rovota\Core\Validation\Rules\DateTime;
 use DateTime;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class DateFormatRule extends Rule
+class DateFormatRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected array $formats = [];
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		foreach ($options as $format) {
+		foreach ($this->formats as $format) {
 			$date = DateTime::createFromFormat($format, $value);
 			if ($date && $date->format($format) === $value) {
 				return ValidationAction::NextRule;
@@ -26,7 +30,19 @@ class DateFormatRule extends Rule
 		}
 
 		return new ErrorMessage($this->name, 'The value must follow a specified format.', data: [
-			'formats' => $options,
+			'formats' => $this->formats,
 		]);
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (empty($options) === false) {
+			$this->formats = $options;
+		}
+
+		return $this;
+	}
+
 }

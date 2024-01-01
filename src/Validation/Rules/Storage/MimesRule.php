@@ -13,12 +13,16 @@ use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class MimesRule extends Rule
+class MimesRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected array $extensions = [];
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof UploadedFile) {
 			$value = $value->variant('original');
@@ -28,7 +32,7 @@ class MimesRule extends Rule
 			return ValidationAction::NextRule;
 		}
 
-		foreach ($options as $extension) {
+		foreach ($this->extensions as $extension) {
 			$mime_types = ValidationTools::extensionMimeTypes($extension);
 			if (empty($mime_types)) {
 				continue;
@@ -39,7 +43,19 @@ class MimesRule extends Rule
 		}
 
 		return new ErrorMessage($this->name, 'The value must be of an allowed type.', data: [
-			'allowed' => $options,
+			'allowed' => $this->extensions,
 		]);
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (empty($options) === false) {
+			$this->extensions = $options;
+		}
+
+		return $this;
+	}
+
 }

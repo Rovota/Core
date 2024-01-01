@@ -9,23 +9,42 @@
 namespace Rovota\Core\Validation\Rules\Basic;
 
 use Rovota\Core\Support\ErrorMessage;
+use Rovota\Core\Support\Str;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class StartsWithRule extends Rule
+class StartsWithRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected string $target = '-';
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value)) {
 			return ValidationAction::NextRule;
 		}
 
-		if (!str_starts_with($value, $options[0])) {
-			return new ErrorMessage($this->name, 'The value must start with :ending.', data: [
-				'ending' => $options[0],
+		if (!str_starts_with($value, $this->target)) {
+			return new ErrorMessage($this->name, 'The value must start with :target.', data: [
+				'actual' => Str::take($value, Str::length($this->target)),
+				'target' => $this->target,
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (isset($options[0])) {
+			$this->target = $options[0];
+		}
+
+		return $this;
+	}
+
 }

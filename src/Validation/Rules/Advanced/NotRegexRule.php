@@ -10,18 +10,35 @@ namespace Rovota\Core\Validation\Rules\Advanced;
 
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class NotRegexRule extends Rule
+class NotRegexRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected string $pattern = 'now';
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		if (preg_match($options[0], $value)) {
+		if (preg_match($this->pattern, $value)) {
 			return new ErrorMessage($this->name, 'The value does not match an allowed pattern.', data: [
-				'pattern' => $options[0],
+				'pattern' => $this->pattern,
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (isset($options[0])) {
+			$this->pattern = $options[0];
+		}
+
+		return $this;
+	}
+
 }

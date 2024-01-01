@@ -11,25 +11,41 @@ namespace Rovota\Core\Validation\Rules\Basic;
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class NotInRule extends Rule
+class NotInRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected array $items = [];
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		if (count($options) === 1 && str_contains($options[0], '\\')) {
-			if ($options[0]::tryFrom($value) !== null) {
+		if (count($this->items) === 1 && str_contains($this->items[0], '\\')) {
+			if ($this->items[0]::tryFrom($value) !== null) {
 				return new ErrorMessage($this->name, 'The value may not be one of the specified items.');
 			}
 		}
 
-		if (count($options) > 1 && Arr::contains($options, $value)) {
+		if (count($this->items) > 1 && Arr::contains($this->items, $value)) {
 			return new ErrorMessage($this->name, 'The value may not be one of the specified items.', data: [
-				'items' => $options,
+				'items' => $this->items,
 			]);
 		}
 
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (empty($options) === false) {
+			$this->items = $options;
+		}
+
+		return $this;
+	}
+
 }

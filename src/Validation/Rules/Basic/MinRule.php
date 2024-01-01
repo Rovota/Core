@@ -11,18 +11,38 @@ namespace Rovota\Core\Validation\Rules\Basic;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class MinRule extends Rule
+class MinRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected float|int $size = 0;
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		if (ValidationTools::getSize($value) < $options[0]) {
+		$actual = ValidationTools::getSize($value);
+
+		if ($actual < $this->size) {
 			return new ErrorMessage($this->name, 'The value must be at least :target.', data: [
-				'target' => $options[0],
+				'actual' => $actual,
+				'target' => $this->size,
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (isset($options[0])) {
+			$this->size = $options[0];
+		}
+
+		return $this;
+	}
+
 }

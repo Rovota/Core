@@ -10,19 +10,38 @@ namespace Rovota\Core\Validation\Rules\DateTime;
 
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class BetweenDatesRule extends Rule
+class BetweenDatesRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected mixed $start = 'now';
+	protected mixed $end = 'now';
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		if (!moment($value)->isBetween(...$options)) {
+		if (!moment($value)->isBetween($this->start, $this->end)) {
 			return new ErrorMessage($this->name, 'The value must be within the specified window.', data: [
-				'start' => $options[0],
-				'end' => $options[1],
+				'start' => moment($this->start),
+				'end' => moment($this->end),
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (count($options) === 2) {
+			$this->start = $options[0];
+			$this->end = $options[1];
+		}
+
+		return $this;
+	}
+
 }

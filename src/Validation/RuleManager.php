@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Validation;
 
-use Rovota\Core\Validation\Interfaces\RuleInterface;
 use Rovota\Core\Validation\Rules\Advanced\DifferentRule;
 use Rovota\Core\Validation\Rules\Advanced\EmailRule;
 use Rovota\Core\Validation\Rules\Advanced\EqualRule;
@@ -18,34 +17,26 @@ use Rovota\Core\Validation\Rules\Advanced\HashRule;
 use Rovota\Core\Validation\Rules\Advanced\HibpRule;
 use Rovota\Core\Validation\Rules\Advanced\NotRegexRule;
 use Rovota\Core\Validation\Rules\Advanced\RegexRule;
-use Rovota\Core\Validation\Rules\Advanced\RequiredIfDisabledRule;
-use Rovota\Core\Validation\Rules\Advanced\RequiredIfEnabledRule;
+use Rovota\Core\Validation\Rules\Advanced\RequiredIfDisabled;
+use Rovota\Core\Validation\Rules\Advanced\RequiredIfEnabled;
 use Rovota\Core\Validation\Rules\Advanced\UniqueRule;
-use Rovota\Core\Validation\Rules\Basic\ArrayRule;
 use Rovota\Core\Validation\Rules\Basic\BetweenRule;
-use Rovota\Core\Validation\Rules\Basic\BooleanRule;
 use Rovota\Core\Validation\Rules\Basic\CaseRule;
 use Rovota\Core\Validation\Rules\Basic\ContainsAnyRule;
 use Rovota\Core\Validation\Rules\Basic\ContainsNoneRule;
 use Rovota\Core\Validation\Rules\Basic\ContainsRule;
 use Rovota\Core\Validation\Rules\Basic\EndsWithRule;
-use Rovota\Core\Validation\Rules\Basic\EnumRule;
-use Rovota\Core\Validation\Rules\Basic\FloatRule;
 use Rovota\Core\Validation\Rules\Basic\GreaterThanOrEqualRule;
 use Rovota\Core\Validation\Rules\Basic\GreaterThanRule;
 use Rovota\Core\Validation\Rules\Basic\InRule;
-use Rovota\Core\Validation\Rules\Basic\IntegerRule;
 use Rovota\Core\Validation\Rules\Basic\LessThanOrEqualRule;
 use Rovota\Core\Validation\Rules\Basic\LessThanRule;
 use Rovota\Core\Validation\Rules\Basic\MaxRule;
 use Rovota\Core\Validation\Rules\Basic\MinRule;
-use Rovota\Core\Validation\Rules\Basic\MomentRule;
 use Rovota\Core\Validation\Rules\Basic\NotInRule;
-use Rovota\Core\Validation\Rules\Basic\NumericRule;
 use Rovota\Core\Validation\Rules\Basic\RangeRule;
 use Rovota\Core\Validation\Rules\Basic\SizeRule;
 use Rovota\Core\Validation\Rules\Basic\StartsWithRule;
-use Rovota\Core\Validation\Rules\Basic\StringRule;
 use Rovota\Core\Validation\Rules\DateTime\AfterOrEqualRule;
 use Rovota\Core\Validation\Rules\DateTime\AfterRule;
 use Rovota\Core\Validation\Rules\DateTime\BeforeOrEqualRule;
@@ -59,6 +50,15 @@ use Rovota\Core\Validation\Rules\Storage\ExtensionsRule;
 use Rovota\Core\Validation\Rules\Storage\FileRule;
 use Rovota\Core\Validation\Rules\Storage\MimesRule;
 use Rovota\Core\Validation\Rules\Storage\MimeTypesRule;
+use Rovota\Core\Validation\Rules\Types\ArrayRule;
+use Rovota\Core\Validation\Rules\Types\BooleanRule;
+use Rovota\Core\Validation\Rules\Types\EnumRule;
+use Rovota\Core\Validation\Rules\Types\FloatRule;
+use Rovota\Core\Validation\Rules\Types\IntegerRule;
+use Rovota\Core\Validation\Rules\Types\MomentRule;
+use Rovota\Core\Validation\Rules\Types\NumericRule;
+use Rovota\Core\Validation\Rules\Types\StringRule;
+use Rovota\Core\Validation\Interfaces\RuleInterface;
 
 final class RuleManager
 {
@@ -96,7 +96,7 @@ final class RuleManager
 
 	protected static function registerDefaultRules(): void
 	{
-		// Basic
+		// Types
 		self::register('array', ArrayRule::class);
 		self::register('bool', BooleanRule::class);
 		self::register('enum', EnumRule::class);
@@ -105,6 +105,8 @@ final class RuleManager
 		self::register('moment', MomentRule::class);
 		self::register('numeric', NumericRule::class);
 		self::register('string', StringRule::class);
+
+		// Basic
 		self::register('size', SizeRule::class);
 		self::register('max', MaxRule::class);
 		self::register('min', MinRule::class);
@@ -150,8 +152,8 @@ final class RuleManager
 		self::register('email', EmailRule::class);
 		self::register('different', DifferentRule::class);
 		self::register('equal', EqualRule::class);
-		self::register('required_if_enabled', RequiredIfEnabledRule::class);
-		self::register('required_if_disabled', RequiredIfDisabledRule::class);
+		self::register('required_if_enabled', RequiredIfEnabled::class);
+		self::register('required_if_disabled', RequiredIfDisabled::class);
 		self::register('hibp', HibpRule::class);
 	}
 

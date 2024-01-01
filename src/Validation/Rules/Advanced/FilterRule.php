@@ -12,18 +12,22 @@ use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\FilterAction;
 use Rovota\Core\Validation\Enums\ValidationAction;
 use Rovota\Core\Validation\FilterManager;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class FilterRule extends Rule
+class FilterRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected array $filters = [];
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (!is_string($value)) {
-			return true;
+			return ValidationAction::NextRule;
 		}
 
-		foreach ($options as $filter_name) {
+		foreach ($this->filters as $filter_name) {
 			if (FilterManager::has($filter_name)) {
 				$filter = FilterManager::get($filter_name);
 
@@ -45,4 +49,16 @@ class FilterRule extends Rule
 
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (empty($options) === false) {
+			$this->filters = $options;
+		}
+
+		return $this;
+	}
+
 }

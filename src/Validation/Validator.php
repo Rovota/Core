@@ -18,7 +18,9 @@ use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Interfaces\RuleContextInterface;
+use Rovota\Core\Validation\Rules\Base;
+use Rovota\Core\Validation\Interfaces\ContextAware;
+use Rovota\Core\Validation\Interfaces\LegacyRuleInterface;
 use Rovota\Core\Validation\Interfaces\RuleInterface;
 use Rovota\Core\Validation\Interfaces\ValidatorInterface;
 
@@ -107,7 +109,7 @@ class Validator implements ValidatorInterface
 
 	// -----------------
 
-	protected function validateAttribute($attribute, $value, $rules): bool
+	protected function validateAttribute(string $attribute, mixed $value, array|object|string $rules): bool
 	{
 		$rules = $this->getNormalizedRules($rules);
 		$stop_on_failure = array_key_exists('bail', $rules);
@@ -134,28 +136,49 @@ class Validator implements ValidatorInterface
 				return false;
 			}
 
-			$result = match(true) {
-				$options instanceof Closure => $options($value),
-				default => $this->getUsableRule($name)->validate($attribute, $value, $options),
-			};
+			$result = null;
+
+			if ($options instanceof Closure) {
+				$result = $options($value);
+			} else {
+				$rule = match(true) {
+					$options instanceof RuleInterface => $this->getUsableRule($options, []),
+					default => $this->getUsableRule($name, $options),
+				};
+
+				if ($rule instanceof RuleInterface) {
+					$result = $rule->validate($attribute, $value);
+				}
+			}
 
 			if ($result === ValidationAction::NextField) {
 				return $this->errors()->count($attribute) === 0;
 			}
 
 			if ($result instanceof ErrorMessage) {
-				$this->setError($attribute, $name, $result);
+				$this->setError($attribute, $result->name, $result);
 			}
 		}
 
 		return $this->errors()->count($attribute) === 0;
 	}
 
-	protected function getNormalizedRules(array $rules): array
+	protected function getNormalizedRules(array|object|string $rules): array
 	{
+		$rules = is_array($rules) ? $rules : [$rules];
 		$normalized = [];
 
 		foreach ($rules as $name => $options) {
+			if ($options instanceof RuleInterface) {
+				$normalized[$options->getName()] = $options;
+				continue;
+			}
+
+			if ($options instanceof Closure) {
+				$normalized[$name] = $options;
+				continue;
+			}
+
 			if (is_int($name)) {
 				$normalized[$options] = [];
 			} else {
@@ -166,12 +189,18 @@ class Validator implements ValidatorInterface
 		return $normalized;
 	}
 
-	protected function getUsableRule(string|RuleInterface $name): RuleInterface|null
+	protected function getUsableRule(string|RuleInterface $name, array $options): RuleInterface|null
 	{
 		$rule = $name instanceof RuleInterface ? $name : RuleManager::get($name);
-		if ($rule instanceof RuleContextInterface) {
-			$rule->setContext($this->unsafe_data->toArray());
+
+		if ($rule instanceof RuleInterface && empty($options) === false) {
+			$rule->withOptions($options);
 		}
+
+		if ($rule instanceof ContextAware) {
+			$rule->withContext($this->unsafe_data->toArray());
+		}
+
 		return $rule;
 	}
 

@@ -11,22 +11,41 @@ namespace Rovota\Core\Validation\Rules\Basic;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class RangeRule extends Rule
+class RangeRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
-	{
-		[$min, $max] = $options;
-		$size = ValidationTools::getSize($value);
+	protected float|int $min = 0;
+	protected float|int $max = 0;
 
-		if ($size < $min || $size > $max) {
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
+	{
+		$actual = ValidationTools::getSize($value);
+
+		if ($actual < $this->min || $actual > $this->max) {
 			return new ErrorMessage($this->name, 'The value must be in the range of :min and :max.', data: [
-				'min' => $options[0],
-				'max' => $options[1],
+				'actual' => $actual,
+				'min' => $this->min,
+				'max' => $this->max,
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (count($options) === 2) {
+			$this->min = $options[0];
+			$this->max = $options[1];
+		}
+
+		return $this;
+	}
+
 }

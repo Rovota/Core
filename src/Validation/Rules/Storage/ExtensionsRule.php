@@ -12,22 +12,39 @@ use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class ExtensionsRule extends Rule
+class ExtensionsRule extends Base
 {
 
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+	protected array $extensions = [];
+
+	// -----------------
+
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if ($value instanceof UploadedFile) {
 			$value = $value->variant('original');
 		}
 
-		if ($value instanceof FileInterface && $value->isAnyExtension($options) === false) {
+		if ($value instanceof FileInterface && $value->isAnyExtension($this->extensions) === false) {
 			return new ErrorMessage($this->name, 'The file must have one of the allowed extensions.', data: [
-				'allowed' => $options,
+				'allowed' => $this->extensions,
 			]);
 		}
+
 		return ValidationAction::NextRule;
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (empty($options) === false) {
+			$this->extensions = $options;
+		}
+
+		return $this;
+	}
+
 }

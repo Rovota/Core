@@ -12,19 +12,46 @@ use DateTimeZone;
 use Rovota\Core\Support\Arr;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Rule;
+use Rovota\Core\Validation\Rules\Base;
 
-class TimezoneRule extends Rule
+class TimezoneRule extends Base
 {
-	public function validate(string $attribute, mixed $value, array $options): ErrorMessage|ValidationAction
+
+	protected array $timezones = [];
+
+	// -----------------
+
+	public function __construct(string $name)
+	{
+		parent::__construct($name);
+
+		$this->timezones = timezone_identifiers_list();
+	}
+
+	// -----------------
+	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
 		if (is_string($value) || $value instanceof DateTimeZone) {
 			$value = $value instanceof DateTimeZone ? $value->getName() : $value;
-			if (Arr::contains(timezone_identifiers_list(), $value)) {
+			if (Arr::contains($this->timezones, $value)) {
 				return ValidationAction::NextRule;
 			}
 		}
 
-		return new ErrorMessage($this->name, 'The value must be a valid timezone.', data: []);
+		return new ErrorMessage($this->name, 'The value must be a valid timezone.', data: [
+			'timezones' => $this->timezones,
+		]);
 	}
+
+	// -----------------
+
+	public function withOptions(array $options): static
+	{
+		if (empty($options) === false) {
+			$this->timezones = $options;
+		}
+
+		return $this;
+	}
+
 }
