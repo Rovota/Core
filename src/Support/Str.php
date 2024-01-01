@@ -285,7 +285,7 @@ final class Str
 
 	public static function limit(string $string, int $start, int $length, string $marker = ''): string
 	{
-		if (mb_strwidth($string, 'UTF-8') <= $length) {
+		if (mb_strwidth($string, 'UTF-8') <= abs($length)) {
 			return $string;
 		} else {
 			return mb_strimwidth($string, $start, $length, $marker, 'UTF-8');
