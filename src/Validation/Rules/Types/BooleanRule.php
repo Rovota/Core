@@ -24,7 +24,7 @@ class BooleanRule extends Base
 
 	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
 	{
-		if (!is_bool($value)) {
+		if (!filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)) {
 			return new ErrorMessage($this->name, 'The value must be a valid boolean.');
 		}
 		return ValidationAction::NextRule;
