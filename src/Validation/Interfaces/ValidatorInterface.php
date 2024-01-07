@@ -26,9 +26,9 @@ interface ValidatorInterface
 
 	public function clear(): static;
 
-	public function addRule(string $attribute, string $name, array|string $options = []): static;
+	public function withRule(string $attribute, string $name, array|string $options = []): static;
 
-	public function addData(string $name, mixed $value): static;
+	public function withData(string $name, mixed $value): static;
 
 	// -----------------
 

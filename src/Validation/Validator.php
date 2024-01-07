@@ -18,9 +18,7 @@ use Rovota\Core\Support\Traits\Conditionable;
 use Rovota\Core\Support\Traits\Errors;
 use Rovota\Core\Support\Traits\Macroable;
 use Rovota\Core\Validation\Enums\ValidationAction;
-use Rovota\Core\Validation\Rules\Base;
 use Rovota\Core\Validation\Interfaces\ContextAware;
-use Rovota\Core\Validation\Interfaces\LegacyRuleInterface;
 use Rovota\Core\Validation\Interfaces\RuleInterface;
 use Rovota\Core\Validation\Interfaces\ValidatorInterface;
 
@@ -36,7 +34,7 @@ class Validator implements ValidatorInterface
 
 	// -----------------
 
-	public function __construct(mixed $data, array $rules, array $messages = [])
+	public function __construct(mixed $data, array $rules = [], array $messages = [])
 	{
 		$this->errors = new ErrorBucket();
 		$this->unsafe_data = new Bucket($data);
@@ -101,13 +99,13 @@ class Validator implements ValidatorInterface
 		return $this;
 	}
 
-	public function addRule(string $attribute, string $name, array|string $options = []): static
+	public function withRule(string $attribute, string $name, array|string $options = []): static
 	{
 		$this->rules[$attribute][$name] = $options;
 		return $this;
 	}
 
-	public function addData(string $name, mixed $value): static
+	public function withData(string $name, mixed $value): static
 	{
 		$this->unsafe_data->set($name, $value);
 		return $this;
