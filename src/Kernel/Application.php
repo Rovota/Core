@@ -44,7 +44,7 @@ use Rovota\Core\Views\ViewManager;
 final class Application
 {
 
-	protected const CORE_VERSION = '1.0.1+001';
+	protected const CORE_VERSION = '1.0.2+001';
 	protected const CORE_MIN_PHP = '8.2.0';
 	protected const CORE_REQUIRED_EXTENSIONS = ['curl', 'exif', 'fileinfo', 'mbstring', 'openssl', 'pdo', 'sodium', 'zip', 'intl'];
 
