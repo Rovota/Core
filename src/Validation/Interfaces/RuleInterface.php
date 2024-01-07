@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Validation\Interfaces;
 
-use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\ErrorMessage;
 use Rovota\Core\Validation\Enums\ValidationAction;
 

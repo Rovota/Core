@@ -9,7 +9,6 @@
 namespace Rovota\Core\Database\Traits;
 
 use Envms\FluentPDO\Exception;
-use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Database\Builder\Query;
 use Rovota\Core\Database\Model;
 use Rovota\Core\Structures\Bucket;
@@ -160,7 +159,7 @@ trait ModelQueryFunctions
 	{
 		$model = new static;
 		$column = $column ?? $model->getPrimaryKey();
-		$key = 'model_'.$model::class.':'.$column.':'.$identifier;
+//		$key = 'model_'.$model::class.':'.$column.':'.$identifier;
 
 		// TODO: Fix model caching
 //		return CacheManager::get()->remember($key, function () use ($model, $identifier, $column, $key) {

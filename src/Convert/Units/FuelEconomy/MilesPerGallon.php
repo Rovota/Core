@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Convert\Units\FuelEconomy;
 
-use Rovota\Core\Convert\Interfaces\Metric;
 use Rovota\Core\Convert\Interfaces\USC;
 use Rovota\Core\Convert\Units\FuelEconomy;
 

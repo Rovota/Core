@@ -10,7 +10,6 @@ namespace Rovota\Core\Auth\Providers;
 
 use Rovota\Core\Auth\Interfaces\AuthProvider;
 use Rovota\Core\Auth\Interfaces\Identity;
-use Rovota\Core\Auth\TrustedClient;
 use Rovota\Core\Auth\User;
 
 abstract class Provider implements AuthProvider
@@ -79,7 +78,7 @@ abstract class Provider implements AuthProvider
 			foreach ($attributes as $name => $value) {
 				if ($trusted_client->{$name} !== $value) {
 					continue;
-				};
+				}
 				$valid_attributes++;
 			}
 
