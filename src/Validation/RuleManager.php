@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Validation;
 
+use Rovota\Core\Validation\Interfaces\RuleInterface;
 use Rovota\Core\Validation\Rules\Advanced\DifferentRule;
 use Rovota\Core\Validation\Rules\Advanced\EmailRule;
 use Rovota\Core\Validation\Rules\Advanced\EqualRule;
@@ -47,18 +48,17 @@ use Rovota\Core\Validation\Rules\DateTime\DateFormatRule;
 use Rovota\Core\Validation\Rules\DateTime\OutsideDatesRule;
 use Rovota\Core\Validation\Rules\DateTime\TimezoneRule;
 use Rovota\Core\Validation\Rules\Storage\ExtensionsRule;
-use Rovota\Core\Validation\Rules\Storage\FileRule;
 use Rovota\Core\Validation\Rules\Storage\MimesRule;
 use Rovota\Core\Validation\Rules\Storage\MimeTypesRule;
 use Rovota\Core\Validation\Rules\Types\ArrayRule;
 use Rovota\Core\Validation\Rules\Types\BooleanRule;
 use Rovota\Core\Validation\Rules\Types\EnumRule;
+use Rovota\Core\Validation\Rules\Types\FileRule;
 use Rovota\Core\Validation\Rules\Types\FloatRule;
 use Rovota\Core\Validation\Rules\Types\IntegerRule;
 use Rovota\Core\Validation\Rules\Types\MomentRule;
 use Rovota\Core\Validation\Rules\Types\NumericRule;
 use Rovota\Core\Validation\Rules\Types\StringRule;
-use Rovota\Core\Validation\Interfaces\RuleInterface;
 
 final class RuleManager
 {
@@ -100,6 +100,7 @@ final class RuleManager
 		self::register('array', ArrayRule::class);
 		self::register('bool', BooleanRule::class);
 		self::register('enum', EnumRule::class);
+		self::register('file', FileRule::class);
 		self::register('float', FloatRule::class);
 		self::register('int', IntegerRule::class);
 		self::register('moment', MomentRule::class);
@@ -137,7 +138,6 @@ final class RuleManager
 		self::register('timezone', TimezoneRule::class);
 
 		// File
-		self::register('file', FileRule::class);
 		self::register('extensions', ExtensionsRule::class);
 		self::register('mime_types', MimeTypesRule::class);
 		self::register('mimes', MimesRule::class);

@@ -6,7 +6,7 @@
  * @license     MIT
  */
 
-namespace Rovota\Core\Validation\Rules\Storage;
+namespace Rovota\Core\Validation\Rules\Types;
 
 use Rovota\Core\Http\UploadedFile;
 use Rovota\Core\Storage\Interfaces\FileInterface;
