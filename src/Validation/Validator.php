@@ -41,10 +41,11 @@ class Validator implements ValidatorInterface
 		$this->errors = new ErrorBucket();
 		$this->unsafe_data = new Bucket($data);
 		$this->safe_data = new Bucket();
-		$this->rules = $rules;
 
-		if (empty($messages) === false) {
-			$this->setMessageOverrides($messages);
+		$this->rules = array_replace_recursive($this->rules(), $rules);
+
+		if (empty($messages) === false || empty($this->messages()) === false) {
+			$this->setMessageOverrides(array_replace_recursive($this->messages(), $messages));
 		}
 	}
 
@@ -53,6 +54,18 @@ class Validator implements ValidatorInterface
 	public static function create(mixed $data, array $rules, array $messages = []): static
 	{
 		return new static($data, $rules, $messages);
+	}
+
+	// -----------------
+
+	protected function rules(): array
+	{
+		return [];
+	}
+
+	protected function messages(): array
+	{
+		return [];
 	}
 
 	// -----------------
