@@ -10,6 +10,7 @@ namespace Rovota\Core\Convert\Enums;
 
 use Rovota\Core\Convert\Units\FuelEconomy;
 use Rovota\Core\Convert\Units\Length;
+use Rovota\Core\Convert\Units\Mass;
 use Rovota\Core\Convert\Units\Temperature;
 use Rovota\Core\Convert\Units\Time;
 use Rovota\Core\Support\Traits\EnumHelpers;
@@ -25,7 +26,7 @@ enum UnitType: int
 //	case Frequency = 5;
 	case FuelEconomy = 6;
 	case Length = 7;
-//	case Mass = 8;
+	case Mass = 8;
 //	case Pressure = 9;
 //	case Speed = 10;
 	case Temperature = 11;
@@ -44,7 +45,7 @@ enum UnitType: int
 //			UnitType::Frequency => '',
 			UnitType::FuelEconomy => FuelEconomy::class,
 			UnitType::Length => Length::class,
-//			UnitType::Mass => '',
+			UnitType::Mass => Mass::class,
 //			UnitType::Pressure => '',
 //			UnitType::Speed => '',
 			UnitType::Temperature => Temperature::class,
