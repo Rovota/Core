@@ -246,7 +246,7 @@ final class Arr
 			$count = count(Arr::filter($array, fn ($data) => $data === $value));
 		}
 
-		return round($count / count($array) * 100);
+		return round($count / count($array) * 100, $precision);
 	}
 
 	/**
