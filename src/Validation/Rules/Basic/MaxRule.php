@@ -16,7 +16,7 @@ use Rovota\Core\Validation\Rules\Base;
 class MaxRule extends Base
 {
 
-	protected float|int $size = 0;
+	protected float|int $target = 0;
 
 	// -----------------
 
@@ -31,10 +31,10 @@ class MaxRule extends Base
 	{
 		$actual = ValidationTools::getSize($value);
 
-		if ($actual > $this->size) {
+		if ($actual > $this->target) {
 			return new ErrorMessage($this->name, 'The value must be at most :target.', data: [
 				'actual' => $actual,
-				'target' => $this->size,
+				'target' => $this->target,
 			]);
 		}
 
@@ -46,7 +46,7 @@ class MaxRule extends Base
 	public function withOptions(array $options): static
 	{
 		if (isset($options[0])) {
-			$this->size = $options[0];
+			$this->target = $options[0];
 		}
 
 		return $this;
