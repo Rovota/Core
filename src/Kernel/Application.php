@@ -9,6 +9,8 @@
 
 namespace Rovota\Core\Kernel;
 
+use Envms\FluentPDO\Exception;
+use Rovota\Core\Access\Features\FeatureManager;
 use Rovota\Core\Addon\AddonManager;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
@@ -70,6 +72,7 @@ final class Application
 	 * @throws MissingDatabaseConfigException
 	 * @throws SystemRequirementException
 	 * @throws MissingSessionConfigException
+	 * @throws Exception
 	 */
 	public static function start(): void
 	{
@@ -107,6 +110,7 @@ final class Application
 		MiddlewareManager::initialize();
 		RouteManager::initialize();
 		AddonManager::initialize();
+		FeatureManager::initialize();
 
 		RouteManager::run();
 	}
