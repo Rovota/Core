@@ -48,7 +48,7 @@ class TimezoneRule extends Base
 	public function withOptions(array $options): static
 	{
 		if (empty($options) === false) {
-			$this->timezones = $options;
+			$this->timezones = is_string($options[0]) ? [$options[0]] : $options[0];
 		}
 
 		return $this;
