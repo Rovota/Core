@@ -120,7 +120,7 @@ final class FeatureManager
 		unset(self::$cache[$name]);
 	}
 
-	public static function flushCache(string $name): void
+	public static function flushCache(): void
 	{
 		self::$cache = [];
 	}
