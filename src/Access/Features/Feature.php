@@ -19,7 +19,7 @@ abstract class Feature implements FeatureInterface
 
 	protected FeatureConfig $config;
 
-	protected mixed $scope = null;
+	protected Scope $scope;
 
 	// -----------------
 
@@ -27,6 +27,8 @@ abstract class Feature implements FeatureInterface
 	{
 		$this->name = trim($name);
 		$this->config = $config;
+
+		$this->scope = FeatureManager::getScope();
 	}
 
 	// -----------------
@@ -41,7 +43,7 @@ abstract class Feature implements FeatureInterface
 		return $this->config;
 	}
 
-	public function scope(): mixed
+	public function scope(): Scope
 	{
 		return $this->scope;
 	}
@@ -61,13 +63,11 @@ abstract class Feature implements FeatureInterface
 
 	public function value(mixed $default = null): mixed
 	{
-		$cache = FeatureManager::cache();
-
-		if ($cache->missing($this->name)) {
-			return $cache->set($this->name, $this->resolve());
+		if ($this->scope->getCache()->missing($this->name)) {
+			$this->scope->getCache()->set($this->name, $this->resolve());
 		}
 
-		return $cache->get($this->name, $default);
+		return $this->scope->getCache()->get($this->name, $default);
 	}
 
 	// -----------------

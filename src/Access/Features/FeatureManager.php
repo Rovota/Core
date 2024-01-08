@@ -23,15 +23,13 @@ use Rovota\Core\Support\Str;
  */
 final class FeatureManager
 {
+
+	protected static Bucket $scopes;
+
 	/**
 	 * @var array<string, Feature>
 	 */
 	protected static array $features = [];
-
-	/**
-	 * @var array>string, bool>
-	 */
-	protected static Bucket $cache;
 
 	// -----------------
 
@@ -46,19 +44,20 @@ final class FeatureManager
 	 */
 	public static function initialize(): void
 	{
-		self::$cache = new Bucket();
+		self::$scopes = new Bucket();
 
+		self::registerDefaultScope();
 		self::registerRemoteFeatures();
 	}
 
 	// -----------------
 
-	public static function register(string $name, Closure|bool|string $callback): void
+	public static function register(string $name, mixed $definition): void
 	{
 		$feature = self::build($name, [
 			'driver' => 'local',
 			'label' => Str::title($name),
-			'callback' => $callback,
+			'definition' => $definition,
 		]);
 
 		if ($feature !== null) {
@@ -81,29 +80,20 @@ final class FeatureManager
 
 	public static function get(string $name): FeatureInterface|null
 	{
-		return self::$features[$name];
+		return self::$features[$name] ?? null;
 	}
 
-	/**
-	 * @returns array<string, FeatureInterface>
-	 */
-	public static function all(): array
+	public static function getScope(mixed $scope = null): Scope
 	{
-		return self::$features;
-	}
+		if ($scope === null) {
+			$scope = 'global';
+		}
 
-	// -----------------
+		if (self::$scopes->missing($scope)) {
+			self::$scopes->set($scope, new Scope($scope));
+		}
 
-	public static function cache(): Bucket
-	{
-		return self::$cache;
-	}
-
-	// -----------------
-
-	public static function getScope(mixed $scope): Scope
-	{
-		return new Scope($scope);
+		return self::$scopes->get($scope);
 	}
 
 	// -----------------
@@ -130,6 +120,11 @@ final class FeatureManager
 				}
 			}
 		}
+	}
+
+	protected static function registerDefaultScope(): void
+	{
+		self::$scopes['global'] = new Scope();
 	}
 
 }

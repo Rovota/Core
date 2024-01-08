@@ -19,11 +19,7 @@ final class Local extends Feature
 
 	protected function resolve(): mixed
 	{
-		$callback = $this->config->get('callback');
-
-		if ($this->scope === null) {
-			$this->scope = AuthManager::activeProvider()?->identity() ?? null;
-		}
+		$callback = $this->config->get('definition');
 
 		if (is_bool($callback)) {
 			return $callback;
@@ -31,11 +27,11 @@ final class Local extends Feature
 
 		if (is_string($callback)) {
 			$class = new $callback();
-			return $class->resolve($this->scope);
+			return $class->resolve($this->scope->getData());
 		}
 
 		if ($callback instanceof Closure) {
-			return $callback($this->scope);
+			return $callback($this->scope->getData());
 		}
 
 		return null;

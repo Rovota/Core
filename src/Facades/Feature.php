@@ -31,7 +31,7 @@ final class Feature
 
 	public static function get(string $name): FeatureInterface|null
 	{
-		return FeatureManager::get($name);
+		return FeatureManager::getScope()->get($name);
 	}
 
 	public static function for(mixed $scope): Scope
@@ -43,19 +43,24 @@ final class Feature
 
 	public static function active(string $name): bool
 	{
-		return FeatureManager::get($name)?->active() ?? false;
+		return self::get($name)->active();
 	}
 
 	public static function value(string $name, mixed $default = null): mixed
 	{
-		return FeatureManager::get($name)?->value() ?? $default;
+		return self::get($name)->value($default);
 	}
 
 	// -----------------
 
 	public static function forget(string $name): void
 	{
-		FeatureManager::cache()->remove($name);
+		FeatureManager::getScope()->forget($name);
+	}
+
+	public static function update(string $name, mixed $value): void
+	{
+		FeatureManager::getScope()->update($name, $value);
 	}
 
 }
