@@ -25,8 +25,4 @@ interface FeatureInterface
 
 	public function value(mixed $default = null): mixed;
 
-	// -----------------
-
-	public function withScope(mixed $scope): static;
-
 }
