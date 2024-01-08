@@ -15,6 +15,7 @@ use Rovota\Core\Access\Features\Drivers\Remote;
 use Rovota\Core\Access\Features\Enums\Driver;
 use Rovota\Core\Access\Features\Interfaces\FeatureInterface;
 use Rovota\Core\Database\ConnectionManager;
+use Rovota\Core\Structures\Bucket;
 use Rovota\Core\Support\Str;
 
 /**
@@ -30,7 +31,7 @@ final class FeatureManager
 	/**
 	 * @var array>string, bool>
 	 */
-	protected static array $cache = [];
+	protected static Bucket $cache;
 
 	// -----------------
 
@@ -45,6 +46,8 @@ final class FeatureManager
 	 */
 	public static function initialize(): void
 	{
+		self::$cache = new Bucket();
+
 		self::registerRemoteFeatures();
 	}
 
@@ -91,45 +94,16 @@ final class FeatureManager
 
 	// -----------------
 
-	public static function getScope(mixed $scope): Scope
+	public static function cache(): Bucket
 	{
-		return new Scope($scope);
+		return self::$cache;
 	}
 
 	// -----------------
 
-	public static function rememberCacheResult(string $name, mixed $result = null): mixed
+	public static function getScope(mixed $scope): Scope
 	{
-		if (isset(self::$cache[$name]) === false) {
-			self::$cache[$name] = $result;
-		}
-
-		return self::$cache[$name] ?? null;
-	}
-
-	public static function hasCacheResult(string $name): bool
-	{
-		return isset(self::$cache[$name]);
-	}
-
-	public static function getCacheResult(string $name): bool
-	{
-		return self::$cache[$name] ?? false;
-	}
-
-	public static function setCacheResult(string $name, bool $result): void
-	{
-		self::$cache[$name] = $result;
-	}
-
-	public static function removeCacheResult(string $name): void
-	{
-		unset(self::$cache[$name]);
-	}
-
-	public static function flushCache(): void
-	{
-		self::$cache = [];
+		return new Scope($scope);
 	}
 
 	// -----------------

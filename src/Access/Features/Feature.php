@@ -61,7 +61,13 @@ abstract class Feature implements FeatureInterface
 
 	public function value(mixed $default = null): mixed
 	{
-		return FeatureManager::rememberCacheResult($this->name, $this->resolve() ?? $default);
+		$cache = FeatureManager::cache();
+
+		if ($cache->missing($this->name)) {
+			return $cache->set($this->name, $this->resolve());
+		}
+
+		return $cache->get($this->name, $default);
 	}
 
 	// -----------------
