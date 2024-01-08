@@ -72,6 +72,9 @@ abstract class Feature implements FeatureInterface
 
 	// -----------------
 
+	/**
+	 * @internal
+	 */
 	public function withScope(mixed $scope): static
 	{
 		$this->scope = $scope;

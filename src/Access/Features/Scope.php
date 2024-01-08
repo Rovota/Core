@@ -62,6 +62,9 @@ final class Scope
 
 	// -----------------
 
+	/**
+	 * @internal
+	 */
 	public function getData(): mixed
 	{
 		if ($this->data === null) {
@@ -70,6 +73,9 @@ final class Scope
 		return $this->data;
 	}
 
+	/**
+	 * @internal
+	 */
 	public function getCache(): Bucket
 	{
 		return $this->cache;
