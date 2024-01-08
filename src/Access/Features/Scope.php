@@ -40,12 +40,12 @@ final class Scope
 
 	public function active(string $name): bool
 	{
-		return $this->get($name)->active();
+		return $this->get($name)?->active() ?? false;
 	}
 
 	public function value(string $name, mixed $default = null): mixed
 	{
-		return $this->get($name)->value($default);
+		return $this->get($name)?->value($default) ?? $default;
 	}
 
 	// -----------------

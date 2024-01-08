@@ -43,12 +43,12 @@ final class Feature
 
 	public static function active(string $name): bool
 	{
-		return self::get($name)->active();
+		return self::get($name)?->active() ?? false;
 	}
 
 	public static function value(string $name, mixed $default = null): mixed
 	{
-		return self::get($name)->value($default);
+		return self::get($name)?->value($default) ?? $default;
 	}
 
 	// -----------------
