@@ -11,6 +11,7 @@ namespace Rovota\Core\Facades;
 use Closure;
 use Rovota\Core\Access\Features\FeatureManager;
 use Rovota\Core\Access\Features\Interfaces\FeatureInterface;
+use Rovota\Core\Access\Features\Scope;
 
 final class Feature
 {
@@ -33,9 +34,14 @@ final class Feature
 		return FeatureManager::get($name);
 	}
 
+	public static function for(mixed $scope): Scope
+	{
+		return FeatureManager::getScope($scope);
+	}
+
 	// -----------------
 
-	public static function active(string $name): FeatureInterface|bool
+	public static function active(string $name): bool
 	{
 		return FeatureManager::get($name)?->active() ?? false;
 	}

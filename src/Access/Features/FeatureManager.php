@@ -91,6 +91,13 @@ final class FeatureManager
 
 	// -----------------
 
+	public static function getScope(mixed $scope): Scope
+	{
+		return new Scope($scope);
+	}
+
+	// -----------------
+
 	public static function rememberCacheResult(string $name, mixed $result = null): mixed
 	{
 		if (isset(self::$cache[$name]) === false) {
