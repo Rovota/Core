@@ -35,12 +35,12 @@ final class Scope
 
 	public function active(string $name): bool
 	{
-		return FeatureManager::get($name)?->withScope($this->scope)->active();
+		return FeatureManager::get($name)?->withScope($this->scope)->active() ?? false;
 	}
 
 	public function value(string $name, mixed $default = null): mixed
 	{
-		return FeatureManager::get($name)?->withScope($this->scope)->value($default);
+		return FeatureManager::get($name)?->withScope($this->scope)->value($default) ?? null;
 	}
 
 }
