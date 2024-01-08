@@ -140,8 +140,8 @@ final class FeatureManager
 	protected static function registerRemoteFeatures(): void
 	{
 		if (ConnectionManager::get()->hasTable('core_features')) {
-			/** @var FeatureDbEntry $feature */
-			foreach (FeatureDbEntry::all() as $feature) {
+			/** @var DatabaseEntry $feature */
+			foreach (DatabaseEntry::all() as $feature) {
 
 				$feature = self::build($feature->name, [
 					'driver' => 'remote',

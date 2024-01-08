@@ -22,7 +22,7 @@ use Rovota\Core\Support\Moment;
  * @property Moment|null $edited
  * @property Moment|null $deleted
  */
-class FeatureDbEntry extends Model
+class DatabaseEntry extends Model
 {
 
 	protected string|null $table = 'core_features';
