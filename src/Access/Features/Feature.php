@@ -59,9 +59,9 @@ abstract class Feature implements FeatureInterface
 		};
 	}
 
-	public function value(): mixed
+	public function value(mixed $default = null): mixed
 	{
-		return FeatureManager::rememberCacheResult($this->name, $this->resolve());
+		return FeatureManager::rememberCacheResult($this->name, $this->resolve() ?? $default);
 	}
 
 	// -----------------

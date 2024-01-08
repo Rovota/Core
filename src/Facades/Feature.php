@@ -46,9 +46,9 @@ final class Feature
 		return FeatureManager::get($name)?->active() ?? false;
 	}
 
-	public static function value(string $name): mixed
+	public static function value(string $name, mixed $default = null): mixed
 	{
-		return FeatureManager::get($name)?->value() ?? null;
+		return FeatureManager::get($name)?->value() ?? $default;
 	}
 
 }

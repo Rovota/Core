@@ -38,9 +38,9 @@ final class Scope
 		return FeatureManager::get($name)?->withScope($this->scope)->active();
 	}
 
-	public function value(string $name): mixed
+	public function value(string $name, mixed $default = null): mixed
 	{
-		return FeatureManager::get($name)?->withScope($this->scope)->value();
+		return FeatureManager::get($name)?->withScope($this->scope)->value($default);
 	}
 
 }

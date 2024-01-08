@@ -23,7 +23,7 @@ interface FeatureInterface
 
 	public function active(): bool;
 
-	public function value(): mixed;
+	public function value(mixed $default = null): mixed;
 
 	// -----------------
 
