@@ -109,8 +109,8 @@ final class Application
 		AccessManager::initialize();
 		MiddlewareManager::initialize();
 		RouteManager::initialize();
-		AddonManager::initialize();
 		FeatureManager::initialize();
+		AddonManager::initialize();
 
 		RouteManager::run();
 	}
