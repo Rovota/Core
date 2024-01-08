@@ -51,4 +51,11 @@ final class Feature
 		return FeatureManager::get($name)?->value() ?? $default;
 	}
 
+	// -----------------
+
+	public static function forget(string $name): void
+	{
+		FeatureManager::cache()->remove($name);
+	}
+
 }
