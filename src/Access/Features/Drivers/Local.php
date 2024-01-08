@@ -12,7 +12,6 @@ namespace Rovota\Core\Access\Features\Drivers;
 
 use Closure;
 use Rovota\Core\Access\Features\Feature;
-use Rovota\Core\Auth\AuthManager;
 
 final class Local extends Feature
 {

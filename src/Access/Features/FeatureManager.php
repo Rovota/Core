@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Access\Features;
 
-use Closure;
 use Envms\FluentPDO\Exception;
 use Rovota\Core\Access\Features\Drivers\Local;
 use Rovota\Core\Access\Features\Drivers\Remote;
