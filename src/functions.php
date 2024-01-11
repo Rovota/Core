@@ -60,16 +60,6 @@ if (!function_exists('text')) {
 	}
 }
 
-if (!function_exists('string')) {
-	/**
-	 * @deprecated
-	 */
-   function string(string $string): Text
-   {
-      return new Text($string);
-   }
-}
-
 if (!function_exists('__')) {
    function __(string|null $string, array|object $args = [], string|null $source = null): string
    {
