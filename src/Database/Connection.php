@@ -168,11 +168,6 @@ abstract class Connection implements ConnectionInterface
 		return $this->connection;
 	}
 
-	public function fluent(): FluentQuery
-	{
-		return new FluentQuery($this->raw());
-	}
-
 	public function lastId(): string|int
 	{
 		$id = $this->connection->lastInsertId();

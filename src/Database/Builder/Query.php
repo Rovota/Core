@@ -43,7 +43,7 @@ final class Query
 	{
 		$this->connection = is_string($connection) ? ConnectionManager::get($connection) : $connection;
 		$this->config = $config ?? new QueryConfig();
-		$this->fluent = $this->connection->fluent();
+		$this->fluent = new FluentQuery($this->connection->raw());
 	}
 
 	// -----------------
@@ -64,12 +64,6 @@ final class Query
 	public function setConfig(QueryConfig $config): Query
 	{
 		$this->config = $config;
-		return $this;
-	}
-
-	public function setFluent(FluentQuery|Base $fluent): Query
-	{
-		$this->fluent = $fluent;
 		return $this;
 	}
 

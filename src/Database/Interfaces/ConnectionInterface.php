@@ -79,8 +79,6 @@ interface ConnectionInterface
 
 	public function raw(): PDO;
 
-	public function fluent(): FluentQuery;
-
 	public function lastId(): string|int;
 
 	// -----------------

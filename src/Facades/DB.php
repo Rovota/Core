@@ -113,11 +113,6 @@ final class DB
 		return ConnectionManager::get()->raw();
 	}
 
-	public static function fluent(): FluentQuery
-	{
-		return ConnectionManager::get()->fluent();
-	}
-
 	public static function lastId(): string|int
 	{
 		return ConnectionManager::get()->lastId();
