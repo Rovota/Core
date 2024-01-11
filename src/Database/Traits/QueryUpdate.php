@@ -14,7 +14,7 @@ trait QueryUpdate
 {
 
 	// -----------------
-	// UPDATE
+	// Update
 
 	/**
 	 * @throws Exception
@@ -38,7 +38,7 @@ trait QueryUpdate
 	}
 
 	// -----------------
-	// RECOVER
+	// Recover
 
 	/**
 	 * @throws Exception

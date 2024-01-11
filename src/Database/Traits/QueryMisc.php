@@ -14,7 +14,7 @@ trait QueryMisc
 {
 
 	// -----------------
-	// GROUPING
+	// Grouping
 
 	public function groupBy(string $column): static
 	{
@@ -23,7 +23,7 @@ trait QueryMisc
 	}
 
 	// -----------------
-	// ORDER
+	// Order
 
 	public function orderBy(string $column, string $order = 'ASC'): static
 	{
@@ -44,7 +44,7 @@ trait QueryMisc
 	}
 
 	// -----------------
-	// LIMITS / OFFSETS
+	// Limits / Offsets / Pagination
 
 	public function limit(int $limit): static
 	{
@@ -58,8 +58,13 @@ trait QueryMisc
 		return $this;
 	}
 
+	public function page(int $number, int $size): static
+	{
+		return $this->offset(($number - 1) * $size)->limit($size);
+	}
+
 	// -----------------
-	// CHUNKS
+	// Chunks
 
 	/**
 	 * @throws Exception
@@ -87,7 +92,7 @@ trait QueryMisc
 	}
 
 	// -----------------
-	// INSERT
+	// Insert
 
 	/**
 	 * @throws Exception
@@ -114,7 +119,7 @@ trait QueryMisc
 	}
 
 	// -----------------
-	// CACHING
+	// Caching
 
 	// public function withoutCache(): QueryBuilder
 	// {

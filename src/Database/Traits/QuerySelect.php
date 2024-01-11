@@ -17,7 +17,7 @@ trait QuerySelect
 {
 
 	// -----------------
-	// COUNT
+	// Count
 
 	/**
 	 * @throws Exception
@@ -45,7 +45,7 @@ trait QuerySelect
 
 
 	// -----------------
-	// SINGLE
+	// Single
 
 	/**
 	 * @throws Exception
@@ -68,7 +68,7 @@ trait QuerySelect
 	}
 
 	// -----------------
-	// MULTIPLE
+	// Multiple
 
 	/**
 	 * @throws Exception

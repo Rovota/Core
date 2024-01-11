@@ -18,7 +18,7 @@ trait ModelQueryFunctions
 {
 
 	// -----------------
-	// WHERE
+	// Where
 
 	public static function where(string|array $column, mixed $operator = null, mixed $value = null): Query
 	{
@@ -93,7 +93,7 @@ trait ModelQueryFunctions
 	}
 
 	// -----------------
-	// ORDER
+	// Order
 
 	public static function orderBy(string $column, string $order = 'ASC'): Query
 	{
@@ -114,7 +114,7 @@ trait ModelQueryFunctions
 	}
 
 	// -----------------
-	// LIMITS / OFFSETS
+	// Limits / Offsets / Pagination
 
 	public static function limit(int $limit): Query
 	{
@@ -128,8 +128,14 @@ trait ModelQueryFunctions
 		return $builder->offset($offset);
 	}
 
+	public static function page(int $number, int $size): Query
+	{
+		$builder = (new static)->newQueryBuilder();
+		return $builder->page($number, $size);
+	}
+
 	// -----------------
-	// CHUNKS
+	// Chunks
 
 	/**
 	 * @throws Exception
@@ -141,7 +147,7 @@ trait ModelQueryFunctions
 	}
 
 	// -----------------
-	// SELECT
+	// Select
 
 	/**
 	 * @throws Exception
@@ -200,7 +206,7 @@ trait ModelQueryFunctions
 	}
 
 	// -----------------
-	// INSERT
+	// Insert
 
 	/**
 	 * @throws Exception
@@ -212,7 +218,7 @@ trait ModelQueryFunctions
 	}
 
 	// -----------------
-	// DELETE
+	// Delete
 
 	/**
 	 * @throws Exception

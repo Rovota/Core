@@ -15,7 +15,7 @@ trait QueryConstraints
 {
 
 	// -----------------
-	// WHERE
+	// Where
 
 	public function where(string|array $column, mixed $operator = null, mixed $value = null): static
 	{
@@ -148,7 +148,7 @@ trait QueryConstraints
 
 
 	// -----------------
-	// OR WHERE
+	// Or Where
 
 	public function orWhere(string|array $column, mixed $operator = null, mixed $value = null): static
 	{
@@ -249,7 +249,7 @@ trait QueryConstraints
 
 
 	// -----------------
-	// HAVING
+	// Having
 
 	public function having(string|array $column, mixed $operator, mixed $value = null): static
 	{
@@ -278,7 +278,7 @@ trait QueryConstraints
 	}
 
 	// -----------------
-	// DELETED STATUS
+	// Deleted State
 
 	public function withDeleted(): static
 	{
