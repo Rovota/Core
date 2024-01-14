@@ -20,7 +20,7 @@ use function now;
 /**
  * @property int $id
  * @property int $user_id
- * @property int|null $admin_id
+ * @property int|null $parent_id
  * @property string $ip
  * @property string $client
  * @property string $hash
