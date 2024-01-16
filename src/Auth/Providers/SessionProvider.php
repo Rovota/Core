@@ -14,10 +14,12 @@ use Rovota\Core\Auth\Session;
 use Rovota\Core\Auth\TrustedClient;
 use Rovota\Core\Auth\User;
 use Rovota\Core\Cookie\CookieManager;
+use Rovota\Core\Database\Builder\Query;
 use Rovota\Core\Facades\Cookie;
 use Rovota\Core\Facades\Registry;
 use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Kernel\ExceptionHandler;
+use Rovota\Core\Support\Str;
 use Throwable;
 
 class SessionProvider extends Provider implements SessionAuthentication
@@ -98,7 +100,7 @@ class SessionProvider extends Provider implements SessionAuthentication
 
 		$cookie = Cookie::findReceived(Registry::string('identity_session_name', 'account'));
 		if ($cookie !== null) {
-			if (mb_strlen($cookie->value) !== 80) {
+			if (Str::length($cookie->value) !== 80) {
 				return !$cookie->expire();
 			}
 			try {
@@ -219,11 +221,13 @@ class SessionProvider extends Provider implements SessionAuthentication
 			}
 
 			if ($cookie instanceof \Rovota\Core\Cookie\Cookie) {
-				if (mb_strlen($cookie->value) !== 80) {
+				if (Str::length($cookie->value) !== 80) {
 					$cookie->expire();
 				} else {
 					try {
-						$trusted_client = TrustedClient::where(['hash' => $cookie->value, 'ip' => RequestManager::getRequest()->ip()])->first();
+						$trusted_client = TrustedClient::where(['hash' => $cookie->value])->when(registry('identity_trusted_client_ip_lock', false), function (Query $query) {
+							return $query->where(['ips' => RequestManager::getRequest()->ip()]);
+						})->first();
 						if ($trusted_client instanceof TrustedClient && ($trusted_client->expiration === null || $trusted_client->expiration->isFuture())) {
 							$this->trusted_clients[$cookie->name] = $trusted_client;
 						} else {
