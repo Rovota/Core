@@ -25,12 +25,15 @@ final class S3 extends Disk
 			],
 			'region' => $config->parameters->get('region'),
 			'version' => $config->parameters->get('version', 'latest'),
-			'endpoint' => $config->parameters->get('endpoint'),
 			'http' => [
 				'connect_timeout' => 5,
 			],
 			'signature_version' => 'v4',
 		];
+
+		if ($config->parameters->has('endpoint')) {
+			$parameters['endpoint'] = $config->parameters->get('endpoint');
+		}
 
 		$client = new S3Client($parameters);
 		$adapter = new AwsS3V3Adapter($client, $config->parameters->get('bucket'), $config->root);
