@@ -33,22 +33,24 @@
       "ext-intl": "*",
       "dflydev/dot-access-data": "^3.0",
       "envms/fluentpdo": "^2.2",
-      "guzzlehttp/guzzle": "^7.7",
+      "guzzlehttp/guzzle": "^7.8",
       "league/commonmark": "^2.4",
-      "league/flysystem": "^3.15",
-      "league/flysystem-read-only": "^3.15",
-      "monolog/monolog": "^3.4",
+      "league/flysystem": "^3.23",
+      "league/flysystem-read-only": "^3.22",
+      "monolog/monolog": "^3.5",
       "phlak/semver": "^4.1",
-      "phpmailer/phpmailer": "^6.8",
+      "phpmailer/phpmailer": "^6.9",
       "phpseclib/phpseclib": "^3.0",
       "spomky-labs/otphp": "^11.2"
    },
    "require-dev": {
-      "league/flysystem-aws-s3-v3": "^3.15",
-      "league/flysystem-sftp-v3": "^3.15"
+      "league/flysystem-aws-s3-v3": "^3.22",
+      "league/flysystem-async-aws-s3": "^3.22",
+      "league/flysystem-sftp-v3": "^3.22"
    },
    "suggest": {
       "league/flysystem-aws-s3-v3": "Allows usage of S3 compatible services as file storage.",
+      "league/flysystem-async-aws-s3": "Allows usage of S3 compatible services as file storage.",
       "league/flysystem-sftp-v3": "Allows usage of SFTP file storage.",
       "ext-redis": "Allows you to use Redis-based caching.",
       "ext-apcu": "Allows you to use APCu-based caching.",

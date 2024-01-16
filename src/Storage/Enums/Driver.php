@@ -16,6 +16,7 @@ enum Driver: string
 
 	case Custom = 'custom';
 	case Local = 'local';
+	case AsyncS3 = 'async-s3';
 	case S3 = 's3';
 	case Sftp = 'sftp';
 
@@ -27,6 +28,15 @@ enum Driver: string
 
 		if ($driver === null) {
 			return false;
+		}
+
+		if ($driver === Driver::AsyncS3) {
+			if (class_exists('League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter') === false) {
+				return false;
+			}
+			if (class_exists('AsyncAws\S3\S3Client') === false) {
+				return false;
+			}
 		}
 
 		if ($driver === Driver::S3) {
@@ -54,6 +64,7 @@ enum Driver: string
 		return match ($this) {
 			Driver::Custom => 'Custom',
 			Driver::Local => 'Filesystem',
+			Driver::AsyncS3 => 'Async S3',
 			Driver::S3 => 'S3',
 			Driver::Sftp => 'SFTP',
 		};
@@ -64,6 +75,7 @@ enum Driver: string
 		return match ($this) {
 			Driver::Custom => 'Specify your own storage adapter to use with this disk.',
 			Driver::Local => 'Use a folder on the local filesystem as disk.',
+			Driver::AsyncS3 => 'Use any S3-compatible cloud storage solution, asynchronously.',
 			Driver::S3 => 'Use any S3-compatible cloud storage solution.',
 			Driver::Sftp => 'Connect to a storage server using the SSH File Transfer Protocol.',
 		};

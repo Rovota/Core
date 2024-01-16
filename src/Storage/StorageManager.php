@@ -9,6 +9,7 @@
 namespace Rovota\Core\Storage;
 
 use Rovota\Core\Kernel\ExceptionHandler;
+use Rovota\Core\Storage\Drivers\AsyncS3;
 use Rovota\Core\Storage\Drivers\Custom;
 use Rovota\Core\Storage\Drivers\Local;
 use Rovota\Core\Storage\Drivers\Sftp;
@@ -89,6 +90,7 @@ final class StorageManager
 		return match ($config->driver) {
 			Driver::Custom => new Custom($name, $config),
 			Driver::Local => new Local($name, $config),
+			Driver::AsyncS3 => new AsyncS3($name, $config),
 			Driver::S3 => new S3($name, $config),
 			Driver::Sftp => new Sftp($name, $config),
 			default => null,
