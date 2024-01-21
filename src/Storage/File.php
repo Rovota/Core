@@ -42,6 +42,10 @@ class File implements FileInterface
 				$this->properties->set('extension', Str::afterLast($value, '.'));
 				continue;
 			}
+			if ($key === 'path') {
+				$this->properties->set('path', Str::trim($value, '/'));
+				continue;
+			}
 			$this->properties->set($key, $value);
 		}
 	}
@@ -72,10 +76,11 @@ class File implements FileInterface
 
 	public function publicUrl(): string
 	{
-		$base_path = $this->properties->disk->baseUrl().$this->properties->path;
+		$base = $this->properties->disk->baseUrl();
+		$path = $this->properties->path;
 		$file_name = sprintf('%s.%s', $this->properties->name, $this->properties->extension);
 
-		return Str::finish($base_path, '/').$file_name;
+		return implode('/', [$base, $path, $file_name]);
 	}
 
 }
