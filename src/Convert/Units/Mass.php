@@ -14,6 +14,7 @@ use Rovota\Core\Convert\Units\Mass\KiloGram;
 use Rovota\Core\Convert\Units\Mass\MilliGram;
 use Rovota\Core\Convert\Units\Mass\Ounce;
 use Rovota\Core\Convert\Units\Mass\Pound;
+use Rovota\Core\Convert\Units\Mass\Tonne;
 
 abstract class Mass extends Unit
 {
@@ -26,6 +27,7 @@ abstract class Mass extends Unit
 	public static function classFromIdentifier(string $identifier): string|null
 	{
 		return match($identifier) {
+			't', 'tonne' => Tonne::class,
 			'kg', 'kilogram' => KiloGram::class,
 			'g', 'gram' => Gram::class,
 			'mg', 'milligram' => MilliGram::class,
