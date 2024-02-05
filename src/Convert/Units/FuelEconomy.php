@@ -12,6 +12,7 @@ use Rovota\Core\Convert\Enums\UnitType;
 use Rovota\Core\Convert\Units\FuelEconomy\KiloMeterPerLiter;
 use Rovota\Core\Convert\Units\FuelEconomy\LiterPerHundredKiloMeters;
 use Rovota\Core\Convert\Units\FuelEconomy\MilesPerGallon;
+use Rovota\Core\Convert\Units\FuelEconomy\MilesPerGallonImperial;
 
 abstract class FuelEconomy extends Unit
 {
@@ -27,6 +28,7 @@ abstract class FuelEconomy extends Unit
 			'km/l', 'kilometer per liter' => KiloMeterPerLiter::class,
 			'l/100km', 'liter per 100 kilometers' => LiterPerHundredKiloMeters::class,
 			'mpg', 'miles per gallon' => MilesPerGallon::class,
+			'mpg imperial', 'miles per gallon imperial' => MilesPerGallonImperial::class,
 			default => null,
 		};
 	}
