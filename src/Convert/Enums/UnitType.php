@@ -8,6 +8,7 @@
 
 namespace Rovota\Core\Convert\Enums;
 
+use Rovota\Core\Convert\Units\Frequency;
 use Rovota\Core\Convert\Units\FuelEconomy;
 use Rovota\Core\Convert\Units\Length;
 use Rovota\Core\Convert\Units\Mass;
@@ -23,7 +24,7 @@ enum UnitType: int
 //	case DataTransferRate = 2;
 //	case DigitalStorage = 3;
 //	case Energy = 4;
-//	case Frequency = 5;
+	case Frequency = 5;
 	case FuelEconomy = 6;
 	case Length = 7;
 	case Mass = 8;
@@ -42,7 +43,7 @@ enum UnitType: int
 //			UnitType::DataTransferRate => '',
 //			UnitType::DigitalStorage => '',
 //			UnitType::Energy => '',
-//			UnitType::Frequency => '',
+			UnitType::Frequency => Frequency::class,
 			UnitType::FuelEconomy => FuelEconomy::class,
 			UnitType::Length => Length::class,
 			UnitType::Mass => Mass::class,
