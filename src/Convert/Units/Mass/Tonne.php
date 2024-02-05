@@ -20,12 +20,12 @@ final class Tonne extends Mass implements Metric
 
 	protected function toBaseValue(float|int $value): float|int
 	{
-		return $value * 1000000;
+		return $value * 1E6;
 	}
 
 	protected function fromBaseValue(float|int $value): float|int
 	{
-		return $value / 1000000;
+		return $value / 1E6;
 	}
 
 }

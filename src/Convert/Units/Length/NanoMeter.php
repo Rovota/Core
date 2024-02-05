@@ -20,12 +20,12 @@ final class NanoMeter extends Length implements Metric
 
 	protected function toBaseValue(float|int $value): float|int
 	{
-		return $value / 1e+9;
+		return $value / 1E9;
 	}
 
 	protected function fromBaseValue(float|int $value): float|int
 	{
-		return $value * 1e+9;
+		return $value * 1E9;
 	}
 
 }

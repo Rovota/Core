@@ -20,7 +20,7 @@ final class LiterPerHundredKiloMeters extends FuelEconomy implements Metric
 
 	protected function toBaseValue(float|int $value): float|int
 	{
-		return 100/ $value;
+		return 100 / $value;
 	}
 
 	protected function fromBaseValue(float|int $value): float|int

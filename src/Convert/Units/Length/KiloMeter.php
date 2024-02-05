@@ -20,12 +20,12 @@ final class KiloMeter extends Length implements Metric
 
 	protected function toBaseValue(float|int $value): float|int
 	{
-		return $value * 1000;
+		return $value * 1E3;
 	}
 
 	protected function fromBaseValue(float|int $value): float|int
 	{
-		return $value / 1000;
+		return $value / 1E3;
 	}
 
 }
