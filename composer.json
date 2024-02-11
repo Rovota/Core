@@ -1,6 +1,6 @@
 {
    "name": "rovota/core",
-   "version": "1.0.0",
+   "version": "1.0.2",
    "type": "library",
    "description": "A modern PHP framework designed for a painless development experience.",
    "keywords": ["framework", "php", "rovota", "modern", "web"],
