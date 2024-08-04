@@ -64,7 +64,7 @@ final class Application
 //		self::$registry = new Registry();
 
 		ValidationManager::initialize();
-		CookieManager::initialize();
+//		CookieManager::initialize();
 		SessionManager::initialize();
 //		RequestManager::initialize();
 

@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Http;
 
-use Rovota\Core\Facades\Cookie;
 use Rovota\Core\Facades\Route;
 use Rovota\Core\Http\Traits\RequestInput;
 use Rovota\Core\Routing\Route as RouteObject;
@@ -98,22 +97,6 @@ final class Request
 			return str_starts_with(Route::currentName() ?? '', str_replace('*', '', $name));
 		}
 		return Route::currentName() === $name;
-	}
-
-	// -----------------
-
-
-
-
-	public function cookie(string $name, string|null $default = null): string|null
-	{
-		$cookie = Cookie::findReceived($name);
-		return $cookie !== null ? $cookie->value : $default;
-	}
-
-	public function hasCookie(string $name): bool
-	{
-		return Cookie::isReceived($name);
 	}
 
 }
