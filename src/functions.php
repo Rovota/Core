@@ -14,12 +14,9 @@ use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\Interfaces\SessionAuthentication;
 use Rovota\Core\Auth\Interfaces\TokenAuthentication;
 use Rovota\Core\Auth\User;
-use Rovota\Core\Cache\CacheManager;
 use Rovota\Core\Cookie\Cookie;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Http\RequestManager;
-use Rovota\Core\Kernel\Application;
-use Rovota\Core\Kernel\Registry;
 use Rovota\Core\Partials\Partial;
 use Rovota\Core\Partials\PartialManager;
 use Rovota\Core\Routing\UrlBuilder;
@@ -70,16 +67,6 @@ if (!function_exists('sanitize_mime_type')) {
 // -----------------
 // Components
 
-if (!function_exists('cache')) {
-	function cache(string|int|array|null $key = null): mixed
-	{
-		if ($key === null) {
-			return CacheManager::get();
-		}
-		return CacheManager::get()->get($key);
-	}
-}
-
 if (!function_exists('session')) {
 	function session(array|string|null $key = null): mixed
 	{
@@ -91,24 +78,6 @@ if (!function_exists('session')) {
 		}
 		SessionManager::get()->putMany($key);
 		return true;
-	}
-}
-
-if (!function_exists('registry')) {
-	function registry(string|null $name = null, mixed $default = null): Registry|string|bool|int|float|array|null
-	{
-		if ($name === null) {
-			return Application::$registry;
-		}
-
-		return match(true) {
-			is_string($default) => Application::$registry->string($name, $default),
-			is_bool($default) => Application::$registry->bool($name, $default),
-			is_int($default) => Application::$registry->int($name, $default),
-			is_float($default) => Application::$registry->float($name, $default),
-			is_array($default) => Application::$registry->array($name, $default),
-			default => Application::$registry->get($name)?->value,
-		};
 	}
 }
 

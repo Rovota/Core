@@ -57,7 +57,7 @@ final class Application
 
 //		LoggingManager::initialize();
 		CastManager::initialize();
-		CacheManager::initialize();
+//		CacheManager::initialize();
 		ConnectionManager::initialize();
 		StorageManager::initialize();
 

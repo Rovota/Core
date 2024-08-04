@@ -154,11 +154,4 @@ final class CookieManager
 		return self::$received;
 	}
 
-	// -----------------
-	
-	public static function hasEncryptionEnabled(string $name): bool
-	{
-		return Arr::contains(self::$except, $name) === false;
-	}
-
 }
