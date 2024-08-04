@@ -19,47 +19,8 @@ use Rovota\Core\Views\View;
 
 trait ResponseModifiers
 {
-
-	protected array $headers;
 	private string|null $variant = null;
 	private array|null $dimensions = null;
-	protected StatusCode $status_code;
-
-	// -----------------
-
-	public function header(string $name, string $value): Response
-	{
-		if (Str::length($name) > 0 && Str::length($value) > 0) {
-			$this->headers[$name] = $value;
-		}
-		return $this;
-	}
-
-	public function headers(array $headers): Response
-	{
-		foreach ($headers as $name => $value) {
-			$this->headers[$name] = $value;
-		}
-		return $this;
-	}
-
-	public function withoutHeader(string $name): Response
-	{
-		unset($this->headers[$name]);
-		return $this;
-	}
-
-	public function withoutHeaders(array $names = []): Response
-	{
-		if (empty($names)) {
-			$this->headers = [];
-		} else {
-			foreach ($names as $name) {
-				unset($this->headers[$name]);
-			}
-		}
-		return $this;
-	}
 
 	// -----------------
 
@@ -83,23 +44,6 @@ trait ResponseModifiers
 
 	// -----------------
 
-	/**
-	 * When no extension is specified, one will be determined based on the content provided.
-	 */
-	public function download(string $name = null): Response
-	{
-		if (str_contains($name, '.') === false) {
-			$name = match(true) {
-				$this->content instanceof FileInterface => sprintf('%s.%s', $name, $this->content->properties()->extension),
-				$this->content instanceof View => sprintf('%s.%s', $name, 'html'),
-				$this->content instanceof JsonSerializable, is_array($this->content) => sprintf('%s.%s', $name, 'json'),
-				default => sprintf('%s.%s', $name, 'txt'),
-			};
-		}
-		$this->header('Content-Disposition', ($name === null) ? 'attachment;' : sprintf('attachment; filename="%s"', $name));
-		return $this;
-	}
-
 	public function dimensions(int $width, int|null $height = null): Response
 	{
 		$this->dimensions = [$width, $height];
@@ -109,20 +53,6 @@ trait ResponseModifiers
 	public function variant(string $name): Response
 	{
 		$this->variant = trim($name);
-		return $this;
-	}
-
-	// -----------------
-
-	public function setContentType(string $value): Response
-	{
-		$this->header('Content-Type', trim($value));
-		return $this;
-	}
-
-	public function setHttpCode(StatusCode $code): Response
-	{
-		$this->status_code = $code;
 		return $this;
 	}
 

@@ -34,34 +34,4 @@ final class UrlTools
 
 	// -----------------
 
-	public static function queryToArray(string $url, bool $decode = true): array
-	{
-		$query = [];
-		$segments = explode('&', $url);
-		
-		foreach ($segments as $segment) {
-			if (str_contains($segment, '=')) {
-				$item = explode('=', $segment);
-				$query[$item[0]] = trim($decode ? rawurlencode($item[1]) : $item[1]);
-			} else {
-				$query[$segment] = null;
-			}
-		}
-		
-		return $query;
-	}
-
-	public static function arrayToQuery(array $fields = [], bool $encode = true): string
-	{
-		$items = '';
-		foreach ($fields as $key => $value) {
-			$value = (string)$value;
-			if (Str::length($value) > 0) {
-				$value = $encode ? rawurlencode($value) : $value;
-				$items .= sprintf('%s%s=%s', (Str::length($items) > 0) ? '&' : '', $key, $value);
-			}
-		}
-		return (Str::length($items) > 0) ? '?'.$items : '';
-	}
-
 }

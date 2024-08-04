@@ -6,7 +6,6 @@
  * @license     MIT
  */
 
-use Dflydev\DotAccessData\Data;
 use League\Flysystem\FilesystemException;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\ApiToken;
@@ -16,19 +15,10 @@ use Rovota\Core\Auth\Interfaces\SessionAuthentication;
 use Rovota\Core\Auth\Interfaces\TokenAuthentication;
 use Rovota\Core\Auth\User;
 use Rovota\Core\Cache\CacheManager;
-use Rovota\Core\Convert\ConversionManager;
 use Rovota\Core\Cookie\Cookie;
 use Rovota\Core\Cookie\CookieManager;
-use Rovota\Core\Http\ApiError;
-use Rovota\Core\Http\ApiErrorResponse;
-use Rovota\Core\Http\Enums\StatusCode;
-use Rovota\Core\Http\RedirectResponse;
-use Rovota\Core\Http\Request;
 use Rovota\Core\Http\RequestManager;
-use Rovota\Core\Http\Response;
-use Rovota\Core\Http\ResponseManager;
 use Rovota\Core\Kernel\Application;
-use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Kernel\Registry;
 use Rovota\Core\Partials\Partial;
 use Rovota\Core\Partials\PartialManager;
@@ -36,84 +26,10 @@ use Rovota\Core\Routing\UrlBuilder;
 use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Storage\StorageManager;
-use Rovota\Core\Structures\Bucket;
-use Rovota\Core\Structures\Map;
-use Rovota\Core\Structures\Sequence;
-use Rovota\Core\Structures\Set;
-use Rovota\Core\Support\Arr;
-use Rovota\Core\Support\Text;
-use Rovota\Core\Support\Interfaces\Arrayable;
-use Rovota\Core\Support\Moment;
-use Rovota\Core\Support\Str;
 use Rovota\Core\Support\ValidationTools;
 use Rovota\Core\Views\Exceptions\MissingViewException;
 use Rovota\Core\Views\View;
 use Rovota\Core\Views\ViewManager;
-
-// -----------------
-// Strings
-
-if (!function_exists('text')) {
-	function text(string $string): Text
-	{
-		return new Text($string);
-	}
-}
-
-if (!function_exists('__')) {
-   function __(string|null $string, array|object $args = [], string|null $source = null): string
-   {
-      return Str::translate($string, $args, $source);
-   }
-}
-
-if (!function_exists('e')) {
-   function e(string|null $string): string|null
-   {
-      return Str::escape($string);
-   }
-}
-
-if (!function_exists('convert_to_html')) {
-   function convert_to_html(string $string, string|null $language = null): string
-   {
-      return ConversionManager::toHtml($string, $language);
-   }
-}
-
-if (!function_exists('convert_to_ascii')) {
-	function convert_to_ascii(string $string): string
-	{
-		return ConversionManager::toAscii($string);
-	}
-}
-
-// -----------------
-// DateTime
-
-if (!function_exists('now')) {
-	function now(DateTimeZone|null $timezone = null): Moment|null
-	{
-		try {
-			return new Moment(timezone: $timezone);
-		} catch (Throwable $throwable) {
-			ExceptionHandler::logThrowable($throwable);
-		}
-		return null;
-	}
-}
-
-if (!function_exists('moment')) {
-	function moment(mixed $datetime = 'now', DateTimeZone|string|null $timezone = null): Moment|null
-	{
-		try {
-			return Moment::create($datetime, $timezone);
-		} catch (Throwable $throwable) {
-			ExceptionHandler::logThrowable($throwable);
-		}
-		return null;
-	}
-}
 
 // -----------------
 // Sanitization Helpers
@@ -203,41 +119,6 @@ if (!function_exists('cookie')) {
 	}
 }
 
-if (!function_exists('request')) {
-	function request(): Request
-	{
-		return RequestManager::getRequest();
-	}
-}
-
-if (!function_exists('response')) {
-	function response(mixed $content, StatusCode $code = StatusCode::Ok): Response
-	{
-		return ResponseManager::make($content, $code);
-	}
-}
-
-if (!function_exists('api_error')) {
-	function api_error(Throwable|ApiError|array $error, StatusCode $code = StatusCode::BadRequest): ApiErrorResponse
-	{
-		return ResponseManager::apiError($error, $code);
-	}
-}
-
-if (!function_exists('redirect')) {
-	function redirect(string|null $path = null, array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
-	{
-		return ResponseManager::redirect($path, $query, $code);
-	}
-}
-
-if (!function_exists('to_route')) {
-	function to_route(string $name, array $params = [], array $query = [], StatusCode $code = StatusCode::Found): RedirectResponse
-	{
-		return ResponseManager::redirect(null, [], $code)->route($name, $params, $query, $code);
-	}
-}
-
 if (!function_exists('view')) {
 	/**
 	 * @throws MissingViewException
@@ -323,68 +204,7 @@ if (!function_exists('token')) {
 }
 
 // -----------------
-// Structures
-
-if (!function_exists('as_bucket')) {
-	function as_bucket(mixed $items = []): Bucket
-	{
-		return new Bucket($items);
-	}
-}
-
-if (!function_exists('as_map')) {
-	function as_map(mixed $items = []): Map
-	{
-		return new Map($items);
-	}
-}
-
-if (!function_exists('as_sequence')) {
-	function as_sequence(mixed $items = []): Sequence
-	{
-		return new Sequence($items);
-	}
-}
-
-if (!function_exists('as_set')) {
-	function as_set(mixed $items = []): Set
-	{
-		return new Set($items);
-	}
-}
-
-// -----------------
 // Misc
-
-if (!function_exists('quit')) {
-   function quit(StatusCode $code = StatusCode::InternalServerError): never
-   {
-      Application::quit($code);
-   }
-}
-
-if (!function_exists('dump')) {
-   function dump(mixed $data, bool $exit = false): void
-   {
-      print_r($data);
-      if ($exit) quit();
-   }
-}
-
-if (!function_exists('debug')) {
-	function debug(Throwable|string $throwable, string|null $message = '', bool $unhandled = false): void
-	{
-		$throwable = is_string($throwable) ? new $throwable($message) : $throwable;
-		ExceptionHandler::renderDebug($throwable, $unhandled);
-	}
-}
-
-if (!function_exists('deprecated')) {
-   function deprecated(string $message): void
-   {
-      trigger_error($message, E_USER_DEPRECATED);
-   }
-}
 
 if (!function_exists('throw_if')) {
 	/**
@@ -559,36 +379,6 @@ if (!function_exists('token_has')) {
 // -----------------
 // Utility Helpers
 
-if (!function_exists('is_odd')) {
-	function is_odd(int|float $value): bool
-	{
-		return $value & 1;
-	}
-}
-
-if (!function_exists('is_even')) {
-	function is_even(int|float $value): bool
-	{
-		return is_odd($value) === false;
-	}
-}
-
-if (!function_exists('domain')) {
-	function domain(bool $include_scheme = false): string
-	{
-		$host = RequestManager::getRequest()->targetHost();
-		return $include_scheme ? sprintf('%s://%s', RequestManager::getRequest()->scheme(), $host) : $host;
-	}
-}
-
-if (!function_exists('url')) {
-	function url(string|null $path = null, array $query = []): UrlBuilder
-	{
-		$builder = new UrlBuilder();
-		return $path === null ? $builder : $builder->foreign($path, $query);
-	}
-}
-
 if (!function_exists('route')) {
 	function route(string $name, array $params = [], array $query = []): UrlBuilder
 	{
@@ -641,114 +431,9 @@ if (!function_exists('form_submit_time_allowed')) {
 // -----------------
 // Internal
 
-if (!function_exists('base_path')) {
-	function base_path(string $path = ''): string
-	{
-		return strlen($path) > 0 ? getcwd().'/'.ltrim($path, '/') : getcwd();
-	}
-}
-
-if (!function_exists('value_retriever')) {
-	function value_retriever(mixed $value): callable
-	{
-		// Inspired by the Laravel valueRetriever() method.
-		if (!is_string($value) && is_callable($value)) {
-			return $value;
-		}
-
-		return function ($item) use ($value) {
-			return data_get($item, $value);
-		};
-	}
-}
-
-if (!function_exists('convert_to_array')) {
-	function convert_to_array(mixed $value): array
-	{
-		return match(true) {
-			$value === null => [],
-			is_array($value) => $value,
-			$value instanceof Arrayable => $value->toArray(),
-			$value instanceof JsonSerializable => convert_to_array($value->jsonSerialize()),
-			$value instanceof Data => $value->export(),
-			default => [$value],
-		};
-	}
-}
-
-if (!function_exists('data_get')) {
-   function data_get(mixed $target, string|array|null $key, mixed $default = null): mixed
-   {
-      // Inspired by the Laravel data_get() helper.
-      if ($key === null) {
-         return $target;
-      }
-
-      $key = is_array($key) ? $key : explode('.', $key);
-
-      foreach ($key as $i => $segment) {
-         unset($key[$i]);
-
-         if ($segment === null) {
-            return $target;
-         }
-
-         if ($segment === '*') {
-            if ($target instanceof Arrayable) {
-               $target = $target->toArray();
-            } elseif (!is_iterable($target)) {
-               return $default;
-            }
-
-            $result = [];
-            foreach ($target as $item) {
-               $result[] = data_get($item, $key);
-            }
-
-            return in_array('*', $key) ? Arr::collapse($result) : $result;
-         }
-
-		 $target = match (true) {
-			 $target instanceof ArrayAccess => $target->offsetGet($segment),
-			 is_object($target) && isset($target->{$segment}) => $target->{$segment},
-			 is_object($target) && method_exists($target, $segment) => $target->{$segment}(),
-			 is_array($target) && array_key_exists($segment, $target) => $target[$segment],
-			 default => null,
-		 };
-
-		 if ($target === null) {
-			 return $default;
-		 }
-      }
-
-      return $target;
-   }
-}
-
 if (!function_exists('cookie_domain')) {
    function cookie_domain(): string
    {
       return (defined('COOKIE_DOMAIN')) ? COOKIE_DOMAIN : $_SERVER['SERVER_NAME'];
    }
-}
-
-if (!function_exists('hash_length')) {
-	function hash_length(string $algorithm): int|null
-	{
-		return match ($algorithm) {
-			'md5' => 32,
-			'sha1' => 40,
-			'sha256' => 64,
-			'sha384' => 96,
-			'sha512' => 128,
-			default => null,
-		};
-	}
-}
-
-if (!function_exists('json_encode_clean')) {
-	function json_encode_clean(mixed $value, int $depth = 512): false|string
-	{
-		return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK, $depth);
-	}
 }

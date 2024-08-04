@@ -8,87 +8,18 @@
 
 namespace Rovota\Core\Http;
 
-use BackedEnum;
-use JsonSerializable;
 use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Facades\Registry;
-use Rovota\Core\Http\Enums\StatusCode;
-use Rovota\Core\Http\Traits\ResponseModifiers;
-use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Storage\Interfaces\FileInterface;
-use Rovota\Core\Support\Text;
 use Rovota\Core\Support\ImageObject;
-use Rovota\Core\Support\Str;
-use Rovota\Core\Support\Traits\Conditionable;
-use Rovota\Core\Support\Traits\Macroable;
-use Rovota\Core\Views\View;
 use Throwable;
 
 class Response
 {
-	use Macroable, ResponseModifiers, Conditionable;
-
-	protected mixed $content;
-
-	// -----------------
-
-	public function __construct(array $headers, mixed $content, StatusCode $code)
-	{
-		$this->headers = $headers;
-		$this->content = $content;
-		$this->status_code = $code;
-	}
-
-	public function __toString(): string
-	{
-		$this->prepareForPrinting();
-		return $this->content ?? '';
-	}
-
-	// -----------------
 
 	protected function prepareForPrinting(): void
 	{
-		ob_end_clean();
-
-		$content = match(true) {
-			is_int($this->content) => $this->content,
-			$this->content instanceof BackedEnum => $this->content->value,
-			$this->content instanceof FileInterface => $this->getContentFromFile(),
-			$this->content instanceof ImageObject => $this->getContentFromImage(),
-			$this->content instanceof Text => $this->getContentFromText(),
-			$this->content instanceof View => $this->getContentFromView(),
-			$this->content instanceof JsonSerializable || is_array($this->content) => $this->getContentAsJson(),
-			default => $this->getContentAsString(),
-		};
-
-		if ($this->content instanceof StatusCode || (is_int($content) && StatusCode::tryFrom($content) instanceof BackedEnum)) {
-			http_response_code($content);
-			$content = null;
-		} else {
-			http_response_code($this->status_code->value);
-		}
-
-		foreach ($this->headers as $key => $value) {
-			header(sprintf('%s: %s', $key, $value));
-		}
-
 		CookieManager::applyQueue();
-
-		$this->content = $content;
-	}
-
-	// -----------------
-
-	protected function getContentAsJson(): string
-	{
-		$this->setContentType('application/json; charset=UTF-8');
-		return json_encode_clean($this->content);
-	}
-
-	protected function getContentAsString(): string
-	{
-		return (string)$this->content;
 	}
 
 	// -----------------
@@ -114,11 +45,6 @@ class Response
 
 		$this->setContentType($this->content->mime_type);
 		return (string)$this->content;
-	}
-
-	protected function getContentFromText(): string
-	{
-		return (string) $this->content;
 	}
 
 	protected function getContentFromView(): string
