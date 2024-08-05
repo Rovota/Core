@@ -24,26 +24,6 @@ trait ResponseModifiers
 
 	// -----------------
 
-	public function cookie(Cookie|string $name, string|null $value = null, array $options = []): Response
-	{
-		CookieManager::queue($name, $value, $options);
-		return $this;
-	}
-	
-	public function withoutCookie(string $name): Response
-	{
-		CookieManager::removeQueued($name);
-		return $this;
-	}
-
-	public function expireCookie(string $name): Response
-	{
-		CookieManager::expire($name);
-		return $this;
-	}
-
-	// -----------------
-
 	public function dimensions(int $width, int|null $height = null): Response
 	{
 		$this->dimensions = [$width, $height];

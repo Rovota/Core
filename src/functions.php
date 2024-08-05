@@ -81,13 +81,6 @@ if (!function_exists('session')) {
 	}
 }
 
-if (!function_exists('cookie')) {
-	function cookie(string $name, string|null $value, array $options = []): Cookie
-	{
-		return CookieManager::make($name, $value, $options);
-	}
-}
-
 if (!function_exists('view')) {
 	/**
 	 * @throws MissingViewException
@@ -395,14 +388,4 @@ if (!function_exists('form_submit_time_allowed')) {
 
 		return $submit_time > $submit_time_min && $submit_time < $submit_time_max;
 	}
-}
-
-// -----------------
-// Internal
-
-if (!function_exists('cookie_domain')) {
-   function cookie_domain(): string
-   {
-      return (defined('COOKIE_DOMAIN')) ? COOKIE_DOMAIN : $_SERVER['SERVER_NAME'];
-   }
 }
