@@ -11,16 +11,12 @@ namespace Rovota\Core\Kernel;
 
 use Envms\FluentPDO\Exception;
 use Rovota\Core\Access\Features\FeatureManager;
-use Rovota\Core\Addon\AddonManager;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
-use Rovota\Core\Cache\CacheManager;
-use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Database\CastManager;
 use Rovota\Core\Database\ConnectionManager;
 use Rovota\Core\Database\Exceptions\MissingDatabaseConfigException;
 use Rovota\Core\Http\RequestManager;
-use Rovota\Core\Http\ResponseManager;
 use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Mail\MailManager;
 use Rovota\Core\Routing\RouteManager;
@@ -47,9 +43,7 @@ final class Application
 	// -----------------
 
 	/**
-	 * @throws UnsupportedDriverException
 	 * @throws MissingDatabaseConfigException
-	 * @throws MissingSessionConfigException
 	 * @throws Exception
 	 */
 	public static function start(): void
@@ -65,7 +59,7 @@ final class Application
 
 		ValidationManager::initialize();
 //		CookieManager::initialize();
-		SessionManager::initialize();
+//		SessionManager::initialize();
 //		RequestManager::initialize();
 
 		if (RequestManager::getRequest()->ipAllowed() === false) {
@@ -79,10 +73,9 @@ final class Application
 //		ResponseManager::initialize();
 		AuthManager::initialize();
 		AccessManager::initialize();
-		MiddlewareManager::initialize();
+//		MiddlewareManager::initialize();
 		RouteManager::initialize();
 		FeatureManager::initialize();
-		AddonManager::initialize();
 
 		RouteManager::run();
 	}
