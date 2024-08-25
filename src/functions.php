@@ -67,20 +67,6 @@ if (!function_exists('sanitize_mime_type')) {
 // -----------------
 // Components
 
-if (!function_exists('session')) {
-	function session(array|string|null $key = null): mixed
-	{
-		if ($key === null) {
-			return SessionManager::get();
-		}
-		if (is_string($key)) {
-			return SessionManager::get()->read($key);
-		}
-		SessionManager::get()->putMany($key);
-		return true;
-	}
-}
-
 if (!function_exists('view')) {
 	/**
 	 * @throws MissingViewException
@@ -167,30 +153,6 @@ if (!function_exists('token')) {
 
 // -----------------
 // Misc
-
-if (!function_exists('throw_if')) {
-	/**
-	 * @throws Throwable
-	 */
-	function throw_if(bool $bool, Throwable|string $throwable, string|null $message = ''): void
-   {
-      if ($bool === true) {
-		 throw (is_string($throwable) ? new $throwable($message) : $throwable);
-      }
-   }
-}
-
-if (!function_exists('throw_unless')) {
-	/**
-	 * @throws Throwable
-	 */
-	function throw_unless(bool $bool, Throwable|string $throwable, string|null $message = ''): void
-   {
-      if ($bool === false) {
-		  throw (is_string($throwable) ? new $throwable($message) : $throwable);
-      }
-   }
-}
 
 if (!function_exists('retry')) {
 	function retry(int $attempts, callable $action, callable|int $delay = 100, callable|null $filter = null, mixed $fallback = null): mixed
