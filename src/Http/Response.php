@@ -8,21 +8,12 @@
 
 namespace Rovota\Core\Http;
 
-use Rovota\Core\Cookie\CookieManager;
-use Rovota\Core\Facades\Registry;
 use Rovota\Core\Storage\Interfaces\FileInterface;
 use Rovota\Core\Support\ImageObject;
 use Throwable;
 
 class Response
 {
-
-	protected function prepareForPrinting(): void
-	{
-		CookieManager::applyQueue();
-	}
-
-	// -----------------
 
 	protected function getContentFromFile(): string
 	{
