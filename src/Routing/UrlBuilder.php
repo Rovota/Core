@@ -35,22 +35,4 @@ final class UrlBuilder
 		return $this;
 	}
 
-	public function previous(string $default = '/', array $query = []): UrlBuilder
-	{
-		$location = SessionManager::get()->pull('location.previous', RequestManager::getRequest()->referrer() ?? $default);
-		return $this->foreign($location, $query);
-	}
-
-	public function next(string $default = '/', array $query = []): UrlBuilder
-	{
-		$location = SessionManager::get()->pull('location.next', $default);
-		return $this->foreign($location, $query);
-	}
-
-	public function intended(string $default = '/', array $query = []): UrlBuilder
-	{
-		$location = SessionManager::get()->pull('location.intended', $default);
-		return $this->foreign($location, $query);
-	}
-
 }
