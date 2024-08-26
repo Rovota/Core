@@ -13,34 +13,17 @@ use Envms\FluentPDO\Exception;
 use Rovota\Core\Access\Features\FeatureManager;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
-use Rovota\Core\Database\CastManager;
 use Rovota\Core\Database\ConnectionManager;
 use Rovota\Core\Database\Exceptions\MissingDatabaseConfigException;
-use Rovota\Core\Http\RequestManager;
 use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Mail\MailManager;
 use Rovota\Core\Routing\RouteManager;
-use Rovota\Core\Session\Exceptions\MissingSessionConfigException;
-use Rovota\Core\Session\Exceptions\UnsupportedDriverException;
-use Rovota\Core\Session\SessionManager;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Validation\ValidationManager;
 use Rovota\Core\Views\ViewManager;
 
 final class Application
 {
-
-	// -----------------
-
-	public static Registry $registry;
-
-	// -----------------
-
-	protected function __construct()
-	{
-	}
-
-	// -----------------
 
 	/**
 	 * @throws MissingDatabaseConfigException
@@ -50,7 +33,7 @@ final class Application
 	{
 
 //		LoggingManager::initialize();
-		CastManager::initialize();
+//		CastManager::initialize();
 //		CacheManager::initialize();
 		ConnectionManager::initialize();
 		StorageManager::initialize();
@@ -61,10 +44,6 @@ final class Application
 //		CookieManager::initialize();
 //		SessionManager::initialize();
 //		RequestManager::initialize();
-
-		if (RequestManager::getRequest()->ipAllowed() === false) {
-			http_response_code(403); exit;
-		}
 
 		LimitManager::initialize();
 //		LocalizationManager::initialize();
