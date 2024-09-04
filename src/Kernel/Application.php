@@ -13,8 +13,6 @@ use Envms\FluentPDO\Exception;
 use Rovota\Core\Access\Features\FeatureManager;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
-use Rovota\Core\Database\ConnectionManager;
-use Rovota\Core\Database\Exceptions\MissingDatabaseConfigException;
 use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Mail\MailManager;
 use Rovota\Core\Routing\RouteManager;
@@ -26,7 +24,6 @@ final class Application
 {
 
 	/**
-	 * @throws MissingDatabaseConfigException
 	 * @throws Exception
 	 */
 	public static function start(): void
@@ -35,7 +32,7 @@ final class Application
 //		LoggingManager::initialize();
 //		CastManager::initialize();
 //		CacheManager::initialize();
-		ConnectionManager::initialize();
+//		ConnectionManager::initialize();
 		StorageManager::initialize();
 
 //		self::$registry = new Registry();

@@ -74,44 +74,7 @@ final class DB
 		return ConnectionManager::get()->query($query, $params);
 	}
 
-	public static function prepare(string $query): PDOStatement
-	{
-		return ConnectionManager::get()->prepare($query);
-	}
-
-	public static function execute(PDOStatement $statement, array $params): PDOStatement
-	{
-		return ConnectionManager::get()->execute($statement, $params);
-	}
-
 	// -----------------
-
-	public static function beginTransaction(): bool
-	{
-		return ConnectionManager::get()->beginTransaction();
-	}
-
-	public static function inTransaction(): bool
-	{
-		return ConnectionManager::get()->inTransaction();
-	}
-
-	public static function commit(): bool
-	{
-		return ConnectionManager::get()->commit();
-	}
-
-	public static function rollBack(): bool
-	{
-		return ConnectionManager::get()->rollBack();
-	}
-
-	// -----------------
-
-	public static function raw(): PDO
-	{
-		return ConnectionManager::get()->raw();
-	}
 
 	public static function lastId(): string|int
 	{
