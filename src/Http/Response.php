@@ -38,12 +38,6 @@ class Response
 		return (string)$this->content;
 	}
 
-	protected function getContentFromView(): string
-	{
-		$this->setContentType('text/html');
-		return $this->content->render();
-	}
-
 	// -----------------
 
 	protected function getProcessedImage(ImageObject $image): string

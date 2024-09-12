@@ -9,7 +9,6 @@
 
 namespace Rovota\Core\Kernel;
 
-use Envms\FluentPDO\Exception;
 use Rovota\Core\Access\Features\FeatureManager;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
@@ -18,7 +17,6 @@ use Rovota\Core\Mail\MailManager;
 use Rovota\Core\Routing\RouteManager;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Validation\ValidationManager;
-use Rovota\Core\Views\ViewManager;
 
 final class Application
 {
@@ -44,7 +42,7 @@ final class Application
 
 		LimitManager::initialize();
 //		LocalizationManager::initialize();
-		ViewManager::initialize();
+//		ViewManager::initialize();
 		MailManager::initialize();
 //		ResponseManager::initialize();
 		AuthManager::initialize();

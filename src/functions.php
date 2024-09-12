@@ -67,16 +67,6 @@ if (!function_exists('sanitize_mime_type')) {
 // -----------------
 // Components
 
-if (!function_exists('view')) {
-	/**
-	 * @throws MissingViewException
-	 */
-	function view(string $name, string|null $source = null): View
-	{
-		return ViewManager::make($name, $source);
-	}
-}
-
 if (!function_exists('partial')) {
 	function partial(string $name, string|null $source = null, array $variables = []): Partial|string
 	{
