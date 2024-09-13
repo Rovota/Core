@@ -58,61 +58,9 @@ final class Route
 		return RouteManager::getGroup('auth', $provider);
 	}
 
-	public static function controller(string $name): RouteGroup
-	{
-		return RouteManager::getGroup('controller', $name);
-	}
-
 	public static function middleware(array|string $names): RouteGroup
 	{
 		return RouteManager::getGroup('middleware', $names);
-	}
-
-	public static function name(string $value): RouteGroup
-	{
-		return RouteManager::getGroup('name', $value);
-	}
-
-	public static function prefix(string $path): RouteGroup
-	{
-		return RouteManager::getGroup('prefix', $path);
-	}
-
-	public static function target(mixed $target): RouteGroup
-	{
-		return RouteManager::getGroup('target', $target);
-	}
-
-	public static function where(array|string $parameter, string|null $pattern = null): RouteGroup
-	{
-		if (is_string($parameter)) {
-			$parameter = [$parameter => $pattern];
-		}
-		return RouteManager::getGroup('wheres', $parameter);
-	}
-
-	public static function whereHash(array|string $parameter, string|int $algorithm): RouteGroup
-	{
-		if (is_string($parameter)) {
-			$parameter = [$parameter => '[a-zA-Z0-9_-]{'.(is_string($algorithm) ? hash_length($algorithm) ?? 1 : $algorithm).'}'];
-		}
-		return RouteManager::getGroup('wheres', $parameter);
-	}
-
-	public static function whereNumber(array|string $parameter, int|null $length = null): RouteGroup
-	{
-		if (is_string($parameter)) {
-			$parameter = [$parameter => '\d'.($length ? '{'.$length.'}' : '+')];
-		}
-		return RouteManager::getGroup('wheres', $parameter);
-	}
-
-	public static function whereSlug(array|string $parameter, int|null $length = null): RouteGroup
-	{
-		if (is_string($parameter)) {
-			$parameter = [$parameter => '[a-zA-Z0-9_-]'.($length ? '{'.$length.'}' : '+')];
-		}
-		return RouteManager::getGroup('wheres', $parameter);
 	}
 
 	public static function throttle(string $limiter): RouteGroup
