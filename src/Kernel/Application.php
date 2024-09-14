@@ -14,16 +14,12 @@ use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
 use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Mail\MailManager;
-use Rovota\Core\Routing\RouteManager;
 use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Validation\ValidationManager;
 
 final class Application
 {
 
-	/**
-	 * @throws Exception
-	 */
 	public static function start(): void
 	{
 
@@ -48,10 +44,10 @@ final class Application
 		AuthManager::initialize();
 		AccessManager::initialize();
 //		MiddlewareManager::initialize();
-		RouteManager::initialize();
+//		RouteManager::initialize();
 		FeatureManager::initialize();
 
-		RouteManager::run();
+//		RouteManager::run();
 	}
 
 }
