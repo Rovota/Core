@@ -293,14 +293,6 @@ if (!function_exists('token_has')) {
 // -----------------
 // Utility Helpers
 
-if (!function_exists('route')) {
-	function route(string $name, array $params = [], array $query = []): UrlBuilder
-	{
-		$builder = new UrlBuilder();
-		return $builder->route($name, $params, $query);
-	}
-}
-
 if (!function_exists('csrf_input')) {
 	function csrf_input(): string
 	{
