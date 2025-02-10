@@ -6,7 +6,6 @@
  * @license     MIT
  */
 
-use League\Flysystem\FilesystemException;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\ApiToken;
 use Rovota\Core\Auth\AuthManager;
@@ -14,55 +13,7 @@ use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\Interfaces\SessionAuthentication;
 use Rovota\Core\Auth\Interfaces\TokenAuthentication;
 use Rovota\Core\Auth\User;
-use Rovota\Core\Cookie\Cookie;
-use Rovota\Core\Cookie\CookieManager;
 use Rovota\Core\Http\RequestManager;
-use Rovota\Core\Partials\Partial;
-use Rovota\Core\Partials\PartialManager;
-use Rovota\Core\Routing\UrlBuilder;
-use Rovota\Core\Session\SessionManager;
-use Rovota\Core\Storage\Interfaces\FileInterface;
-use Rovota\Core\Storage\StorageManager;
-use Rovota\Core\Support\ValidationTools;
-use Rovota\Core\Views\Exceptions\MissingViewException;
-use Rovota\Core\Views\View;
-use Rovota\Core\Views\ViewManager;
-
-// -----------------
-// Sanitization Helpers
-
-if (!function_exists('sanitize_select')) {
-	function sanitize_select(string $option, array $options, string $fallback): string
-	{
-		return Arr::contains($options, $option) ? $option : $fallback;
-	}
-}
-
-if (!function_exists('sanitize_extension')) {
-	function sanitize_extension(string $type, string $extension): string|null
-	{
-		$extensions = ValidationTools::mimeTypeExtensions($type);
-
-		if (Arr::contains($extensions, $extension)) {
-			return $extension;
-		}
-
-		return $extensions[0] ?? null;
-	}
-}
-
-if (!function_exists('sanitize_mime_type')) {
-	function sanitize_mime_type(string $extension, string $type): string|null
-	{
-		$mime_types = ValidationTools::extensionMimeTypes($extension);
-
-		if (Arr::contains($mime_types, $type)) {
-			return $type;
-		}
-
-		return $mime_types[0] ?? null;
-	}
-}
 
 // -----------------
 // Components
@@ -76,16 +27,6 @@ if (!function_exists('partial')) {
 			ExceptionHandler::logThrowable($throwable);
 			return '';
 		}
-	}
-}
-
-if (!function_exists('file')) {
-	/**
-	 * @throws FilesystemException
-	 */
-	function file(string $location, string|null $disk = null): FileInterface|null
-	{
-		return StorageManager::get($disk)->file($location);
 	}
 }
 

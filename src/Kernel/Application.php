@@ -13,8 +13,6 @@ use Rovota\Core\Access\Features\FeatureManager;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
 use Rovota\Core\Http\Throttling\LimitManager;
-use Rovota\Core\Mail\MailManager;
-use Rovota\Core\Storage\StorageManager;
 use Rovota\Core\Validation\ValidationManager;
 
 final class Application
@@ -27,7 +25,7 @@ final class Application
 //		CastManager::initialize();
 //		CacheManager::initialize();
 //		ConnectionManager::initialize();
-		StorageManager::initialize();
+//		StorageManager::initialize();
 
 //		self::$registry = new Registry();
 
@@ -39,7 +37,7 @@ final class Application
 		LimitManager::initialize();
 //		LocalizationManager::initialize();
 //		ViewManager::initialize();
-		MailManager::initialize();
+//		MailManager::initialize();
 //		ResponseManager::initialize();
 		AuthManager::initialize();
 		AccessManager::initialize();
