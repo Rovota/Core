@@ -19,20 +19,6 @@ trait RouteModifiers
 
 	// -----------------
 
-	public function middleware(array|string $names): static
-	{
-		$this->middleware = array_merge($this->middleware, is_array($names) ? $names : [$names]);
-		return $this;
-	}
-
-	public function withoutMiddleware(array|string $names): static
-	{
-		$this->without_middleware = array_merge($this->without_middleware, is_array($names) ? $names : [$names]);
-		return $this;
-	}
-
-	// -----------------
-
 	public function throttle(string $limiter): static
 	{
 		$this->limiter = $limiter;
