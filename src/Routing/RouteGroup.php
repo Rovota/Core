@@ -17,16 +17,4 @@ final class RouteGroup
 		return $this;
 	}
 
-	public function throttle(string $limiter): RouteGroup
-	{
-		$this->attributes['limiter'] = $limiter;
-		return $this;
-	}
-
-	public function withoutThrottling(): RouteGroup
-	{
-		$this->attributes['limiter'] = null;
-		return $this;
-	}
-
 }

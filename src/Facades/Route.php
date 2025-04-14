@@ -19,9 +19,4 @@ final class Route
 		return RouteManager::getGroup('auth', $provider);
 	}
 
-	public static function throttle(string $limiter): RouteGroup
-	{
-		return RouteManager::getGroup('limiter', $limiter);
-	}
-
 }

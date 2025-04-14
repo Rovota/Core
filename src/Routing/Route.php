@@ -15,26 +15,12 @@ final class Route
 
 	// Optional
 	protected string|null $auth = null;
-	protected string|null $limiter = null;
 
 	// -----------------
 
 	public function getAuthProvider(): string
 	{
 		return $this->auth ?? AuthManager::getDefault();
-	}
-
-
-	public function getLimiter(): string|null
-	{
-		return $this->limiter;
-	}
-
-	// -----------------
-
-	public function hasLimiter(): bool
-	{
-		return $this->limiter !== null;
 	}
 
 }

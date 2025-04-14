@@ -12,7 +12,6 @@ namespace Rovota\Core\Kernel;
 use Rovota\Core\Access\Features\FeatureManager;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
-use Rovota\Core\Http\Throttling\LimitManager;
 use Rovota\Core\Validation\ValidationManager;
 
 final class Application
@@ -34,7 +33,7 @@ final class Application
 //		SessionManager::initialize();
 //		RequestManager::initialize();
 
-		LimitManager::initialize();
+//		LimitManager::initialize();
 //		LocalizationManager::initialize();
 //		ViewManager::initialize();
 //		MailManager::initialize();

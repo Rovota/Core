@@ -17,18 +17,4 @@ trait RouteModifiers
 		return $this;
 	}
 
-	// -----------------
-
-	public function throttle(string $limiter): static
-	{
-		$this->limiter = $limiter;
-		return $this;
-	}
-
-	public function withoutThrottling(): static
-	{
-		$this->limiter = null;
-		return $this;
-	}
-
 }
