@@ -85,38 +85,6 @@ if (!function_exists('token')) {
 // -----------------
 // Misc
 
-if (!function_exists('retry')) {
-	function retry(int $attempts, callable $action, callable|int $delay = 100, callable|null $filter = null, mixed $fallback = null): mixed
-	{
-		// Inspired by the Laravel retry() helper.
-		$throwable = null;
-		$value = null;
-
-		for ($tries = 1; $tries < $attempts + 1; $tries++) {
-			try {
-				$value = $action();
-			} catch (Throwable $e) {
-				if ($filter === null || (is_callable($filter) && $filter($e))) {
-					if ($tries === $attempts) {
-						$throwable = $e;
-					}
-					$delay = is_callable($delay) ? $delay($tries) : $delay;
-					usleep($delay * 1000);
-					continue;
-				}
-			}
-			break;
-		}
-
-		if ($throwable instanceof Throwable) {
-			ExceptionHandler::logThrowable($throwable);
-			return $fallback;
-		} else {
-			return $value;
-		}
-	}
-}
-
 if (!function_exists('identity_has')) {
 	function identity_has(array $conditions): bool
 	{
@@ -254,23 +222,5 @@ if (!function_exists('security_csrf_token')) {
 	function csrf_token_name(): string
 	{
 		return AccessManager::getCsrfTokenName();
-	}
-}
-
-if (!function_exists('form_submit_time')) {
-	function form_submit_time(): float
-	{
-		return microtime(true) - RequestManager::getRequest()->float('submit_timestamp');
-	}
-}
-
-if (!function_exists('form_submit_time_allowed')) {
-	function form_submit_time_allowed(): bool
-	{
-		$submit_time = form_submit_time();
-		$submit_time_min = registry()->float('form_submit_time_min');
-		$submit_time_max = registry()->float('form_submit_time_max');
-
-		return $submit_time > $submit_time_min && $submit_time < $submit_time_max;
 	}
 }

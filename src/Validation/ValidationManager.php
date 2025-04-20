@@ -8,7 +8,6 @@
 
 namespace Rovota\Core\Validation;
 
-use Rovota\Core\Kernel\ExceptionHandler;
 use Rovota\Core\Validation\Exceptions\MissingValidatorException;
 use Rovota\Core\Validation\Interfaces\ValidatorInterface;
 
