@@ -2,8 +2,7 @@
 /** @noinspection SpellCheckingInspection */
 
 /**
- * @author      Software Department <developers@rovota.com>
- * @copyright   Copyright (c), Rovota
+ * @copyright   Léandro Tijink
  * @license     MIT
  */
 
