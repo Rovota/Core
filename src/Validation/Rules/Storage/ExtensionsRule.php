@@ -27,14 +27,14 @@ class ExtensionsRule extends Base
 
 	// -----------------
 
-	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
+	public function validate(mixed $value, Closure $fail): void
 	{
 		if ($value instanceof UploadedFile) {
 			$value = $value->variant('original');
 		}
 
 		if ($value instanceof FileInterface && $value->isAnyExtension($this->extensions) === false) {
-			return new ErrorMessage($this->name, 'The file must have one of the allowed extensions.', data: [
+			$fail('The file must have one of the allowed extensions.', data: [
 				'allowed' => $this->extensions,
 			]);
 		}

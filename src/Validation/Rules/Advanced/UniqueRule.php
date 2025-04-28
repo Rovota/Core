@@ -26,7 +26,7 @@ class UniqueRule extends Base
 
 	// -----------------
 
-	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
+	public function validate(mixed $value, Closure $fail): void
 	{
 		if (!is_string($value) && !is_int($value)) {
 			$value = (string)$value;
@@ -36,7 +36,7 @@ class UniqueRule extends Base
 		$occurrences = ValidationTools::getOccurrences($config, $value);
 
 		if ($occurrences > 0) {
-			return new ErrorMessage($this->name, 'The provided value must be unique.', data: [
+			$fail('The provided value must be unique.', data: [
 				'value' => $value,
 				'occurrences' => $occurrences,
 			]);

@@ -27,7 +27,7 @@ class FilterRule extends Base
 
 	// -----------------
 
-	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
+	public function validate(mixed $value, Closure $fail): void
 	{
 		if (!is_string($value)) {
 			return ValidationAction::NextRule;
@@ -38,14 +38,14 @@ class FilterRule extends Base
 				$filter = FilterManager::get($filter_name);
 
 				if ($filter->action === FilterAction::Block && text($value)->lower()->containsAny($filter->values)) {
-					return new ErrorMessage($this->name, 'The value may not contain any of the forbidden items.', data: [
+					$fail('The value may not contain any of the forbidden items.', data: [
 						'value' => $value,
 						'items' => $filter->values,
 					]);
 				}
 
 				if ($filter->action === FilterAction::Allow && text($value)->lower()->containsNone($filter->values)) {
-					return new ErrorMessage($this->name, 'The value must contain one of the required items.', data: [
+					$fail('The value must contain one of the required items.', data: [
 						'value' => $value,
 						'items' => $filter->values,
 					]);

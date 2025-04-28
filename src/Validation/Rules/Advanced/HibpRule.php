@@ -26,7 +26,7 @@ class HibpRule extends Base
 
 	// -----------------
 
-	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
+	public function validate(mixed $value, Closure $fail): void
 	{
 		if (!is_string($value)) {
 			$value = (string)$value;
@@ -36,7 +36,7 @@ class HibpRule extends Base
 		$matches = $hibp->countPasswordMatches(sha1($value));
 
 		if ($matches > $this->threshold) {
-			return new ErrorMessage($this->name, 'The value has appeared in a data breach :count time(s) and should not be used.', data: [
+			$fail('The value has appeared in a data breach :count time(s) and should not be used.', data: [
 				'count' => $matches,
 				'threshold' => $this->threshold,
 			]);

@@ -28,7 +28,7 @@ class MimesRule extends Base
 
 	// -----------------
 
-	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
+	public function validate(mixed $value, Closure $fail): void
 	{
 		if ($value instanceof UploadedFile) {
 			$value = $value->variant('original');
@@ -48,7 +48,7 @@ class MimesRule extends Base
 			}
 		}
 
-		return new ErrorMessage($this->name, 'The value must be of an allowed type.', data: [
+		$fail('The value must be of an allowed type.', data: [
 			'allowed' => $this->extensions,
 		]);
 	}

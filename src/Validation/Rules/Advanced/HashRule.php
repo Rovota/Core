@@ -26,12 +26,12 @@ class HashRule extends Base
 
 	// -----------------
 
-	public function validate(string $attribute, mixed $value): ErrorMessage|ValidationAction
+	public function validate(mixed $value, Closure $fail): void
 	{
 		$hash = hash($this->algorithm, $this->reference);
 
 		if ($value !== $hash) {
-			return new ErrorMessage($this->name, 'The provided hash is incorrect.', data: [
+			$fail('The provided hash is incorrect.', data: [
 				'algorithm' => $this->algorithm,
 				'reference' => $this->reference,
 				'hash' => $hash,
