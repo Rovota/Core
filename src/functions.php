@@ -12,22 +12,9 @@ use Rovota\Core\Auth\Interfaces\Identity;
 use Rovota\Core\Auth\Interfaces\SessionAuthentication;
 use Rovota\Core\Auth\Interfaces\TokenAuthentication;
 use Rovota\Core\Auth\User;
-use Rovota\Core\Http\RequestManager;
 
 // -----------------
 // Components
-
-if (!function_exists('partial')) {
-	function partial(string $name, string|null $source = null, array $variables = []): Partial|string
-	{
-		try {
-			return PartialManager::make($name, $source, $variables);
-		} catch (Throwable $throwable) {
-			ExceptionHandler::logThrowable($throwable);
-			return '';
-		}
-	}
-}
 
 if (!function_exists('asset')) {
 	/**

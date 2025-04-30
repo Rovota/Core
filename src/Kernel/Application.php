@@ -11,7 +11,6 @@ namespace Rovota\Core\Kernel;
 use Rovota\Core\Access\Features\FeatureManager;
 use Rovota\Core\Auth\AccessManager;
 use Rovota\Core\Auth\AuthManager;
-use Rovota\Core\Validation\ValidationManager;
 
 final class Application
 {
@@ -27,7 +26,7 @@ final class Application
 
 //		self::$registry = new Registry();
 
-		ValidationManager::initialize();
+//		ValidationManager::initialize();
 //		CookieManager::initialize();
 //		SessionManager::initialize();
 //		RequestManager::initialize();
