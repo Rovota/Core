@@ -16,33 +16,6 @@ use Rovota\Core\Auth\User;
 // -----------------
 // Components
 
-if (!function_exists('asset')) {
-	/**
-	 * @deprecated Use asset_url() instead.
-	 */
-	function asset(string $path, array $query = [], string|null $disk = null): UrlBuilder|null
-	{
-		return asset_url($path, $query, $disk);
-	}
-}
-
-if (!function_exists('asset_url')) {
-	function asset_url(string $path, array $query = [], string|null $disk = null): UrlBuilder|null
-	{
-		if ($disk === null && StorageManager::isConnected('public')) {
-			$disk = 'public';
-		}
-
-		$disk = StorageManager::get($disk);
-		if ($disk !== null) {
-			$path = $disk->root().Str::start($path, '/');
-			return url()->domain($disk->domain())->path($path)->query($query);
-		}
-
-		return null;
-	}
-}
-
 if (!function_exists('identity')) {
 	function identity(): Identity|null
 	{
