@@ -40,7 +40,7 @@ class TrustedClient extends Model
 
 	// -----------------
 
-	public static function createUsing(Identity $identity, array $attributes = []): static
+	public static function create(Identity $identity, array $attributes = []): static
 	{
 		$attributes = array_merge([
 			'user_id' => $identity->getId(),

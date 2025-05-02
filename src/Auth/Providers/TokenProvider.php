@@ -36,7 +36,7 @@ class TokenProvider extends Provider implements TokenAuthentication
 
 	public function createToken(array $attributes = []): ApiToken
 	{
-		$token = ApiToken::createUsing($this->identity, $attributes);
+		$token = ApiToken::create($this->identity, $attributes);
 		if ($token->save()) {
 			$this->token = $token;
 		}
@@ -138,7 +138,7 @@ class TokenProvider extends Provider implements TokenAuthentication
 		$attributes['expiration'] = $attributes['expiration'] ?? now()->addDays(30);
 		$attributes['hash'] = $attributes['hash'] ?? $this->token->token;
 
-		$client = TrustedClient::createUsing($this->identity, $attributes);
+		$client = TrustedClient::create($this->identity, $attributes);
 		$client->save();
 
 		$this->trusted_client = $client;
